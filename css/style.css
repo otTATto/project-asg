@@ -1,0 +1,51 @@
+.fluffy{
+	background: #000000;
+	width: 100%;
+	animation: fluffy1 3s ease infinite;
+}
+
+@keyframes fluffy1{
+	0% { transform:translateX(0) }
+	5% { transform:translateX(0) }
+	10% { transform:translateX(0) }
+	20% { transform:translateX(-15px) }
+	25% { transform:translateX(0) }
+	30% { transform:translateX(-15px) }
+	50% { transform:translateX(0) }
+	100% { transform:translateX(0) }
+}
+
+.loading-icon {
+    box-sizing: border-box;
+    width: 15px;
+    height: 15px;
+    border-radius: 50%;
+    box-shadow:
+      0 -30px 0 #eee,     /*  上  */
+      21px -21px 0 #ddd,  /* 右上 */
+      30px 0 0 #ccc,      /*  右  */
+      21px 21px 0 #bbb,   /* 右下 */
+      0 30px 0 #aaa,      /*  下  */
+      -21px 21px 0 #999,  /* 左下 */
+      -30px 0 0 #666,     /*  左  */
+      -21px -21px 0 #000; /* 左上 */
+    animation: rotate 1s steps(8) 0s infinite;
+  }
+  
+  @keyframes rotate {
+    0% {
+      transform: rotate(0deg);
+    }
+    100% {
+      transform: rotate(360deg);
+    }
+  }
+  
+  /****** Base style. ******/
+  body {
+    display: flex;
+    height: 100vh;
+    justify-content: center;
+    align-items: center;
+    margin: 0;
+  }
