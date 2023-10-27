@@ -14,16 +14,19 @@
 
         <div class="form-group">
             <p>以下の項目を埋めてください</p>
+            <!-- 学籍番号 -->
             <div class="mt-2">
                 <label for="studentNumberInput">学籍番号</label>
                 <input type="number" class="form-control" id="studentNumInput" placeholder="1234567">
             </div>
 
+            <!-- 名前 -->
             <div class="mt-2">
                 <label for="nameInput">名前</label>
                 <input type="text" class="form-control" id="nameInput" placeholder="理科大 花子">
             </div>
 
+            <!-- 学部選択 -->
             <div class="mt-2"">
                 <label for="faculty">学部</label>
                 <select id="faculty" class="form-select" aria-label=".form-select-lg example">
@@ -34,6 +37,13 @@
                 </select>
             </div>
             
+            <!-- パスワード -->
+            <div class="mt-2">
+                <label for="password">パスワード</label>
+                <input type="password" class="form-control" id="password">
+            </div>
+
+
         <!-- 送信ボタン -->
             <div class="mt-4">
                 <button onclick="send()" type="submit" class="btn btn-primary"> 送信 </button>
