@@ -4,8 +4,29 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>先生ログイン / マジテストちゃん</title>
+
+    <!-- Bootstrap -->
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-9ndCyUaIbzAi2FUVXJi0CjmCapSmO7SnpJef0486qhLnuZ2cdeRhO02iuK6FUUVM" crossorigin="anonymous">
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js" integrity="sha384-geWF76RCwLtnZ8qwWowPQNguL3RmwHVBC9FhGdlKrxdiJJigb/j/68SIy3Te4Bkz" crossorigin="anonymous"></script>
+
+    <!-- Google Fonts -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Dela+Gothic+One&family=M+PLUS+Rounded+1c:wght@100;300;400;500;700;800;900&family=Noto+Sans+JP:wght@100;200;300;400;500;600;700;800;900&family=Zen+Kaku+Gothic+New:wght@300;400;500;700;900&family=Zen+Maru+Gothic:wght@300;400;500;700;900&display=swap" rel="stylesheet">
+
+    <!-- FontAwesome -->
+    <script src="https://kit.fontawesome.com/6f8d6b3f84.js" crossorigin="anonymous"></script>
+
+    <!-- JS -->
+    <script type="module" src="./js/login.js"></script>
+
+    <!-- CSS -->
+    <link href="./css/style.css" rel="stylesheet">
+    <link href="./css/font.css" rel="stylesheet">
+    <link href="./css/anime.css" rel="stylesheet">
+
 </head>
-<body>
+<body style="background-color: rgb(244, 248, 251);">
 
     <!-- ヘッダー -->
     <header>
@@ -14,6 +35,38 @@
 
     <!-- 本文 -->
     <div class="container">
+
+        <!-- ログイン画面 -->
+        <div class="my-5 py-5 br-20 col-lg-6 mx-auto shadow" style="background-color: rgb(255, 255, 255);">
+            <!-- ようこそ表示 -->
+            <div class="text-center f-M-Plus-Rounded-1c fw-bold" style="font-size: 45px; color: rgb(119, 149, 187);">
+                ようこそ
+            </div>
+            <!-- ログイン選択中を示すサークル -->
+            <div class="row">
+                <div class="col-6 text-center">
+                    <i class="fa-solid fa-circle fa-fade" style="color: rgb(58, 96, 146); font-size: 10px;"></i>
+                </div>
+                <div class="col-6 text-center"></div>
+            </div>
+            <!-- ログインボタンとサインインボタン -->
+            <div class="row mt-2">
+                <div class="col-6 text-center text-white">
+                    <div class="d-grid gap-2 col-6 mx-auto">
+                        <div onclick="" type="button" class="br-10 f-Zen-Kaku-Gothic-New fw-exbold be-big-click make-letters-distance" style="background-color: rgb(58, 96, 146);">
+                            ログイン
+                        </div>
+                    </div>
+                </div>
+                <div class="col-6 text-center">
+                    <div class="d-grid gap-2 col-6 mx-auto">
+                        <div onclick="" type="button" class="br-10 f-Zen-Kaku-Gothic-New fw-bold be-big-click make-letters-distance" style="border: 1px solid rgb(58, 96, 146); color: rgb(58, 96, 146);">
+                            サインイン
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
         
     </div>
     
