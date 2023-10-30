@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>先生ログイン / マジテストちゃん</title>
+    <title>教師ログイン / マジテストちゃん</title>
 
     <!-- Bootstrap -->
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-9ndCyUaIbzAi2FUVXJi0CjmCapSmO7SnpJef0486qhLnuZ2cdeRhO02iuK6FUUVM" crossorigin="anonymous">
@@ -31,6 +31,17 @@
     <!-- ヘッダー -->
     <header>
 
+        <!-- タイトル -->
+        <h1 class="mt-4 text-center f-Dela-Gothic-One" style="color: rgb(158, 68, 112); font-size: 50px;">
+            マジテストちゃん
+        </h1>
+
+        <div class="mt-3 col-4 col-sm-3 col-md-2 col-lg-1 br-20 mx-auto" style="background-color: rgb(156, 70, 70);">
+            <div class="text-center f-Zen-Maru-Gothic fw-medium text-white">
+                教師側
+            </div>
+        </div>
+
     </header>
 
     <!-- 本文 -->
@@ -38,34 +49,55 @@
 
         <!-- ログイン画面 -->
         <div class="my-5 py-5 br-20 col-lg-6 mx-auto shadow" style="background-color: rgb(255, 255, 255);">
+
             <!-- ようこそ表示 -->
             <div class="text-center f-M-Plus-Rounded-1c fw-bold" style="font-size: 45px; color: rgb(119, 149, 187);">
                 ようこそ
             </div>
             <!-- ログイン選択中を示すサークル -->
-            <div class="row">
+            <div class="row mt-3">
                 <div class="col-6 text-center">
                     <i class="fa-solid fa-circle fa-fade" style="color: rgb(58, 96, 146); font-size: 10px;"></i>
                 </div>
                 <div class="col-6 text-center"></div>
             </div>
             <!-- ログインボタンとサインインボタン -->
-            <div class="row mt-2">
+            <div class="row mt-1">
                 <div class="col-6 text-center text-white">
-                    <div class="d-grid gap-2 col-6 mx-auto">
+                    <div class="d-grid gap-2 col-8 col-md-7 col-lg-6 mx-auto">
                         <div onclick="" type="button" class="br-10 f-Zen-Kaku-Gothic-New fw-exbold be-big-click make-letters-distance" style="background-color: rgb(58, 96, 146);">
                             ログイン
                         </div>
                     </div>
                 </div>
                 <div class="col-6 text-center">
-                    <div class="d-grid gap-2 col-6 mx-auto">
+                    <div class="d-grid gap-2 col-8 col-sm-8 col-md-7 col-lg-6 mx-auto">
                         <div onclick="" type="button" class="br-10 f-Zen-Kaku-Gothic-New fw-bold be-big-click make-letters-distance" style="border: 1px solid rgb(58, 96, 146); color: rgb(58, 96, 146);">
                             サインイン
                         </div>
                     </div>
                 </div>
             </div>
+
+            <!-- 入力領域 -->
+            <div class="mt-5">
+                <div class="col-10 mx-auto f-Zen-Kaku-Gothic-New fw-bold" style="color: rgb(119, 149, 187);">
+                    <div class="form-floating mb-3">
+                        <input type="email" class="form-control br-30 px-4" id="loginMailInput" placeholder="name@example.com">
+                        <label for="loginMailInput" class="px-4">大学メールアドレス</label>
+                    </div>
+                    <div class="form-floating">
+                        <input type="password" class="form-control br-30 px-4" id="loginPasswordInput" placeholder="Password">
+                        <label for="loginPasswordInput" class="px-4">パスワード</label>
+                    </div>
+                </div>
+            </div>
+
+            <!-- ログインするボタン -->
+            <div class="mt-5 mb-3 d-grid gap-2 col-6 mx-auto">
+                <button onclick="login()" class="btn btn-primary btn-lg br-30 f-Zen-Kaku-Gothic-New fw-exbold" type="button" >ログインする</button>
+            </div>
+
         </div>
         
     </div>
