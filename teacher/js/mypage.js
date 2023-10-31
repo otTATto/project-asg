@@ -1,0 +1,1 @@
+$('#titleText').arctext({radius: 300});
