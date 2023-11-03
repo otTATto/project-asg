@@ -30,7 +30,20 @@
     <link href="./css/anime.css" rel="stylesheet">
 
 </head>
-<body style="background-color: rgb(244, 248, 251);">
+<body class="col-xxl-10 mx-auto" style="background-color: rgb(244, 248, 251);">
+
+    <!-- ナビボタン (スマホ・タブレット) -->
+    <div id="nav-mobile-buttonArea">
+        <div type="button" data-bs-toggle="offcanvas" data-bs-target="#nav-mobile-canvas" aria-controls="nav-mobile-canvas" class="br shadow set-center be-big-click" style="background-color: rgba(255, 255, 255, 0.5); color: rgba(158, 68, 112, 0.8); position: fixed; top: 20px; left: 20px; font-size: 30px; width: 60px; height: 60px;">
+            <i class="fa-solid fa-bars"></i>
+        </div>
+    </div>
+
+    <div id="notify-buttonArea">
+        <div type="button" data-bs-toggle="offcanvas" data-bs-target="#notify-canvas" aria-controls="notify-canvas" class="br shadow set-center be-big-click" style="background-color: rgba(255, 255, 255, 0.5); color: rgba(158, 139, 68, 0.8); position: fixed; top: 20px; right: 20px; font-size: 30px; width: 60px; height: 60px;">
+            <i class="fa-solid fa-bell"></i>
+        </div>
+    </div>
 
     <!-- ヘッダー -->
     <header>
@@ -51,11 +64,13 @@
     <!-- 本文 -->
     <div class="container">
 
-        <div class="row">
-            <!-- ナビ -->
-            <div class="mt-5 col-lg-3">
+        
 
-                <div class="py-5 br-20 shadow" style="background-color: white;">
+        <div class="row">
+            <!-- ナビ (PC) -->
+            <div id="nav-pc" class="mt-5 col-lg-3">
+
+                <div class="py-5 br-20 shadow position-fixed" style="background-color: white;">
 
                     <div class="f-Zen-Kaku-Gothic-New fw-exbold text-center">
                     
@@ -100,8 +115,12 @@
 
             </div>
 
+            <div class="col-lg-9"></div>
+
             <!-- メインエリア -->
-            <div class="mt-5 col-lg-9">
+            <div class="mt-5 col-lg-3"></div>
+            
+            <div class="col-lg-9">
 
                 <div class="py-5 br-20 shadow" style="background-color: white;">
                     
@@ -127,10 +146,77 @@
 
 
     </div>
+
+
+<!-- ナビ (スマホ・タブレット) -->
+<div class="offcanvas offcanvas-start" tabindex="-1" id="nav-mobile-canvas" aria-labelledby="nav-mobile-canvasLabel">
+    <div class="offcanvas-header">
+        <h5 class="offcanvas-title" id="nav-mobile-canvasLabel"></h5>
+        <button type="button" class="btn-close" data-bs-dismiss="offcanvas" aria-label="Close"></button>
+    </div>
+    <div class="offcanvas-body">
+
+        <div class="mt-5 f-Zen-Kaku-Gothic-New fw-exbold text-center" style="font-size: 25px;">
+                    
+            <div onclick="" type="button" class="br-20 mx-5 text-white be-big-click make-letters-distance" style="background-color: rgb(158, 68, 112);">
+                <div class="mx-3">
+                    <i class="fa-solid fa-house" style="font-size: 20px; position: relative; top: -3px;"></i>
+                    ホーム
+                </div>
+            </div>
+
+            <div onclick="" type="button" class="mt-4 br-20 mx-5 be-big-click make-letters-distance">
+                <div class="mx-3">
+                    <i class="fa-solid fa-file-lines" style="font-size: 20px; position: relative; top: -3px;"></i>
+                    テスト
+                </div>
+            </div>
+
+            <div onclick="" type="button" class="mt-4 br-20 mx-5 be-big-click make-letters-distance">
+                <div class="mx-3">
+                    <i class="fa-solid fa-user" style="font-size: 20px; position: relative; top: -3px;"></i>
+                    プロフィール
+                </div>
+            </div>
+
+            <div onclick="" type="button" class="mt-4 br-20 mx-5 be-big-click make-letters-distance">
+                <div class="mx-3">
+                    <i class="fa-solid fa-gear" style="font-size: 20px; position: relative; top: -2px;"></i>
+                    設定
+                </div>
+            </div>
+
+            <div onclick="" type="button" class="mt-4 br-20 mx-5 be-big-click make-letters-distance" style="color: rgb(158, 68, 112);">
+                <div class="mx-3">
+                    <i class="fa-solid fa-right-from-bracket" style="font-size: 20px; position: relative; top: -2px;"></i>
+                    ログアウト
+                </div>
+            </div>
+
+        </div>
+    </div>
+</div>
+
+<!-- 通知 -->
+<div class="offcanvas offcanvas-end" tabindex="-1" id="notify-canvas" aria-labelledby="notify-canvasLabel">
+    <div class="offcanvas-header">
+        <h5 class="offcanvas-title" id="notify-canvasLabel">
+            <div class="f-Zen-Kaku-Gothic-New fw-exbold" style="color: rgb(158, 139, 68);">
+                <i class="mx-2 fa-solid fa-bell"></i>
+                通知
+            </div>
+        </h5>
+        <button type="button" class="btn-close" data-bs-dismiss="offcanvas" aria-label="Close"></button>
+    </div>
+    <div class="offcanvas-body">
+
+        <div class="mt-5 f-Zen-Kaku-Gothic-New fw-exbold text-center" style="font-size: 25px;">
+                    
+            
+
+        </div>
+    </div>
+</div>
     
 </body>
 </html>
-
-<script>
-    $('#titleText').arctext({radius: 300});
-</script>

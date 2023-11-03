@@ -33,3 +33,22 @@
     .br-b-30 {
         border-radius: 0px 0px 30px 30px;
     }
+    /* 完全な丸 */
+    .br {
+        border-radius: 50%;
+    }
+
+/* 中央寄せ */
+    .set-center {
+        display: flex;
+        align-items: center;
+        justify-content: center;
+    }
+
+/* コンテンツの表示非表示 */
+    .unvisible {
+        display: none; /* コンテンツを表示させない */
+    }
+    .visible {
+        display: block; /* コンテンツを表示させる */
+    }
