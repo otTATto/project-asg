@@ -9,11 +9,17 @@
     }
 
     /* ホバー時に拡大 */
-    .be-big {
+    .be-big-lg {
         transition-duration: .3s;
     }
-    .be-big:hover {
+    .be-big-lg:hover {
         transform: scale(1.1);
+    }
+    .be-big-sm {
+        transition-duration: .3s;
+    }
+    .be-big-sm:hover {
+        transform: scale(1.02);
     }
 
     /* ホバー時に文字間隔を開ける */

@@ -1,0 +1,13 @@
+/* 色に関するCSS */
+
+    /* main pink */
+    .c-pink {
+        color: rgb(158, 68, 112);
+    }
+    .c-pink-bg {
+        background-color: rgb(158, 68, 112);
+    }
+
+    .c-black {
+        color: rgb(55, 51, 51);
+    }

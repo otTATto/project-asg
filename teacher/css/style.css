@@ -70,3 +70,8 @@
     .visible {
         display: block; /* コンテンツを表示させる */
     }
+
+/* ハイライト文字の色 */
+::selection {
+    background: #fddcef;
+}
