@@ -9,18 +9,33 @@
 
 </head>
 <body>
-   <div class="container text-center">
+   <div class="container">
 
     <h1>タイトル</h1>
 
-    <div class="mt-5">
-        <div class="row">
-            <div class="col">
-                <a href="./signInStu.html" target="_self" type="button" class="btn btn-primary" style="width: 50%;">サインイン(新規登録)</a>
+    <div class="row mt-5">
+        <!-- ログイン部分 -->
+        <div class="col-6 border border-primary border-3 rounded">
+            <div class="mt-2">
+                <lablel for="studentNumberInput">学籍番号</lablel>
+                <input type="number" class="form-control" id="studentNumInput" placeholder="1234567">
+            </div>
+            <div class="mt-2">
+                <label for="password">パスワード</label>
+                <input type="password" class="form-control" id="password">
+            </div>
+
+            <div class="my-3" style>
+                <a href="" target="_self" type="button" class="btn btn-primary" style="width: 100%;">ログイン</a>
+            </div>
+        </div>
+
+        <!-- <div class="row mt-5"> -->
+            <div class="col-4 my-5">
+                <a href="./signInStu.html" target="_self" type="button" class="btn btn-primary" style="width: 100%; padding: 30px 30px">サインイン(新規登録)</a>
             </div>
             <div class="col">
-                <a href="" target="_self" type="button" class="btn btn-primary" style="width: 50%;">ログイン</a>
-            </div>
+        </div>
     </div>
 
    </div>
