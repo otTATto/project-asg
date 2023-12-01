@@ -1,7 +1,5 @@
 function login(){
 
-    // TODO: 空欄チェック
-
     // ページ遷移
     window.location.href = './mypage.html';
 
