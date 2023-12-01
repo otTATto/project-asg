@@ -13,7 +13,7 @@ window.onload = async function () {
 }
 
 // 画面サイズが変更されたときに実行
-$(window).resize(function () {
+$(window).resize(function () {  
     // 表示領域のサイズを取得（横幅だけを更新）
     var windowSize = getWindowSize();
     windowWidth = windowSize[0];
