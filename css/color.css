@@ -8,6 +8,15 @@
         background-color: rgb(158, 68, 112);
     }
 
+    /* sub pink */
+    .c-sub-pink {
+        color: rgb(206, 141, 171);
+    }
+    .c-sub-pink-bg {
+        background-color: rgb(206, 141, 171);
+    }
+
+    /* main black */
     .c-black {
         color: rgb(55, 51, 51);
     }
