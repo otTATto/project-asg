@@ -73,5 +73,10 @@
 
 /* ハイライト文字の色 */
 ::selection {
-  background: #fddcef;
+  background: #fddcdc;
 }
+
+/* aタグの装飾を無しにする */
+    .non-a {
+        text-decoration: none;
+    }
