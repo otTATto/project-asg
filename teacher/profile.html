@@ -41,9 +41,19 @@
         </div>
     </div>
 
+    <!-- 通知ボタン -->
     <div id="notify-buttonArea">
         <div type="button" data-bs-toggle="offcanvas" data-bs-target="#notify-canvas" aria-controls="notify-canvas" class="br shadow set-center be-big-lg" style="background-color: rgba(255, 255, 255, 0.5); color: rgba(158, 139, 68, 0.8); position: fixed; top: 20px; right: 20px; font-size: 30px; width: 60px; height: 60px;">
             <i class="fa-solid fa-bell"></i>
+        </div>
+    </div>
+
+    <!-- プロフ編集ボタン -->
+    <div id="profile-edit-buttonArea">
+        <div type="button" data-bs-toggle="offcanvas" data-bs-target="#profile-edit-modal" aria-controls="profile-edit-modal"
+            class="br shadow set-center be-big-lg"
+            style="background-color: rgba(255, 255, 255, 0.5); color: rgba(103, 123, 198, 0.8); position: fixed; bottom: 20px; right: 20px; font-size: 30px; width: 60px; height: 60px;">
+            <i class="fa-solid fa-plus"></i>
         </div>
     </div>
 
@@ -117,17 +127,29 @@
 
             <div class="col-lg-9"></div>
 
+            <!-- メインエリア -->
+            <div class="mt-5 col-lg-3"></div>
+
+            <div class="col-lg-9">
+
+                <div class="pt-lg-4 pb-lg-5 py-4 br-20 shadow" style="background-color: white;">
+                
+                    <div class="text-center c-pink" style="font-size: 50px;">
+                        <i class="fa-solid fa-circle-user"></i>
+                    </div>
+                
+                </div>
+
             
+            </div>
+
         </div>
-
-
     </div>
 
     <!-- ここまで本文 -->
 
     <!-- ナビ (スマホ・タブレット) -->
-    <div class="br-r-20 offcanvas offcanvas-start" tabindex="-1" id="nav-mobile-canvas"
-        aria-labelledby="nav-mobile-canvasLabel">
+    <div class="br-r-20 offcanvas offcanvas-start" tabindex="-1" id="nav-mobile-canvas" aria-labelledby="nav-mobile-canvasLabel">
         <div class="offcanvas-header">
             <h5 class="offcanvas-title" id="nav-mobile-canvasLabel"></h5>
             <button type="button" class="btn-close" data-bs-dismiss="offcanvas" aria-label="Close"></button>

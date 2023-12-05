@@ -41,9 +41,19 @@
         </div>
     </div>
 
+    <!-- 通知ボタン -->
     <div id="notify-buttonArea">
         <div type="button" data-bs-toggle="offcanvas" data-bs-target="#notify-canvas" aria-controls="notify-canvas" class="br shadow set-center be-big-lg" style="background-color: rgba(255, 255, 255, 0.5); color: rgba(158, 139, 68, 0.8); position: fixed; top: 20px; right: 20px; font-size: 30px; width: 60px; height: 60px;">
             <i class="fa-solid fa-bell"></i>
+        </div>
+    </div>
+
+    <!-- テスト追加ボタン -->
+    <div id="add-test-buttonArea">
+        <div type="button" data-bs-toggle="offcanvas" data-bs-target="#add-test-modal" aria-controls="add-test-modal"
+            class="br shadow set-center be-big-lg"
+            style="background-color: rgba(255, 255, 255, 0.5); color: rgba(103, 123, 198, 0.8); position: fixed; bottom: 20px; right: 20px; font-size: 30px; width: 60px; height: 60px;">
+            <i class="fa-solid fa-plus"></i>
         </div>
     </div>
 
@@ -117,10 +127,88 @@
 
             <div class="col-lg-9"></div>
 
+            <!-- メインエリア -->
+            <div class="mt-5 col-lg-3"></div>
+
+            <div class="col-lg-9">
+
+                <div class="pt-lg-3 pb-lg-4 py-3 px-3 br-20 shadow" style="background-color: white;">
+                    <div class="mx-lg-5 mx-3">
+                        <div class="">
+                            <div class="text-center c-black f-Zen-Kaku-Gothic-New fw-exbold" style="font-size: 25px;">
+                                科目選択
+                            </div>
+                        </div>
+                        <div class="mt-3">
+                            <select class="form-select text-center f-Zen-Kaku-Gothic-New fw-medium br-10" aria-label="Default select example">
+                                <option selected>科目を選択してください</option>
+                                <option value="1">宗教学１</option>
+                                <option value="2">宗教学２</option>
+                              </select>
+                        </div>
+                    </div>
+                </div>
+                
+                <div class="mt-4 pt-lg-2 pb-lg-5 pt-2 pb-5 br-20 shadow" style="background-color: white;">
+                    
+                    <div class="mt-3">
+                        <div class="row justify-content-center row-cols-auto f-Zen-Kaku-Gothic-New">
+                            <div class="col">
+                                <div class="fw-exbold c-pink tb-pink">
+                                    本日のテスト
+                                </div>
+                            </div>
+                            <div class="col">
+                                <div onclick="" type="button" class="fw-medium text-secondary be-big-lg">
+                                    今後のテスト
+                                </div>
+                            </div>
+                            <div class="col">
+                                <div onclick="" type="button" class="fw-medium text-secondary be-big-lg">
+                                    過去のテスト
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="mt-4"></div>
+
+                    <!-- デモ・テストブロック -->
+                    <div onclick="viewTest('8984123')" type="button" data-bs-toggle="modal"
+                        data-bs-target="#testViewModal"
+                        class="shadow br-10 mt-2 mx-lg-5 mx-3 px-3 py-3 f-Zen-Kaku-Gothic-New be-big-sm"
+                        style="border: 2px solid rgb(124, 154, 95);">
+                        <div class="row row-cols-auto">
+                            <!-- 科目 -->
+                            <div class="col fw-bold br-20 px-3 ms-2 text-white"
+                                style="background-color: rgb(124, 154, 95); font-size: 20px;">
+                                宗教学
+                            </div>
+                            <!-- タイトル -->
+                            <div class="col fw-exbold c-black" style="font-size: 20px">
+                                第8回 小テスト
+                            </div>
+                        </div>
+                        <div class="my-2" style="border-bottom: 1px solid rgb(180, 180, 180);"></div>
+                        <div class="row row-cols-auto mt-1 justify-content-end">
+                            <!-- 日付 -->
+                            <div class="col f-Zen-Maru-Gothic br-20 px-3 ms-2 text-white"
+                                style="background-color: rgb(89, 121, 60); font-size: 15px;">
+                                2023年11月3日 10:40
+                            </div>
+                            <!-- タイトル -->
+                            <div class="col f-Zen-Maru-Gothic fw-medium c-black text-secondary" style="font-size: 15px">
+                                受験予定者 75人
+                            </div>
+                        </div>
+                    </div>
+                
+                </div>
+
             
+            </div>
+
         </div>
-
-
     </div>
 
     <!-- ここまで本文 -->
