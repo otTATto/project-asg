@@ -35,7 +35,7 @@ var mailInput;     // メアド in 入力領域を格納
 var passwordInput; //パスワード in 入力領域を格納
 
 
-
+// 「ログインする」ボタンを押したときに実行
 function login(){
 
     // メアド、パスワードin 入力領域を取得
@@ -54,5 +54,21 @@ function login(){
 
 }
 
+// ナビにおける「サインイン」ボタンを押したときに実行
+function viewSigninArea(){
+    // 「ログインエリア」を非表示・「サインインエリア」を表示
+    $('#loginArea').removeClass('visible').addClass('unvisible');
+    $('#signinArea').removeClass('unvisible').addClass('visible');
+}
+
+// ナビにおける「ログイン」ボタンを押したときに実行
+function viewLoginArea(){
+    // 「ログインエリア」を表示・「サインインエリア」を非表示
+    $('#loginArea').removeClass('unvisible').addClass('visible');
+    $('#signinArea').removeClass('visible').addClass('unvisible');
+}
+
 window.login = login;
-export{ login };
+window.viewSigninArea = viewSigninArea;
+window.viewLoginArea = viewLoginArea;
+export{ login, viewSigninArea, viewLoginArea };
