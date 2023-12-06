@@ -39,8 +39,8 @@ var passwordInput; //パスワード in 入力領域を格納
 function login(){
 
     // メアド、パスワードin 入力領域を取得
-    mailInput = document.getElementById(loginMailInput).value;
-    passwordInput = document.getElementById(loginPasswordInput).value;
+    mailInput = document.getElementById('loginMailInput').value;
+    passwordInput = document.getElementById('loginPasswordInput').value;
     // メールアドレス、パスワードin データベースを取得
 
     // メアドが存在しなかったらreturn
