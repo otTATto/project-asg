@@ -91,9 +91,14 @@
   }
 
 /* ハイライト文字の色 */
-::selection {
-    background: #fddcdc;
-}
+    ::selection {
+        background: #fddcdc;
+    }
+
+/* スクロールバーの非表示 */
+    ::-webkit-scrollbar{
+        display:none;
+    }
 
 /* aタグの装飾を無しにする */
     .non-a {
