@@ -24,6 +24,14 @@
         background-color: rgb(68, 112, 158);
     }
 
+    /* sub blue */
+    .c-sub-blue {
+        color: rgb(119, 149, 187);
+    }
+    .c-sub-blue-bg {
+        background-color: rgb(119, 149, 187);
+    }
+
     /* main black */
     .c-black {
         color: rgb(55, 51, 51);
