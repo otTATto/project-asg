@@ -34,22 +34,8 @@ var uidValue;       // ユーザーユニークIDを格納
 var mailInput;     // メアド in 入力領域を格納
 var passwordInput; //パスワード in 入力領域を格納
 
-
-
-async function login(){
-  // メアド、パスワードin 入力領域を取得
-  mailInput = document.getElementById('loginMailInput').value;
-  passwordInput = document.getElementById('loginPasswordInput').value;
-  console.log("mail:" + mailInput + "pass:" + passwordInput);
-
-  // メールアドレス、パスワードin データベースを取得
-  //全数探索
-  const userRef = ref(database, 'users/');
-  console.log('userRef:' + userRef);
-  var snapshot = await get(userRef);
-  var data = snapshot.val();
 // 「ログインする」ボタンを押したときに実行
-function login(){
+async function login(){
 
     // メアド、パスワードin 入力領域を取得
     mailInput = document.getElementById('loginMailInput').value;
