@@ -36,21 +36,48 @@ var passwordInput; //パスワード in 入力領域を格納
 
 
 
-function login(){
+async function login(){
+  // メアド、パスワードin 入力領域を取得
+  mailInput = document.getElementById('loginMailInput').value;
+  passwordInput = document.getElementById('loginPasswordInput').value;
+  console.log("mail:" + mailInput + "pass:" + passwordInput);
 
-    // メアド、パスワードin 入力領域を取得
-    mailInput = document.getElementById(loginMailInput).value;
-    passwordInput = document.getElementById(loginPasswordInput).value;
-    // メールアドレス、パスワードin データベースを取得
+  // メールアドレス、パスワードin データベースを取得
+  //全数探索
+  const userRef = ref(database, 'users/');
+  console.log('userRef:' + userRef);
+  var snapshot = await get(userRef);
+  var data = snapshot.val();
 
-    // メアドが存在しなかったらreturn
-    if(!mailValue) return;
+  if(!data) {
+    alert("DBに正しくアクセスできません");
+    return;
+  }
 
-    // パスワードが間違っていたらreturn
-    if(passwordValue != passwordInput ) return;
+  Object.keys(data).forEach((element, index, key, snapshot) => {  //DB内を全探索して一致するメアドを探す
+    let mailFromDB = data[element].mail;
+    
+    if(mailFromDB == mailInput){   //一致したらそれを保存
+      console.log('ヒットしました:' + element.value);
+      mailValue = mailFromDB;
+      passwordValue = data[element].password;
+    }
+  });
+  
+  // メアドがDBに無かったらreturn
+  if(!mailValue) {
+    alert("登録していないメールアドレスです");
+    return;
+  }
 
-    // ページ遷移
-    window.location.href = './mypage.html';
+  // パスワードが間違っていたらreturn
+  if(passwordValue != passwordInput ) {
+    alert("パスワードが間違っています");
+    return;
+  }
+
+  // ページ遷移
+  window.location.href = './mypage.html';
 
 }
 
