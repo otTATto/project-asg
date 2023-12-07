@@ -22,7 +22,7 @@
     <script src="./jquery.arctext.js" type="text/javascript"></script>
 
     <!-- JS -->
-    <script type="module" src="../js/teacher/profile.js"></script>
+    <script type="module" src="../js/teacher/tests.js"></script>
     <script type="module" src="../js/teacher/setPage.js"></script>
 
     <!-- CSS -->
@@ -129,6 +129,7 @@
 
             <div class="col-lg-9">
 
+                <!-- 科目選択ウィンドウ -->
                 <div class="pt-lg-3 pb-lg-4 py-3 px-3 br-20 shadow" style="background-color: white;">
                     <div class="mx-lg-5 mx-3">
                         <div class="">
@@ -145,63 +146,126 @@
                         </div>
                     </div>
                 </div>
+                <!-- ここまで、科目選択ウィンドウ -->
                 
+                <!-- テスト一覧ウィンドウ -->
                 <div class="mt-4 pt-lg-2 pb-lg-5 pt-2 pb-5 br-20 shadow" style="background-color: white;">
                     
-                    <!-- ナビ（テストの種類） -->
-                    <div class="mt-3">
-                        <div class="row justify-content-center row-cols-auto f-Zen-Kaku-Gothic-New">
-                            <div class="col">
-                                <div class="fw-exbold c-pink tb-pink">
-                                    本日のテスト
+                    <!-- 「本日のテスト」エリア -->
+                    <div id="todayTestArea">
+                        <!-- ナビ（テストの種類） -->
+                        <div class="mt-3">
+                            <div class="row justify-content-center row-cols-auto f-Zen-Kaku-Gothic-New">
+                                <div class="col">
+                                    <div class="fw-exbold c-pink tb-pink">
+                                        本日のテスト
+                                    </div>
                                 </div>
-                            </div>
-                            <div class="col">
-                                <div onclick="" type="button" class="fw-medium text-secondary be-big-lg">
-                                    今後のテスト
+                                <div class="col">
+                                    <div onclick="viewFutureTestArea()" type="button" class="fw-medium text-secondary be-big-lg">
+                                        今後のテスト
+                                    </div>
                                 </div>
-                            </div>
-                            <div class="col">
-                                <div onclick="" type="button" class="fw-medium text-secondary be-big-lg">
-                                    過去のテスト
+                                <div class="col">
+                                    <div onclick="viewPastTestArea()" type="button" class="fw-medium text-secondary be-big-lg">
+                                        過去のテスト
+                                    </div>
                                 </div>
                             </div>
                         </div>
-                    </div>
 
-                    <div class="mt-4"></div>
+                        <div class="mt-4"></div>
 
-                    <!-- デモ・テストブロック -->
-                    <div onclick="" type="button" data-bs-toggle="modal"
-                        data-bs-target="#testViewModal"
-                        class="shadow br-10 mt-2 mx-lg-5 mx-3 px-3 py-3 f-Zen-Kaku-Gothic-New be-big-sm"
-                        style="border: 2px solid rgb(124, 154, 95);">
-                        <div class="row row-cols-auto">
-                            <!-- 科目 -->
-                            <div class="col fw-bold br-20 px-3 ms-2 text-white"
-                                style="background-color: rgb(124, 154, 95); font-size: 20px;">
-                                宗教学
+                        <!-- デモ・テストブロック -->
+                        <div onclick="" type="button" data-bs-toggle="modal"
+                            data-bs-target="#testViewModal"
+                            class="shadow br-10 mt-2 mx-lg-5 mx-3 px-3 py-3 f-Zen-Kaku-Gothic-New be-big-sm"
+                            style="border: 2px solid rgb(124, 154, 95);">
+                            <div class="row row-cols-auto">
+                                <!-- 科目 -->
+                                <div class="col fw-bold br-20 px-3 ms-2 text-white"
+                                    style="background-color: rgb(124, 154, 95); font-size: 20px;">
+                                    宗教学
+                                </div>
+                                <!-- タイトル -->
+                                <div class="col fw-exbold c-black" style="font-size: 20px">
+                                    第8回 小テスト
+                                </div>
                             </div>
-                            <!-- タイトル -->
-                            <div class="col fw-exbold c-black" style="font-size: 20px">
-                                第8回 小テスト
+                            <div class="my-2" style="border-bottom: 1px solid rgb(180, 180, 180);"></div>
+                            <div class="row row-cols-auto mt-1 justify-content-end">
+                                <!-- 日付 -->
+                                <div class="col f-Zen-Maru-Gothic br-20 px-3 ms-2 text-white"
+                                    style="background-color: rgb(89, 121, 60); font-size: 15px;">
+                                    2023年11月3日 10:40
+                                </div>
+                                <!-- タイトル -->
+                                <div class="col f-Zen-Maru-Gothic fw-medium c-black text-secondary" style="font-size: 15px">
+                                    受験予定者 75人
+                                </div>
                             </div>
                         </div>
-                        <div class="my-2" style="border-bottom: 1px solid rgb(180, 180, 180);"></div>
-                        <div class="row row-cols-auto mt-1 justify-content-end">
-                            <!-- 日付 -->
-                            <div class="col f-Zen-Maru-Gothic br-20 px-3 ms-2 text-white"
-                                style="background-color: rgb(89, 121, 60); font-size: 15px;">
-                                2023年11月3日 10:40
-                            </div>
-                            <!-- タイトル -->
-                            <div class="col f-Zen-Maru-Gothic fw-medium c-black text-secondary" style="font-size: 15px">
-                                受験予定者 75人
-                            </div>
-                        </div>
+
                     </div>
+                    <!-- ここまで、「本日のテスト」エリア -->
+
+                    <!-- 「今後のテスト」エリア -->
+                    <div id="futureTestArea" class="unvisible">
+
+                        <!-- ナビ（テストの種類） -->
+                        <div class="mt-3">
+                            <div class="row justify-content-center row-cols-auto f-Zen-Kaku-Gothic-New">
+                                <div class="col">
+                                    <div onclick="viewTodayTestArea()" type="button" class="fw-medium text-secondary be-big-lg">
+                                        本日のテスト
+                                    </div>
+                                    
+                                </div>
+                                <div class="col">
+                                    <div class="fw-exbold c-pink tb-pink">
+                                        今後のテスト
+                                    </div>
+                                </div>
+                                <div class="col">
+                                    <div onclick="viewPastTestArea()" type="button" class="fw-medium text-secondary be-big-lg">
+                                        過去のテスト
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+
+                    </div>
+                    <!-- ここまで、「今後のテスト」エリア -->
+
+                    <!-- 「過去のテスト」エリア -->
+                    <div id="pastTestArea" class="unvisible">
+
+                        <!-- ナビ（テストの種類） -->
+                        <div class="mt-3">
+                            <div class="row justify-content-center row-cols-auto f-Zen-Kaku-Gothic-New">
+                                <div class="col">
+                                    <div onclick="viewTodayTestArea()" type="button" class="fw-medium text-secondary be-big-lg">
+                                        本日のテスト
+                                    </div>
+                                </div>
+                                <div class="col">
+                                    <div onclick="viewFutureTestArea()" type="button" class="fw-medium text-secondary be-big-lg">
+                                        今後のテスト
+                                    </div>
+                                </div>
+                                <div class="col">
+                                    <div class="fw-exbold c-pink tb-pink">
+                                        過去のテスト
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+
+                    </div>
+                    <!-- ここまで、「過去のテスト」エリア -->
                 
                 </div>
+                <!-- ここまで、テスト一覧ウィンドウ -->
 
                 <!-- フッター -->
                 <div class="mt-5 py-5">
