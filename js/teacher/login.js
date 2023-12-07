@@ -153,4 +153,4 @@ window.moveTo3 = moveTo3;
 window.backTo1 = backTo1;
 window.moveToMypage = moveToMypage;
 window.backTo2 = backTo2;
-export{ login, viewSigninArea, viewLoginArea, moveTo2, moveTo3, backTo1, moveToMypage, backTo2 };
+export{ login, viewSigninArea, viewLoginArea, moveTo2, moveTo3, backTo1, moveToMypage, backTo2 }

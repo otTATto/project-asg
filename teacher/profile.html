@@ -402,5 +402,82 @@
         </div>
     </div>
 
+    <!-- 科目追加モーダル -->
+    <div class="modal fade" id="subjectAddModal" tabindex="-1" aria-labelledby="subjectAddModalLabel" aria-hidden="true">
+        <div class="modal-dialog modal-dialog-centered modal-dialog-scrollable">
+            <div class="modal-content br-20">
+                <div class="modal-header">
+                    <h1 class="c-blue modal-title fs-5 f-Zen-Kaku-Gothic-New fw-exbold" id="subjectAddModalLabel">
+                        <i class="fa-solid fa-file-lines"></i>
+                        担当科目を追加する
+                    </h1>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                </div>
+                <div class="modal-body f-Zen-Kaku-Gothic-New">
+
+                    <div class="px-3">
+
+                        <!-- 説明欄 -->
+                        <div class="bg-secondary-subtle py-1 br-10">
+                            <div class="f-Zen-Kaku-Gothic-New text-secondary text-center">
+                                アスタリスク(<span class="c-pink">*</span>)は必須項目です。
+                            </div>
+                        </div>
+
+                        <div class="mt-4 f-Zen-Kaku-Gothic-New fw-bold c-black" style="font-size: 21px;">
+                            <i class="fa-solid fa-hashtag"></i>
+                            基本情報
+                        </div>
+
+                        <div class="mt-3 f-Zen-Kaku-Gothic-New fw-bold text-secondary">
+                            教科名<span class="c-pink">*</span>
+                        </div>
+                        <div class="mt-1">
+                            <input class="form-control br-10" id="testNameInput" placeholder="(例) 宗教学１">
+                        </div>
+
+                        <div class="mt-4 f-Zen-Kaku-Gothic-New fw-bold c-black" style="font-size: 21px;">
+                            <i class="fa-solid fa-hashtag"></i>
+                            履修者情報
+                        </div>
+
+                        <div class="mt-2 f-Zen-Kaku-Gothic-New fw-bold text-secondary">
+                            履修者を追加する
+                        </div>
+
+                        <div class="my-3">
+                            <div type="button" class="c-blue d-grid col-8 py-2 py-lg-1 mx-auto br-20 be-big-sm make-letters-distance" style="border: 1.5px solid rgb(68, 112, 158);">
+                                <div class="f-Zen-Kaku-Gothic-New text-center fw-bold">
+                                    <i class="fa-solid fa-plus"></i>
+                                    学生を追加する
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="mt-2 f-Zen-Kaku-Gothic-New fw-bold text-secondary">
+                            現在、登録されている履修者一覧
+                        </div>
+                        
+                    </div>
+
+                    <div class="mt-3"></div>
+
+                </div>
+                <div class="modal-footer f-Zen-Maru-Gothic">
+                    <div class="mt-1 mb-2 d-grid gap-2 col-10 mx-auto">
+                        <button onclick="" class="btn btn-outline-primary btn-lg br-30 f-Zen-Kaku-Gothic-New fw-exbold" type="button">
+                            追加する
+                        </button>
+                    </div>
+                    <div class="d-grid col-4 mx-auto">
+                        <button type="button" class="btn btn-secondary br-30" data-bs-dismiss="modal">
+                            閉じる
+                        </button>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
 </body>
 </html>
