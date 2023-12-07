@@ -316,5 +316,91 @@
         </div>
     </div>
 
+    <!-- プロフィール編集モーダル -->
+    <div class="modal fade" id="profileEditModal" tabindex="-1" aria-labelledby="profileEditModalLabel" aria-hidden="true">
+        <div class="modal-dialog modal-dialog-centered modal-dialog-scrollable">
+            <div class="modal-content br-20">
+                <div class="modal-header">
+                    <h1 class="c-pink modal-title fs-5 f-Zen-Kaku-Gothic-New fw-exbold" id="profileEditModalLabel">
+                        <i class="fa-solid fa-file-lines"></i>
+                        プロフィールを編集する
+                    </h1>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                </div>
+                <div class="modal-body f-Zen-Kaku-Gothic-New">
+
+                    <div class="px-3">
+
+                        <!-- 説明欄 -->
+                        <div class="bg-secondary-subtle py-1 br-10">
+                            <div class="f-Zen-Kaku-Gothic-New text-secondary text-center">
+                                アスタリスク(<span class="c-pink">*</span>)は必須項目です。
+                            </div>
+                        </div>
+
+                        <div class="mt-3 f-Zen-Kaku-Gothic-New fw-bold text-secondary">
+                            お名前<span class="c-pink">*</span>
+                        </div>
+                        <div class="mt-1">
+                            <input class="form-control br-10" id="testNameInput" value="福沢諭吉">
+                        </div>
+
+                        <div class="mt-4 f-Zen-Kaku-Gothic-New fw-bold c-black" style="font-size: 21px;">
+                            <i class="fa-solid fa-hashtag"></i>
+                            所属に関する情報
+                        </div>
+
+                        <div class="mt-2 f-Zen-Kaku-Gothic-New fw-bold text-secondary">
+                            大学<span class="c-pink">*</span>
+                        </div>
+                        <div class="mt-1">
+                            <select class="form-select text-center f-Zen-Kaku-Gothic-New fw-medium br-10" aria-label="Default select example">
+                                <option>大学を選択してください</option>
+                                <option value="1" selected>東京理科大学</option>
+                            </select>
+                        </div>
+
+                        <div class="mt-2 f-Zen-Kaku-Gothic-New fw-bold text-secondary">
+                            学部<span class="c-pink">*</span>
+                        </div>
+                        <div class="mt-1">
+                            <select class="form-select text-center f-Zen-Kaku-Gothic-New fw-medium br-10" aria-label="Default select example">
+                                <option>学部を選択してください</option>
+                                <option value="1" selected>創域理工学部</option>
+                                <option value="2">薬学部</option>
+                            </select>
+                        </div>
+
+                        <div class="mt-2 f-Zen-Kaku-Gothic-New fw-bold text-secondary">
+                            学科<span class="c-pink">*</span>
+                        </div>
+                        <div class="mt-1">
+                            <select class="form-select text-center f-Zen-Kaku-Gothic-New fw-medium br-10" aria-label="Default select example">
+                                <option>学科を選択してください</option>
+                                <option value="1" selected>情報計算科学科</option>
+                                <option value="2">電気電子情報工学科</option>
+                            </select>
+                        </div>
+                    </div>
+
+                    <div class="mt-3"></div>
+
+                </div>
+                <div class="modal-footer f-Zen-Maru-Gothic">
+                    <div class="mt-1 mb-2 d-grid gap-2 col-10 mx-auto">
+                        <button onclick="" class="btn btn-outline-primary btn-lg br-30 f-Zen-Kaku-Gothic-New fw-exbold" type="button">
+                            保存する
+                        </button>
+                    </div>
+                    <div class="d-grid col-4 mx-auto">
+                        <button type="button" class="btn btn-secondary br-30" data-bs-dismiss="modal">
+                            閉じる
+                        </button>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
 </body>
 </html>
