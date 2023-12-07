@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>プロフィール・教師マイページ / 試験防衛壁</title>
+    <title>プロフィール・教師 / 試験防衛壁</title>
 
     <!-- Bootstrap -->
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-9ndCyUaIbzAi2FUVXJi0CjmCapSmO7SnpJef0486qhLnuZ2cdeRhO02iuK6FUUVM" crossorigin="anonymous">
@@ -45,15 +45,6 @@
     <div id="notify-buttonArea">
         <div type="button" data-bs-toggle="offcanvas" data-bs-target="#notify-canvas" aria-controls="notify-canvas" class="br shadow set-center be-big-lg" style="background-color: rgba(255, 255, 255, 0.5); color: rgba(158, 139, 68, 0.8); position: fixed; top: 20px; right: 20px; font-size: 30px; width: 60px; height: 60px;">
             <i class="fa-solid fa-bell"></i>
-        </div>
-    </div>
-
-    <!-- プロフ編集ボタン -->
-    <div id="profile-edit-buttonArea">
-        <div type="button" data-bs-toggle="offcanvas" data-bs-target="#profile-edit-modal" aria-controls="profile-edit-modal"
-            class="br shadow set-center be-big-lg"
-            style="background-color: rgba(255, 255, 255, 0.5); color: rgba(198, 152, 103, 0.8); position: fixed; bottom: 20px; right: 20px; font-size: 25px; width: 60px; height: 60px;">
-            <i class="fa-solid fa-pen"></i>
         </div>
     </div>
 
@@ -133,19 +124,126 @@
             <div class="col-lg-9">
 
                 <div class="pt-lg-4 pb-lg-5 py-4 br-20 shadow" style="background-color: white;">
-                
-                    <!-- アイコン -->
-                    <div class="text-center c-pink" style="font-size: 50px;">
-                        <i class="fa-solid fa-circle-user"></i>
-                    </div>
 
-                    <div class="my-2">
-                        <div type="button" class="d-grid col-lg-4 col-10 py-2 py-lg-1 mx-auto c-pink br-20 be-big-sm make-letters-distance" style="border: 1.5px solid rgb(158, 68, 112);">
-                            <div class="f-Zen-Kaku-Gothic-New text-center fw-bold">
-                                <i class="fa-solid fa-pen"></i>
-                                プロフィールを編集する
+                    <!-- 基本情報エリア -->
+                    <div id="profileMainArea">
+
+                        <!-- ナビ -->
+                        <div class="">
+                            <div class="row justify-content-center row-cols-auto f-Zen-Kaku-Gothic-New">
+                                <div class="col">
+                                    <div class="fw-exbold c-pink tb-pink">
+                                        基本情報
+                                    </div>
+                                </div>
+                                <div class="col">
+                                    <div onclick="viewSubjectArea()" type="button" class="fw-medium text-secondary be-big-lg">
+                                        科目情報
+                                    </div>
+                                </div>
                             </div>
                         </div>
+                    
+                        <!-- アイコン -->
+                        <div class="mt-4 text-center c-pink" style="font-size: 50px;">
+                            <i class="fa-solid fa-circle-user"></i>
+                        </div>
+
+                        <!-- ユーザーID表示エリア -->
+                        <div class="mb-2 text-center">
+                            <div class="f-Zen-Kaku-Gothic-New fw-bold text-secondary">
+                                ID・<span class="f-Zen-Maru-Gothic fw-bold c-black">9324075</span>
+                            </div>
+                        </div>
+
+                        <!-- プロフィール編集ボタン -->
+                        <div class="my-2">
+                            <div type="button" data-bs-toggle="modal" data-bs-target="#profileEditModal" class="d-grid col-lg-4 col-md-6 col-10 py-2 py-lg-1 mx-auto c-pink br-20 be-big-sm make-letters-distance" style="border: 1.5px solid rgb(158, 68, 112);">
+                                <div class="f-Zen-Kaku-Gothic-New text-center fw-bold">
+                                    <i class="fa-solid fa-pen"></i>
+                                    プロフィールを編集する
+                                </div>
+                            </div>
+                        </div>
+
+                        <!-- 名前表示エリア -->
+                        <div class="mt-4 text-center">
+                            <div class="f-Zen-Kaku-Gothic-New fw-bold text-secondary">
+                                名前・<span class="f-Zen-Maru-Gothic fw-bold c-black">福沢諭吉</span>
+                            </div>
+                        </div>
+
+                        <!-- 所属大学表示エリア -->
+                        <div class="mt-4 text-center">
+                            <div class="f-Zen-Kaku-Gothic-New fw-bold text-secondary">
+                                大学・<span class="f-Zen-Maru-Gothic fw-bold c-black">東京理科大学</span>
+                            </div>
+                        </div>
+
+                        <div class="mt-2 text-center">
+                            <div class="f-Zen-Kaku-Gothic-New fw-bold text-secondary">
+                                学部・<span class="f-Zen-Maru-Gothic fw-bold c-black">創域理工学部</span>
+                            </div>
+                        </div>
+
+                        <div class="mt-2 text-center">
+                            <div class="f-Zen-Kaku-Gothic-New fw-bold text-secondary">
+                                学科・<span class="f-Zen-Maru-Gothic fw-bold c-black">情報計算科学科</span>
+                            </div>
+                        </div>
+
+                    </div>
+
+                    <!-- 科目情報エリア -->
+                    <div id="profileSubjectArea" class="unvisible">
+
+                        <!-- ナビ -->
+                        <div class="">
+                            <div class="row justify-content-center row-cols-auto f-Zen-Kaku-Gothic-New">
+                                <div class="col">
+                                    <div onclick="viewMainArea()" type="button" class="fw-medium text-secondary be-big-lg">
+                                        基本情報
+                                    </div>
+                                </div>
+                                <div class="col">
+                                    <div class="fw-exbold c-pink tb-pink">
+                                        科目情報
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+
+                        <!-- 科目追加ボタン -->
+                        <div class="mt-4 my-2">
+                            <div type="button" data-bs-toggle="modal" data-bs-target="#subjectAddModal" class="c-blue d-grid col-lg-4 col-md-6 col-10 py-2 py-lg-1 mx-auto br-20 be-big-sm make-letters-distance" style="border: 1.5px solid rgb(68, 112, 158);">
+                                <div class="f-Zen-Kaku-Gothic-New text-center fw-bold">
+                                    <i class="fa-solid fa-plus"></i>
+                                    科目を追加する
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="mt-3">
+                            <div class="f-Zen-Kaku-Gothic-New fw-bold text-secondary text-center">
+                                担当科目
+                            </div>
+                        </div>
+
+                        <div class="mx-lg-5 mx-3 mt-3">
+                            <div class="list-group br-10 text-center">
+                                <button type="button" class="list-group-item list-group-item-action">
+                                    <div class="f-Zen-Kaku-Gothic-New fw-bold fs-5 c-black">
+                                        宗教学１
+                                    </div>
+                                </button>
+                                <button type="button" class="list-group-item list-group-item-action">
+                                    <div class="f-Zen-Kaku-Gothic-New fw-bold fs-5 c-black">
+                                        宗教学２
+                                    </div>
+                                </button>
+                            </div>
+                        </div>
+
                     </div>
                 
                 </div>

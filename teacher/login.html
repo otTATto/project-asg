@@ -17,6 +17,10 @@
     <!-- FontAwesome -->
     <script src="https://kit.fontawesome.com/6f8d6b3f84.js" crossorigin="anonymous"></script>
 
+    <!-- jQuery -->
+    <script src="https://code.jquery.com/jquery-3.6.4.min.js"></script>
+    <script src="./jquery.arctext.js" type="text/javascript"></script>
+
     <!-- JS -->
     <script type="module" src="../js/teacher/login.js"></script>
 
@@ -49,8 +53,9 @@
     <div class="container">
 
         <!-- ログイン画面 -->
-        <div class="my-5 py-5 br-20 col-lg-6 mx-auto shadow" style="background-color: rgb(255, 255, 255);">
+        <div class="my-5 py-5 br-20 col-lg-6 col-md-8 mx-auto shadow" style="background-color: rgb(255, 255, 255);">
 
+<<<<<<< HEAD
             <!-- ログイン選択中を示すサークル -->
             <div class="row">
                 <div class="col-6 text-center">
@@ -64,36 +69,286 @@
                     <div class="d-grid gap-2 col-8 col-md-7 col-lg-6 mx-auto">
                         <div onclick="login()" type="button" class="br-10 f-Zen-Kaku-Gothic-New fw-exbold be-big-click make-letters-distance" style="background-color: rgb(58, 96, 146);">
                             ログイン
+=======
+            <!-- ログインエリア -->
+            <div id="loginArea">
+
+                <!-- ナビ -->
+                <div class="">
+                    <div class="row justify-content-center row-cols-auto f-Zen-Kaku-Gothic-New">
+                        <div class="col">
+                            <div class="fw-exbold c-pink tb-pink">
+                                ログイン
+                            </div>
+                        </div>
+                        <div class="col">
+                            <div onclick="viewSigninArea()" type="button" class="fw-medium text-secondary be-big-lg">
+                                サインイン
+                            </div>
+>>>>>>> b6232d4ac0d01659cd2d12e29e68024cd0ed541c
                         </div>
                     </div>
                 </div>
-                <div class="col-6 text-center">
-                    <div class="d-grid gap-2 col-8 col-sm-8 col-md-7 col-lg-6 mx-auto">
-                        <div onclick="" type="button" class="br-10 f-Zen-Kaku-Gothic-New fw-bold be-big-click make-letters-distance" style="border: 1px solid rgb(58, 96, 146); color: rgb(58, 96, 146);">
-                            サインイン
+
+                <!-- 入力領域（ログイン） -->
+                <div class="mt-5">
+                    <div class="col-10 mx-auto f-Zen-Kaku-Gothic-New fw-bold" style="color: rgb(119, 149, 187);">
+                        <div class="form-floating mb-3">
+                            <input type="email" class="form-control br-30 px-4" id="loginMailInput" placeholder="name@example.com">
+                            <label for="loginMailInput" class="px-4">大学メールアドレス</label>
+                        </div>
+                        <div class="form-floating">
+                            <input type="password" class="form-control br-30 px-4" id="loginPasswordInput" placeholder="Password">
+                            <label for="loginPasswordInput" class="px-4">パスワード</label>
                         </div>
                     </div>
                 </div>
-            </div>
 
-            <!-- 入力領域 -->
-            <div class="mt-5">
-                <div class="col-10 mx-auto f-Zen-Kaku-Gothic-New fw-bold" style="color: rgb(119, 149, 187);">
-                    <div class="form-floating mb-3">
-                        <input type="email" class="form-control br-30 px-4" id="loginMailInput" placeholder="name@example.com">
-                        <label for="loginMailInput" class="px-4">大学メールアドレス</label>
-                    </div>
-                    <div class="form-floating">
-                        <input type="password" class="form-control br-30 px-4" id="loginPasswordInput" placeholder="Password">
-                        <label for="loginPasswordInput" class="px-4">パスワード</label>
+                <!-- ログインするボタン -->
+                <div class="mt-5 mb-3 d-grid gap-2 col-6 mx-auto">
+                    <button onclick="login()" class="btn btn-primary btn-lg br-30 f-Zen-Kaku-Gothic-New fw-exbold" type="button" >ログインする</button>
+                </div>
+
+            </div>
+            <!-- ここまで、ログインエリア -->
+
+            <!-- サインインエリア -->
+            <div id="signinArea" class="unvisible">
+
+                <!-- ナビ -->
+                <div class="">
+                    <div class="row justify-content-center row-cols-auto f-Zen-Kaku-Gothic-New">
+                        <div class="col">
+                            <div onclick="viewLoginArea()" type="button" class="fw-medium text-secondary be-big-lg">
+                                ログイン
+                            </div>
+                        </div>
+                        <div class="col">
+                            <div class="fw-exbold c-pink tb-pink">
+                                サインイン
+                            </div>
+                        </div>
                     </div>
                 </div>
-            </div>
 
-            <!-- ログインするボタン -->
-            <div class="mt-5 mb-3 d-grid gap-2 col-6 mx-auto">
-                <button onclick="login()" class="btn btn-primary btn-lg br-30 f-Zen-Kaku-Gothic-New fw-exbold" type="button" >ログインする</button>
+                <!-- 1st ステップ エリア -->
+                <div id="firstStepArea">
+
+                    <!-- ステップナビ -->
+                    <div class="mt-4">
+                        <div class="f-Zen-Maru-Gothic">
+                            <div class="row justify-content-center row-cols-auto">
+                                <div class="col">
+                                    <div class="br-20 px-2 c-pink-bg text-white fw-bold">
+                                        ❶st step
+                                    </div>
+                                </div>
+                                <div class="col">
+                                    <div class="c-pink">
+                                        2
+                                    </div>
+                                </div>
+                                <div class="col">
+                                    <div class="c-pink">
+                                        3
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- 入力領域（サインイン） -->
+                    <div class="mt-4">
+                        <div class="col-10 mx-auto f-Zen-Kaku-Gothic-New fw-bold" style="color: rgb(119, 149, 187);">
+                            <div class="form-floating mb-3">
+                                <input type="email" class="form-control br-30 px-4" id="signinMailInput" placeholder="name@example.com">
+                                <label for="signinMailInput" class="px-4">大学メールアドレス</label>
+                            </div>
+                            <div class="form-floating">
+                                <input type="password" class="form-control br-30 px-4" id="signinPasswordInput01" placeholder="Password">
+                                <label for="signinPasswordInput01" class="px-4">パスワード</label>
+                            </div>
+                            <div class="my-3">
+                                <div class="text-center" style="font-size: 12px;">
+                                    確認のために、<span class="c-pink">もう一度</span>パスワードを入力してください
+                                </div>
+                            </div>
+                            <div class="form-floating">
+                                <input type="password" class="form-control br-30 px-4" id="signinPasswordInput02" placeholder="Password">
+                                <label for="signinPasswordInput02" class="px-4">パスワード（再入力）</label>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="mt-4">
+                        <div class="d-grid col-lg-5 col-md-8 col-10 mx-auto">
+                            <div onclick="moveTo2()" class="btn btn-outline-primary br-20">
+                                <div class="f-Zen-Maru-Gothic fw-bold">
+                                    次へ
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                
+                </div>
+                <!-- ここまで、1st ステップ エリア -->
+
+                <!-- 2nd ステップ エリア -->
+                <div id="secondStepArea" class="unvisible">
+
+                    <!-- ステップナビ -->
+                    <div class="mt-4">
+                        <div class="f-Zen-Maru-Gothic">
+                            <div class="row justify-content-center row-cols-auto">
+                                <div class="col">
+                                    <div class="c-pink">
+                                        1
+                                    </div>
+                                </div>
+                                <div class="col">
+                                    <div class="br-20 px-2 c-pink-bg text-white fw-bold">
+                                        ❷nd step
+                                    </div>
+                                </div>
+                                <div class="col">
+                                    <div class="c-pink">
+                                        3
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- 入力領域（サインイン） -->
+                    <div class="mt-4">
+                        <div class="my-3 f-Zen-Kaku-Gothic-New fw-bold">
+                            <div class="text-center c-sub-blue" style="font-size: 12px;">
+                                <span class="c-pink">お名前</span>を教えてください
+                            </div>
+                        </div>
+                        <div class="col-10 mx-auto f-Zen-Kaku-Gothic-New fw-bold" style="color: rgb(119, 149, 187);">
+                            <input type="text" class="form-control form-control-lg br-30 px-4 c-sub-blue fw-bold" id="signinNameInput" placeholder="(例) 理科大太郎">
+                        </div>
+                    </div>
+
+                    <div class="mt-4">
+                        <div class="d-grid col-lg-5 col-md-8 col-10 mx-auto">
+                            <div onclick="moveTo3()" class="btn btn-outline-primary br-20">
+                                <div class="f-Zen-Maru-Gothic fw-bold">
+                                    次へ
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="mt-2">
+                        <div class="d-grid col-lg-5 col-md-8 col-10 mx-auto">
+                            <div onclick="backTo1()" class="btn btn-outline-secondary br-20">
+                                <div class="f-Zen-Maru-Gothic fw-bold">
+                                    戻る
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                
+                </div>
+                <!-- ここまで、2nd ステップ エリア -->
+
+                <!-- 3rd ステップ エリア -->
+                <div id="thirdStepArea" class="unvisible">
+
+                    <!-- ステップナビ -->
+                    <div class="mt-4">
+                        <div class="f-Zen-Maru-Gothic">
+                            <div class="row justify-content-center row-cols-auto">
+                                <div class="col">
+                                    <div class="c-pink">
+                                        1
+                                    </div>
+                                </div>
+                                <div class="col">
+                                    <div class="c-pink">
+                                        2
+                                    </div>
+                                </div>
+                                <div class="col">
+                                    <div class="br-20 px-2 c-pink-bg text-white fw-bold">
+                                        ❸rd step
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- 入力領域（サインイン） -->
+                    <div class="mt-4">
+                        <div class="col-10 mx-auto f-Zen-Kaku-Gothic-New fw-bold" style="color: rgb(119, 149, 187);">
+                            <div class="my-3 f-Zen-Kaku-Gothic-New fw-bold">
+                                <div class="text-center c-sub-blue" style="font-size: 12px;">
+                                    <span class="c-pink">所属</span>を教えてください
+                                </div>
+                            </div>
+
+                            <div class="f-Zen-Kaku-Gothic-New fw-bold">
+                                <div class="text-secondary ms-4">
+                                    大学
+                                </div>
+                            </div>
+                            <select class="form-select form-select-lg mb-3 f-Zen-Kaku-Gothic-New fw-bold c-sub-blue br-30" aria-label=".form-select-lg example">
+                                <option selected>大学を選んでください</option>
+                                <option value="1">東京理科大学</option>
+                            </select>
+
+                            <div class="f-Zen-Kaku-Gothic-New fw-bold">
+                                <div class="text-secondary ms-4">
+                                    学部
+                                </div>
+                            </div>
+                            <select class="form-select form-select-lg mb-3 f-Zen-Kaku-Gothic-New fw-bold c-sub-blue br-30" aria-label=".form-select-lg example">
+                                <option selected>学部を選んでください</option>
+                                <option value="1">創域理工学部</option>
+                                <option value="2">薬学部</option>
+                            </select>
+
+                            <div class="f-Zen-Kaku-Gothic-New fw-bold">
+                                <div class="text-secondary ms-4">
+                                    学科
+                                </div>
+                            </div>
+                            <select class="form-select form-select-lg mb-3 f-Zen-Kaku-Gothic-New fw-bold c-sub-blue br-30" aria-label=".form-select-lg example">
+                                <option selected>学部を選んでください</option>
+                                <option value="1">情報計算科学科</option>
+                                <option value="2">電気電子情報工学科</option>
+                            </select>
+                            
+                        </div>
+                    </div>
+
+                    <div class="mt-4">
+                        <div class="d-grid col-lg-5 col-md-8 col-10 mx-auto">
+                            <div onclick="moveToMypage()" class="btn btn-outline-primary br-20">
+                                <div class="f-Zen-Maru-Gothic fw-bold">
+                                    次へ
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="mt-2">
+                        <div class="d-grid col-lg-5 col-md-8 col-10 mx-auto">
+                            <div onclick="backTo2()" class="btn btn-outline-secondary br-20">
+                                <div class="f-Zen-Maru-Gothic fw-bold">
+                                    戻る
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                
+                </div>
+                <!-- ここまで、3nd ステップ エリア -->
+
             </div>
+            <!-- ここまで、サインインエリア -->
 
         </div>
         
