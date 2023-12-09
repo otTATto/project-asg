@@ -30,9 +30,11 @@ import {queryDivider, generateUuid } from '../set.js';
 // グローバル変数の用意
 var mailValue;      // メアド in databaseを格納
 var passwordValue;  //パスワード in databaseを格納
+var nameValue;      //
 var uidValue;       // ユーザーユニークIDを格納
 var mailInput;     // メアド in 入力領域を格納
 var passwordInput; //パスワード in 入力領域を格納
+var nameInput      //名前 in 入力領域を格納
 
 // 「ログインする」ボタンを押したときに実行
 async function login(){
@@ -113,9 +115,77 @@ function backTo1(){
 }
 
 // 「サインインエリア」の「3rd step」における「次へ」ボタンを押したときに実行
-function moveToMypage(){
-    // 各情報をデータベースに格納
-    
+async function moveToMypage(){
+    // テキストボックスからメアドを取得
+    mailValue = document.getElementById('signinMailInput').value;
+    //「signinMailInput」が空ならreturn
+    if(!mailValue) {
+      alert("メールアドレスが入力されていません");
+      return;   //if内の代替→maiVaalue == NULL
+    };
+    // テキストボックスからパスワードを取得
+    //「passwordInput」から文字を取得
+    passwordValue = document.getElementById('signinPasswordInput01').value;
+    //「signinPasswordInput01」が空ならreturn
+    if(!passwordValue) {
+        alert("パスワードが入力されていません");
+        return;
+    };
+
+    //パスワード(再入力)と違ったらreturn
+    const passwordValue02 = document.getElementById('signinPasswordInput02').value;
+    if(passwordValue != passwordValue02){
+      alert("正しくパスワードを入力してください");
+      return;
+    };
+
+    //テキストボックスから名前を取得
+    nameInput = document.getElementById('signinNameInput').value;
+    if(!nameInput){
+      alert("名前を入力してください");
+      return;
+    };
+    console.log(nameInput);
+
+    //プルダウンから大学、学部、学科を取得
+    const univInput = document.getElementById('univ').value;
+    const facInput = document.getElementById('faculty').value;
+    const depInput = document.getElementById('depature').value;
+    console.log(facInput); 
+
+
+    // ユニークなユーザーIDを生成・取得
+    // 関数「generateUuid」を呼び出して、返り値を「uidValue」に格納
+    uidValue = generateUuid();
+
+    // 登録時間を取得
+    const signinTime = Date.now();
+
+    //DBに格納
+    const userRef1 = ref(database, 'users/teachers/' + uidValue + '/mainData/');  //第一引数：database(L24)(どのデータベースか), 第2：入れたい場所のパス, refはfirebaseから引っ張ってきた
+    await set(userRef1, {      //第一引数：入れたい場所, 第2引数：入れたい内容   await: 非同期関数の中で使える、この関数が完了するまで先に進まない
+      studentName : nameInput,
+      userType : "teacher",
+      userUid : uidValue,
+    });
+
+    const userRef2 = ref(database, 'users/teachers/' + uidValue + '/mainData/belonging/');
+    await set(userRef2, {
+      univ : univInput,
+      fac : facInput,
+      dep : depInput
+    });
+
+    const userRef3 = ref(database, 'users/teachers/' + uidValue + '/loginData/');
+    await set(userRef3, {
+      mail : mailValue,
+      passwd : passwordValue
+    });
+
+    const userRef4 = ref(database, 'users/teachers/' + uidValue + '/baseData/');
+    await set(userRef4, {
+      makeDate : signinTime
+    })
 
     // マイページへの遷移
     window.location.href = './mypage.html';

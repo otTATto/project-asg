@@ -23,6 +23,7 @@
 
     <!-- JS -->
     <script type="module" src="../js/teacher/login.js"></script>
+    <script type="module" src="../js/teacher/selectFacForTeacher.js"></script>
 
     <!-- CSS -->
     <link href="../css/style.css" rel="stylesheet">
@@ -278,9 +279,9 @@
                                     大学
                                 </div>
                             </div>
-                            <select class="form-select form-select-lg mb-3 f-Zen-Kaku-Gothic-New fw-bold c-sub-blue br-30" aria-label=".form-select-lg example">
+                            <select class="form-select form-select-lg mb-3 f-Zen-Kaku-Gothic-New fw-bold c-sub-blue br-30" id="univ" aria-label=".form-select-lg example">
                                 <option selected>大学を選んでください</option>
-                                <option value="1">東京理科大学</option>
+                                <option value="TUS">東京理科大学</option>
                             </select>
 
                             <div class="f-Zen-Kaku-Gothic-New fw-bold">
@@ -288,10 +289,8 @@
                                     学部
                                 </div>
                             </div>
-                            <select class="form-select form-select-lg mb-3 f-Zen-Kaku-Gothic-New fw-bold c-sub-blue br-30" aria-label=".form-select-lg example">
+                            <select class="form-select form-select-lg mb-3 f-Zen-Kaku-Gothic-New fw-bold c-sub-blue br-30" id="faculty" aria-label=".form-select-lg example">
                                 <option selected>学部を選んでください</option>
-                                <option value="1">創域理工学部</option>
-                                <option value="2">薬学部</option>
                             </select>
 
                             <div class="f-Zen-Kaku-Gothic-New fw-bold">
@@ -299,10 +298,8 @@
                                     学科
                                 </div>
                             </div>
-                            <select class="form-select form-select-lg mb-3 f-Zen-Kaku-Gothic-New fw-bold c-sub-blue br-30" aria-label=".form-select-lg example">
+                            <select class="form-select form-select-lg mb-3 f-Zen-Kaku-Gothic-New fw-bold c-sub-blue br-30" id="depature" aria-label=".form-select-lg example">
                                 <option selected>学部を選んでください</option>
-                                <option value="1">情報計算科学科</option>
-                                <option value="2">電気電子情報工学科</option>
                             </select>
                             
                         </div>
