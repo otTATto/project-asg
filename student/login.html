@@ -204,16 +204,28 @@
                     </div>
 
                     <!-- 入力領域（サインイン） -->
-                    <div class="mt-4">
-                        <div class="my-3 f-Zen-Kaku-Gothic-New fw-bold">
-                            <div class="text-center c-sub-blue" style="font-size: 12px;">
-                                <span class="c-pink">お名前</span>を教えてください
+                        <!-- 学籍番号の入力 -->
+                        <div class="mt-4">
+                            <div class="my-3 f-Zen-Kaku-Gothic-New fw-bold">
+                                <div class="text-center c-sub-blue" style="font-size: 12px;">
+                                    <span class="c-pink">学籍番号</span>を教えてください
+                                </div>
+                            </div>
+                            <div class="col-10 mx-auto f-Zen-Kaku-Gothic-New fw-bold" style="color: rgb(119, 149, 187);">
+                                <input type="number" min="1000000" max="9999999" class="form-control form-control-lg br-30 px-4 c-sub-blue fw-bold" id="signinStudentNumInput">
                             </div>
                         </div>
-                        <div class="col-10 mx-auto f-Zen-Kaku-Gothic-New fw-bold" style="color: rgb(119, 149, 187);">
-                            <input type="text" class="form-control form-control-lg br-30 px-4 c-sub-blue fw-bold" id="signinNameInput" placeholder="(例) 理科大太郎">
+                        <!-- 名前の入力 -->
+                        <div class="mt-4">
+                            <div class="my-3 f-Zen-Kaku-Gothic-New fw-bold">
+                                <div class="text-center c-sub-blue" style="font-size: 12px;">
+                                    <span class="c-pink">お名前</span>を教えてください
+                                </div>
+                            </div>
+                            <div class="col-10 mx-auto f-Zen-Kaku-Gothic-New fw-bold" style="color: rgb(119, 149, 187);">
+                                <input type="text" class="form-control form-control-lg br-30 px-4 c-sub-blue fw-bold" id="signinNameInput" placeholder="(例) 理科大太郎">
+                            </div>
                         </div>
-                    </div>
 
                     <div class="mt-4">
                         <div class="d-grid col-lg-5 col-md-8 col-10 mx-auto">
