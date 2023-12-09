@@ -345,7 +345,7 @@
                         テスト内容の確認
                     </h1>
                     <div class="d-grid col-4 mx-auto f-Zen-Kaku-Gothic-New">
-                        <button type="button" class="btn btn-outline-danger br-30 fw-exbold" data-bs-dismiss="modal">
+                        <button type="button" class="btn btn-outline-danger br-30 fw-exbold" data-bs-toggle="modal" data-bs-target="#testEditModal">
                             編集する
                         </button>
                     </div>
@@ -620,6 +620,115 @@
         </div>
     </div>
     <!-- ここまで、テストを追加するモーダル -->
+
+    <!-- テストを編集するモーダル -->
+    <div class="modal fade" id="testEditModal" tabindex="-1" aria-labelledby="testEditModalLabel" aria-hidden="true">
+        <div class="modal-dialog modal-dialog-centered modal-dialog-scrollable">
+            <div class="modal-content br-20">
+                <div class="modal-header">
+                    <h1 class="c-pink modal-title fs-5 f-Zen-Kaku-Gothic-New fw-exbold" id="testEditModalLabel">
+                        <i class="fa-solid fa-file-lines"></i>
+                        テストを編集する
+                    </h1>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                </div>
+                <div class="modal-body f-Zen-Kaku-Gothic-New">
+
+                    <div class="px-3">
+
+                        <!-- 説明欄 -->
+                        <div class="bg-secondary-subtle py-1 br-10">
+                            <div class="f-Zen-Kaku-Gothic-New text-secondary text-center">
+                                アスタリスク(<span class="c-pink">*</span>)は必須項目です。
+                            </div>
+                        </div>
+
+                        <div class="mt-2 f-Zen-Kaku-Gothic-New fw-bold c-black" style="font-size: 21px;">
+                            <i class="fa-solid fa-hashtag"></i>
+                            基本情報
+                        </div>
+
+                        <div class="mt-2 f-Zen-Kaku-Gothic-New fw-bold text-secondary">
+                            科目<span class="c-pink">*</span>
+                        </div>
+                        <div class="mt-1">
+                            <select class="form-select text-center f-Zen-Kaku-Gothic-New fw-medium br-10" aria-label="Default select example">
+                                <option>科目を選択してください</option>
+                                <option value="1" selected>宗教学１</option>
+                                <option value="2">宗教学２</option>
+                            </select>
+                        </div>
+
+                        <div class="mt-3 f-Zen-Kaku-Gothic-New fw-bold text-secondary">
+                            テストの名前<span class="c-pink">*</span>
+                        </div>
+                        <div class="mt-1">
+                            <input id="edittingTestNameInput" class="form-control br-10" value="第8回 小テスト">
+                        </div>
+
+                        <div class="mt-3 f-Zen-Kaku-Gothic-New fw-bold text-secondary">
+                            テストの実施予定日時<span class="c-pink">*</span>
+                        </div>
+                        <div class="mt-1">
+                            <input type="datetime-local" class="form-control br-10" id="edittingTestDateInput" value="2023-11-03T10:40">
+                        </div>
+
+                        <div class="mt-3 f-Zen-Kaku-Gothic-New fw-bold text-secondary">
+                            テストの試験時間<span class="c-pink">*</span>
+                        </div>
+                        <div class="mt-1">
+                            <div class="input-group">
+                                <input id="edittingTestLimitInput" type="text" class="form-control br-10" value="60" aria-describedby="basic-addon2">
+                                <span class="input-group-text f-Zen-Kaku-Gothic-New fw-bold text-secondary br-10" id="basic-addon2">分</span>
+                            </div>
+                        </div>
+
+                        <div class="mt-4 f-Zen-Kaku-Gothic-New fw-bold c-black" style="font-size: 21px;">
+                            <i class="fa-solid fa-hashtag"></i>
+                            補助情報
+                        </div>
+
+                        <div class="mt-2 f-Zen-Kaku-Gothic-New fw-bold text-secondary">
+                            テストの備考
+                        </div>
+                        <div class="mt-1">
+                            <textarea id="edittingTestMemoInput" class="form-control br-10" rows="3">教科書の持ち込みはできませんが、授業で配ったレジュメのみ試験中に参照可能です。</textarea>
+                        </div>
+
+                        <div class="mt-3 f-Zen-Kaku-Gothic-New fw-bold c-black" style="font-size: 21px;">
+                            <i class="fa-solid fa-hashtag"></i>
+                            受験者情報
+                        </div>
+                        <div class="mt-2 bg-danger-subtle py-1 px-3 br-10">
+                            <div class="f-Zen-Kaku-Gothic-New text-secondary text-center">
+                                科目に登録されている学生が自動的に対象となります
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="my-4 mb-2 d-grid gap-2 col-10 mx-auto">
+                        <button onclick="" class="btn btn-outline-danger btn-lg br-30 f-Zen-Kaku-Gothic-New fw-exbold" type="button">
+                            テストを削除する
+                        </button>
+                    </div>
+
+                </div>
+                <div class="modal-footer f-Zen-Maru-Gothic">
+                    <div class="mt-1 mb-2 d-grid gap-2 col-10 mx-auto">
+                        <button onclick="" class="btn btn-outline-primary btn-lg br-30 f-Zen-Kaku-Gothic-New fw-exbold" type="button">
+                            更新する
+                        </button>
+                    </div>
+                    <div class="d-grid col-4 mx-auto">
+                        <button type="button" class="btn btn-secondary br-30" data-bs-dismiss="modal">
+                            閉じる
+                        </button>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    <!-- ここまで、テストを編集するモーダル -->
 
 </body>
 </html>
