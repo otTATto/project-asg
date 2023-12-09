@@ -2,7 +2,7 @@
 function supervise(){
 
     // ページ遷移
-
+    window.location.href = './supervisor.html';
     
 }
 
@@ -35,4 +35,5 @@ function viewPastTestArea(){
 window.viewTodayTestArea = viewTodayTestArea;
 window.viewFutureTestArea = viewFutureTestArea;
 window.viewPastTestArea = viewPastTestArea;
-export{ viewTodayTestArea, viewFutureTestArea, viewPastTestArea }
+window.supervise = supervise;
+export{ viewTodayTestArea, viewFutureTestArea, viewPastTestArea, supervise }
