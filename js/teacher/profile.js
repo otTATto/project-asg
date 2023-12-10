@@ -26,11 +26,13 @@ const database = getDatabase();
 
 import { queryDivider, generateUuid } from '../set.js';
 
+// 後で使う変数
 var uidValue;
 var nameInput;
 var univInput;
 var facInput;
 var depInput;
+var students = [];     //学籍番号を格納
 
 //ページが読み込まれたときに実行
 window.addEventListener('load', async function(){
@@ -106,18 +108,85 @@ async function saveProf(){
     window.location.href = './profile.html?uid=' + uidValue;
 }
 
+// 科目追加で「学生を追加する」ボタンを押したときに実行
+// 入力→[num1「, or -」num2] を想定、返り値→学籍番号の配列？
+function addStu(){
+    // テキストエリアを「,」「-」で分解
+    var stuNumsInput = document.getElementById('participantInput').value;
+
+    // 「,」だったら前後の二つの数字を配列に追加
+    students = stuNums.split(',');
+    console.log(typeof(students));
+    for(var num in students){
+        students[num] = parseInt(students[num]);
+        console.log(students[num]);
+    }
+    // console.log(students);
+    // console.log(typeof(students));
+    // 「-」だったらnum1~num2までのすべての数字を配列に追加
+
+
+    return;
+}
+
 //「科目情報エリア」の「科目を追加する」機能
-function addSub(){
+async function addSubj(){
+    // 担当者のuidを取得(uidValue)
+
     //テキストエリアから科目名を取得
-    const subNameInput = document.getElementById('testNameInput').value;
+    const subjNameInput = document.getElementById('testNameInput').value;
 
-    // 履修者の学籍番号を取得
+    // 教科のuidを作成
+    const subjUid = generateUuid();
 
-    // 学籍番号からuidを取得
+    // 作成時間を取得
+    const createTime = Date.now();
 
-    // 担当者のuidを取得
+    // 履修者の学籍番号を取得(students)
 
-    // 
+    // 学籍番号からuidを取得  
+    const itemRef = ref(database, 'users/students/');
+    var snapshot = await get(itemRef);
+    var data = snapshot.val();
+    var stuUidValue;   //参加生徒のuid
+    var uidArray = [];   //uidの配列
+    // students(学籍番号の配列)の各要素に対してuidを探す
+    for(var num in students){
+        Object.keys(data).forEach((element, index, key, snapshot) => {  //DB内を全探索して一致する学籍番号を探す
+            let numFromDB = data[element].mainData.studentNum;
+    
+            if(numFromDB == num){   //一致したらその人のuidを保存
+                console.log('ヒットしました:' + element.value);
+                stuUidValue = data[element].mainData.userUid  //uidを取得
+                uidArray.push(stuUidValue);
+            }
+            // 一致する学籍番号が存在しないとき
+
+        });
+    }
+
+    // subjectのDBを作成、基本情報を格納
+    const subjRef1 = ref(database, 'subjects/' + subjUid + '/mainData/');
+    await set(subjRef1, {
+        subjectName : subjNameInput,
+        subjectId : subjUid,
+        managerId : uidValue
+    });
+
+    // 各生徒のuidをDBに格納
+    const subjRef2 = ref(database, 'subjects/' + subjUid + '/participants');
+    for(var id in uidArray){
+        await set(subjRef2, {
+            uid : id
+        });
+    }
+
+    // 作成時間をDBに格納
+    const subjRef3 = ref(database, 'subjects/' + subjUid + '/baseData/');
+    await set(subjRef3, {
+        makeDate : createTime
+    });
+   
 }
 
 //ホームボタンを押したとき実行
@@ -148,10 +217,11 @@ function logout(){
 window.viewSubjectArea = viewSubjectArea;
 window.viewMainArea = viewMainArea;
 window.saveProf = saveProf;
-window.addSub = addSub;
+window.addStu = addStu;
+window.addSubj = addSubj;
 window.moveToHome = moveToHome;
 window.moveToTest = moveToTest;
 window.moveToProf = moveToProf;
 window.moveToSet = moveToSet;
 window.logout = logout;
-export{ viewSubjectArea, viewMainArea, saveProf, addSub, moveToHome, moveToTest, moveToProf, moveToSet }
+export{ viewSubjectArea, viewMainArea, saveProf, addStu, addSubj, moveToHome, moveToTest, moveToProf, moveToSet }
