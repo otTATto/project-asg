@@ -38,10 +38,15 @@ function moveToSet(){
     window.location.href = './setting.html?id=' + uidValue;
 }
 
+//ログアウトボタンを押したときに実行
+function logout(){
+    window.location.href = './login.html';
+}
 
 window.supervise = supervise;
 window.moveToHome = moveToHome;
 window.moveToTest = moveToTest;
 window.moveToProf = moveToProf;
 window.moveToSet = moveToSet;
-export{ supervise, moveToHome, moveToTest, moveToProf, moveToSet }
+window.logout = logout;
+export{ supervise, moveToHome, moveToTest, moveToProf, moveToSet, logout }

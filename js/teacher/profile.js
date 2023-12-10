@@ -1,13 +1,15 @@
 import { queryDivider, generateUuid } from '../set.js';
 
+var uidValue;
+
 //ページが読み込まれたときに実行
 window.addEventListener('load', async function(){
   // クエリからuidを取得
-  const uidValue = queryDivider()[0];
+  uidValue = queryDivider()[0];
   console.log("get uid: " + uidValue);
 
   //uid から学籍番号を取得
-  
+
 
   // uidValueをhtmlに反映
   var uid = document.getElementById('uid');
@@ -42,7 +44,37 @@ function addSub(){
     // 
 }
 
+//ホームボタンを押したとき実行
+function moveToHome(){
+    window.location.href = './mypage.html?id=' + uidValue;
+}
+
+//テストボタンを押したとき実行
+function moveToTest(){
+    window.location.href = './tests.html?id=' + uidValue;  
+}
+
+//プロフィールボタンを押したとき実行
+function moveToProf(){
+    window.location.href = './profile.html?uid=' + uidValue;
+}
+
+//設定ボタンを押したとき実行
+function moveToSet(){
+    window.location.href = './setting.html?id=' + uidValue;
+}
+
+//ログアウトボタンを押したときに実行
+function logout(){
+    window.location.href = './login.html';
+}
+
 window.viewSubjectArea = viewSubjectArea;
 window.viewMainArea = viewMainArea;
 window.addSub = addSub;
-export{ viewSubjectArea, viewMainArea, addSub }
+window.moveToHome = moveToHome;
+window.moveToTest = moveToTest;
+window.moveToProf = moveToProf;
+window.moveToSet = moveToSet;
+window.logout = logout;
+export{ viewSubjectArea, viewMainArea, addSub, moveToHome, moveToTest, moveToProf, moveToSet }
