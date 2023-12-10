@@ -169,27 +169,27 @@
 
                         <!-- 名前表示エリア -->
                         <div class="mt-4 text-center">
-                            <div class="f-Zen-Kaku-Gothic-New fw-bold text-secondary">
-                                名前・<span class="f-Zen-Maru-Gothic fw-bold c-black">福沢諭吉</span>
+                            <div class="f-Zen-Kaku-Gothic-New fw-bold text-secondary" id="teaName">
+                                名前・<span class="f-Zen-Maru-Gothic fw-bold c-black"></span>
                             </div>
                         </div>
 
                         <!-- 所属大学表示エリア -->
                         <div class="mt-4 text-center">
-                            <div class="f-Zen-Kaku-Gothic-New fw-bold text-secondary">
-                                大学・<span class="f-Zen-Maru-Gothic fw-bold c-black">東京理科大学</span>
+                            <div class="f-Zen-Kaku-Gothic-New fw-bold text-secondary" id="teaUniv">
+                                大学・<span class="f-Zen-Maru-Gothic fw-bold c-black"></span>
                             </div>
                         </div>
 
                         <div class="mt-2 text-center">
-                            <div class="f-Zen-Kaku-Gothic-New fw-bold text-secondary">
-                                学部・<span class="f-Zen-Maru-Gothic fw-bold c-black">創域理工学部</span>
+                            <div class="f-Zen-Kaku-Gothic-New fw-bold text-secondary" id="teaFac">
+                                学部・<span class="f-Zen-Maru-Gothic fw-bold c-black"></span>
                             </div>
                         </div>
 
                         <div class="mt-2 text-center">
-                            <div class="f-Zen-Kaku-Gothic-New fw-bold text-secondary">
-                                学科・<span class="f-Zen-Maru-Gothic fw-bold c-black">情報計算科学科</span>
+                            <div class="f-Zen-Kaku-Gothic-New fw-bold text-secondary" id="teaDep">
+                                学科・<span class="f-Zen-Maru-Gothic fw-bold c-black"></span>
                             </div>
                         </div>
 
@@ -355,7 +355,7 @@
                             大学<span class="c-pink">*</span>
                         </div>
                         <div class="mt-1">
-                            <select class="form-select text-center f-Zen-Kaku-Gothic-New fw-medium br-10" aria-label="Default select example">
+                            <select class="form-select text-center f-Zen-Kaku-Gothic-New fw-medium br-10" id="univ" aria-label="Default select example">
                                 <option>大学を選択してください</option>
                                 <option value="1" selected>東京理科大学</option>
                             </select>
@@ -385,7 +385,7 @@
                 </div>
                 <div class="modal-footer f-Zen-Maru-Gothic">
                     <div class="mt-1 mb-2 d-grid gap-2 col-10 mx-auto">
-                        <button onclick="" class="btn btn-outline-primary btn-lg br-30 f-Zen-Kaku-Gothic-New fw-exbold" type="button">
+                        <button onclick="saveProf()" class="btn btn-outline-primary btn-lg br-30 f-Zen-Kaku-Gothic-New fw-exbold" type="button">
                             保存する
                         </button>
                     </div>
