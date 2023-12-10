@@ -18,11 +18,30 @@ function supervise(){
     
 }
 
-//profile.html への遷移
+//ホームボタンを押したとき実行
+function moveToHome(){
+    window.location.href = './mypage.html?id=' + uidValue;
+}
+
+//テストボタンを押したとき実行
+function moveToTest(){
+    window.location.href = './tests.html?id=' + uidValue;  
+}
+
+//プロフィールボタンを押したとき実行
 function moveToProf(){
     window.location.href = './profile.html?uid=' + uidValue;
 }
 
+//設定ボタンを押したとき実行
+function moveToSet(){
+    window.location.href = './setting.html?id=' + uidValue;
+}
+
+
 window.supervise = supervise;
+window.moveToHome = moveToHome;
+window.moveToTest = moveToTest;
 window.moveToProf = moveToProf;
-export{ supervise, moveToProf }
+window.moveToSet = moveToSet;
+export{ supervise, moveToHome, moveToTest, moveToProf, moveToSet }
