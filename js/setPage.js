@@ -5,14 +5,14 @@ var windowWidth;
 var windowHeight;
 
 // ページが読み込まれたときに実行
-window.onload = async function () {
+window.addEventListener('load', async function (){
     // 表示領域のサイズを取得
     var windowSize = getWindowSize();
     windowWidth = windowSize[0];
     windowHeight = windowSize[1];
 
     setContents();
-}
+})
 
 // 画面サイズが変更されたときに実行
 $(window).resize(function () {  
