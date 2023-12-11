@@ -18,6 +18,10 @@ function supervise(){
     
 }
 
+function viewTest(){
+    
+}
+
 //ホームボタンを押したとき実行
 function moveToHome(){
     window.location.href = './mypage.html?id=' + uidValue;
