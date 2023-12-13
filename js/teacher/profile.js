@@ -29,6 +29,7 @@ import { queryDivider, generateUuid } from '../set.js';
 // 後で使う変数
 var uidValue;   //ログイン者のuidを格納
 var nameInput;
+var stuNumInput;
 var univInput;
 var facInput;
 var depInput;
@@ -150,6 +151,7 @@ function viewMainArea(){
 async function saveProf(){
     //テキストエリアから情報を取得
     nameInput = document.getElementById('teaNameInput').value;
+    stuNumInput = document.getElementById('teaNumInput').value;
     univInput = document.getElementById('univ').value;
     facInput = document.getElementById('faculty').value;
     depInput = document.getElementById('depature').value;
@@ -157,6 +159,7 @@ async function saveProf(){
     //DBに上書き
     const userRef1 = ref(database, 'users/teachers/' + uidValue + '/mainData/');
     await update(userRef1, {
+        studentNum : stuNumInput,
         studentName : nameInput
     });
 
