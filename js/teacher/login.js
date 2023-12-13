@@ -151,7 +151,8 @@ async function moveToMypage(){
     };
     console.log(nameInput);
 
-    //プルダウンから大学、学部、学科を取得
+    //プルダウンから学籍番号、大学、学部、学科を取得
+    const stuNumInput = document.getElementById('signinStudentNumInput').value;
     const univInput = document.getElementById('univ').value;
     const facInput = document.getElementById('faculty').value;
     const depInput = document.getElementById('depature').value;
@@ -168,6 +169,7 @@ async function moveToMypage(){
     //DBに格納
     const userRef1 = ref(database, 'users/teachers/' + uidValue + '/mainData/');  //第一引数：database(L24)(どのデータベースか), 第2：入れたい場所のパス, refはfirebaseから引っ張ってきた
     await set(userRef1, {      //第一引数：入れたい場所, 第2引数：入れたい内容   await: 非同期関数の中で使える、この関数が完了するまで先に進まない
+      studentNum : stuNumInput,
       studentName : nameInput,
       userType : "teacher",
       userUid : uidValue,
