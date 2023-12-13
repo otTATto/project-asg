@@ -70,6 +70,7 @@ const categories = [
     // 小分類のプルダウンに「選択してください」を加える
     const firstSelect = document.createElement('option');
     firstSelect.textContent = '学科を選択してください';
+    firstSelect.setAttribute('value', '1');
     subCategorySelect1.appendChild(firstSelect);
     
     // 大分類で選択されたカテゴリーと同じ小分類のみを、プルダウンの選択肢に設定する
