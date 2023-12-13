@@ -23,6 +23,7 @@
 
     <!-- JS -->
     <script type="module" src="../js/student/login.js"></script>
+    <script type="module" src="../js/student/selectFacForStu.js"></script>
 
     <!-- CSS -->
     <link href="../css/style.css" rel="stylesheet">
@@ -300,10 +301,9 @@
                                     学部
                                 </div>
                             </div>
-                            <select class="form-select form-select-lg mb-3 f-Zen-Kaku-Gothic-New fw-bold c-sub-blue br-30" aria-label=".form-select-lg example">
+                            <select class="form-select form-select-lg mb-3 f-Zen-Kaku-Gothic-New fw-bold c-sub-blue br-30" id = "faculty" aria-label=".form-select-lg example">
                                 <option selected>学部を選んでください</option>
-                                <option value="1">創域理工学部</option>
-                                <option value="2">薬学部</option>
+                                
                             </select>
 
                             <div class="f-Zen-Kaku-Gothic-New fw-bold">
@@ -311,10 +311,9 @@
                                     学科
                                 </div>
                             </div>
-                            <select class="form-select form-select-lg mb-3 f-Zen-Kaku-Gothic-New fw-bold c-sub-blue br-30" aria-label=".form-select-lg example">
-                                <option selected>学部を選んでください</option>
-                                <option value="1">情報計算科学科</option>
-                                <option value="2">電気電子情報工学科</option>
+                            <select class="form-select form-select-lg mb-3 f-Zen-Kaku-Gothic-New fw-bold c-sub-blue br-30" id = "depature" aria-label=".form-select-lg example">
+                                <option selected>学科を選んでください</option>
+                               
                             </select>
 
                             <div class="f-Zen-Kaku-Gothic-New fw-bold">
@@ -333,7 +332,7 @@
                         <div class="d-grid col-lg-5 col-md-8 col-10 mx-auto">
                             <div onclick="moveToMypage()" class="btn btn-outline-primary br-20">
                                 <div class="f-Zen-Maru-Gothic fw-bold">
-                                    次へ
+                                    登録
                                 </div>
                             </div>
                         </div>
