@@ -36,6 +36,10 @@ var mailInput;     // メアド in 入力領域を格納
 var passwordInput; //パスワード in 入力領域を格納
 var nameInput      //名前 in 入力領域を格納
 var stunum;     //学籍番号 in入力領域を格納
+var grade;      //生徒の学年を格納
+var univInput;  //大学名の情報格納
+var facInput; //学部の情報格納
+var depInput; //学科の情報格納
 
 // 「ログインする」ボタンを押したときに実行
 async function login(){
@@ -50,7 +54,7 @@ async function login(){
     return;
   }
 
-  const itemRef = ref(database, 'users/teachers/');
+  const itemRef = ref(database, 'users/students/');
   var snapshot = await get(itemRef);
   var data = snapshot.val();
   Object.keys(data).forEach((element, index, key, snapshot) => {  //DB内を全探索して一致するメアドを探す
@@ -163,16 +167,16 @@ async function moveToMypage(){
     // 各情報をデータベースに格納
     
     //プルダウンから大学、学部、学科を取得
-    const univInput = document.getElementById('univ').value;
-    console.log(univInput);
-    if(!univInput =='大学を選択してください') {
-        alert("選択してください");
-        return;
-      };
-    const facInput = document.getElementById('faculty').value;
-    const depInput = document.getElementById('depature').value;
+    univInput = document.getElementById('univ').value;
+    facInput = document.getElementById('faculty').value;
+    depInput = document.getElementById('depature').value;
     console.log(facInput); 
 
+    grade = document.getElementById('signinGradeInput').value;
+    if(!grade){
+        alert("学年を選択してください");
+        return;
+      };
 
     // ユニークなユーザーIDを生成・取得
     // 関数「generateUuid」を呼び出して、返り値を「uidValue」に格納
@@ -182,7 +186,7 @@ async function moveToMypage(){
     const signinTime = Date.now();
 
     //DBに格納
-    const userRef1 = ref(database, 'users/teachers/' + uidValue + '/mainData/');  //第一引数：database(L24)(どのデータベースか), 第2：入れたい場所のパス, refはfirebaseから引っ張ってきた
+    const userRef1 = ref(database, 'users/students/' + uidValue + '/mainData/');  //第一引数：database(L24)(どのデータベースか), 第2：入れたい場所のパス, refはfirebaseから引っ張ってきた
     await set(userRef1, {      //第一引数：入れたい場所, 第2引数：入れたい内容   await: 非同期関数の中で使える、この関数が完了するまで先に進まない
       studentNum : stunum,
       studentName : nameInput,
@@ -190,27 +194,28 @@ async function moveToMypage(){
       userUid : uidValue,
     });
 
-    const userRef2 = ref(database, 'users/teachers/' + uidValue + '/mainData/belonging/');
+    const userRef2 = ref(database, 'users/students/' + uidValue + '/mainData/belonging/');
     await set(userRef2, {
       univ : univInput,
       fac : facInput,
-      dep : depInput
+      dep : depInput,
+      grade : grade
     });
 
-    const userRef3 = ref(database, 'users/teachers/' + uidValue + '/loginData/');
+    const userRef3 = ref(database, 'users/students/' + uidValue + '/loginData/');
     await set(userRef3, {
       mail : mailValue,
       passwd : passwordValue
     });
 
-    const userRef4 = ref(database, 'users/teachers/' + uidValue + '/baseData/');
+    const userRef4 = ref(database, 'users/students/' + uidValue + '/baseData/');
     await set(userRef4, {
       makeDate : signinTime
     })
 
 
     // マイページへの遷移
-    window.location.href = './mypage.html';
+    window.location.href = './mypage.html?uid=' + uidValue + '/';
 
 }
 
@@ -223,6 +228,7 @@ function backTo2(){
 }
 
 // 関数のエクスポート
+window.login = login;
 window.viewSigninArea = viewSigninArea;
 window.viewLoginArea = viewLoginArea;
 window.moveTo2 = moveTo2;
@@ -230,4 +236,4 @@ window.moveTo3 = moveTo3;
 window.backTo1 = backTo1;
 window.moveToMypage = moveToMypage;
 window.backTo2 = backTo2;
-export{ viewSigninArea, viewLoginArea, moveTo2, moveTo3, backTo1, moveToMypage, backTo2 }
+export{login, viewSigninArea, viewLoginArea, moveTo2, moveTo3, backTo1, moveToMypage, backTo2 }
