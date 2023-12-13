@@ -35,6 +35,7 @@ var uidValue;       // ユーザーユニークIDを格納
 var mailInput;     // メアド in 入力領域を格納
 var passwordInput; //パスワード in 入力領域を格納
 var nameInput      //名前 in 入力領域を格納
+var stunum;     //学籍番号 in入力領域を格納
 
 // 「ログインする」ボタンを押したときに実行
 async function login(){
@@ -127,6 +128,22 @@ function moveTo2(){
 // 「サインインエリア」の「2st step」における「次へ」ボタンを押したときに実行
 function moveTo3(){
     // 「1st ステップ エリア」を非表示・「2nd ステップ エリア」を非表示・「3rd ステップ エリア」を表示
+    //テキストボックスから学籍番号
+    stunum = document.getElementById('signinStudentNumInput').value;
+    if(!stunum){
+        alert("学籍番号を入力してください");
+        return;
+      };
+      console.log(signinStudentNumInput);
+
+    //テキストボックスから名前を取得
+    nameInput = document.getElementById('signinNameInput').value;
+    if(!nameInput){
+      alert("名前を入力してください");
+      return;
+    };
+    console.log(nameInput);
+
     $('#firstStepArea').removeClass('visible').addClass('unvisible');
     $('#secondStepArea').removeClass('visible').addClass('unvisible');
     $('#thirdStepArea').removeClass('unvisible').addClass('visible');
@@ -141,20 +158,17 @@ function backTo1(){
     $('#thirdStepArea').removeClass('visible').addClass('unvisible');
 }
 
-// 「サインインエリア」の「3rd step」における「次へ」ボタンを押したときに実行
+// 「サインインエリア」の「3rd step」における「登録」ボタンを押したときに実行
 async function moveToMypage(){
     // 各情報をデータベースに格納
-
-    //テキストボックスから名前を取得
-    nameInput = document.getElementById('signinNameInput').value;
-    if(!nameInput){
-      alert("名前を入力してください");
-      return;
-    };
-    console.log(nameInput);
-
+    
     //プルダウンから大学、学部、学科を取得
     const univInput = document.getElementById('univ').value;
+    console.log(univInput);
+    if(!univInput =='大学を選択してください') {
+        alert("選択してください");
+        return;
+      };
     const facInput = document.getElementById('faculty').value;
     const depInput = document.getElementById('depature').value;
     console.log(facInput); 
@@ -170,8 +184,9 @@ async function moveToMypage(){
     //DBに格納
     const userRef1 = ref(database, 'users/teachers/' + uidValue + '/mainData/');  //第一引数：database(L24)(どのデータベースか), 第2：入れたい場所のパス, refはfirebaseから引っ張ってきた
     await set(userRef1, {      //第一引数：入れたい場所, 第2引数：入れたい内容   await: 非同期関数の中で使える、この関数が完了するまで先に進まない
+      studentNum : stunum,
       studentName : nameInput,
-      userType : "teacher",
+      userType : "student",
       userUid : uidValue,
     });
 
