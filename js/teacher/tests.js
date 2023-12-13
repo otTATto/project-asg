@@ -47,7 +47,7 @@ window.addEventListener('load', async function(){
     Object.keys(subjData).forEach((element, index, key, snapshot) => {
         let manaIdFromDB = subjData[element].mainData.managerId;
 
-        if(manaIdFromDB == uidValue){   //一致したら
+        if(manaIdFromDB == uidValue){   // もし自分の担当教科だったらvalue=uid, text=教科名 でプルダウンを作成(innerHTML,appendChild)
             var subjName = subjData[element].mainData.subjectName;  //教科の名前を取得
             var subjUid = subjData[element].mainData.subjectId; //教科のuidを取得(もしかしたらelementだけでいい？)
             var subject = document.createElement('option');   //子クラス
@@ -63,7 +63,7 @@ window.addEventListener('load', async function(){
         }
     });
 
-    // もし自分の担当教科だったらvalue=uid, text=教科名 でプルダウンを作成(innerHTML,appendChild)
+    
 })
 
 // 起動時に「本日のテスト」を表示する
@@ -81,7 +81,7 @@ window.addEventListener('load', function(){
 
 })
 
-// プルダウンを選択したときにテストを絞り込む
+// 科目検索のプルダウンを選択したときにテストを絞り込む
 
 // 新しくテストを作成する
 async function makeTest(){
