@@ -399,8 +399,8 @@ async function addSubj(){
     });
 
     // 各生徒のuidをDBに格納
-    const subjRef2 = ref(database, 'subjects/' + subjUid + '/participants');
-    for(var id of stuUidArray){      
+    for(var id of stuUidArray){
+        const subjRef2 = ref(database, 'subjects/' + subjUid + '/participants/' + id + '/');
         await set(subjRef2, {
             uid : id
         });
