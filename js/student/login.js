@@ -176,7 +176,10 @@ async function moveToMypage(){
     if(!grade){
         alert("学年を選択してください");
         return;
-      };
+    } else if(grade < 1 || grade > 4) {
+      alert("正しい学年を選択してください");
+      return;
+    };
 
     // ユニークなユーザーIDを生成・取得
     // 関数「generateUuid」を呼び出して、返り値を「uidValue」に格納
