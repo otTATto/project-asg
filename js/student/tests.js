@@ -1,4 +1,16 @@
 // テストの詳細モーダル内の「試験画面へ進む」ボタンを押したときに実行
+import { queryDivider, generateUuid } from '../set.js';
+
+var uidValue;   //自分(生徒)のuidを格納
+// 起動時に実行
+window.addEventListener('load', function(){
+    // クエリからuidを取得
+    uidValue = queryDivider()[0];
+    console.log("get uid: " + uidValue);
+
+})
+
+
 function moveToExam(){
 
     // ページ遷移
@@ -30,10 +42,38 @@ function viewPastTestArea(){
     $('#pastTestArea').removeClass('unvisible').addClass('visible');
 }
 
+//ホームボタンを押したとき実行
+function moveToHome(){
+    window.location.href = './mypage.html?id=' + uidValue;
+}
 
+//テストボタンを押したとき実行
+function moveToTest(){
+    window.location.href = './tests.html?id=' + uidValue;  
+}
+
+//プロフィールボタンを押したとき実行
+function moveToProf(){
+    window.location.href = './profile.html?uid=' + uidValue;
+}
+
+//設定ボタンを押したとき実行
+function moveToSet(){
+    window.location.href = './setting.html?id=' + uidValue;
+}
+
+//ログアウトボタンを押したときに実行
+function logout(){
+    window.location.href = './login.html';
+}
 // 関数のエクスポート
 window.viewTodayTestArea = viewTodayTestArea;
 window.viewFutureTestArea = viewFutureTestArea;
 window.viewPastTestArea = viewPastTestArea;
 window.moveToExam = moveToExam;
-export{ viewTodayTestArea, viewFutureTestArea, viewPastTestArea, moveToExam }
+window.moveToHome = moveToHome;
+window.moveToTest = moveToTest;
+window.moveToProf = moveToProf;
+window.moveToSet = moveToSet;
+window.logout = logout;
+export{ viewTodayTestArea, viewFutureTestArea, viewPastTestArea, moveToExam,moveToHome, moveToTest, moveToProf, moveToSet, logout }

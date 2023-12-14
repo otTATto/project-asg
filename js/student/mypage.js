@@ -1,6 +1,8 @@
 import { queryDivider, generateUuid } from '../set.js';
 // テストの詳細モーダル内の「試験画面へ進む」ボタンを押したときに実行
 
+var uidValue;
+
 window.addEventListener('load', function(){
     // クエリからuidを取得
     uidValue = queryDivider()[0];
@@ -42,4 +44,9 @@ function moveToExam(){
 }
 
 window.moveToExam = moveToExam;
-export{ moveToExam }
+window.moveToHome = moveToHome;
+window.moveToTest = moveToTest;
+window.moveToProf = moveToProf;
+window.moveToSet = moveToSet;
+window.logout = logout;
+export{ moveToExam, moveToHome,moveToTest, moveToProf, moveToSet, logout}
