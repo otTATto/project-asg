@@ -39,7 +39,7 @@ function logout(){
 function moveToExam(){
 
     // ページ遷移
-    window.location.href = './exam.html';
+    window.location.href = './exam.html?uuid=uuid&tuid=tuid';
     
 }
 
