@@ -1,12 +1,96 @@
+// firebaseで使うやつ
+// Import the functions you need from the SDKs you need
+import { initializeApp } from "https://www.gstatic.com/firebasejs/10.7.0/firebase-app.js";
+import { getAnalytics } from "https://www.gstatic.com/firebasejs/10.7.0/firebase-analytics.js";
+import { getDatabase, ref, set, get, onValue, update } from "https://www.gstatic.com/firebasejs/10.7.0/firebase-database.js";  //追加
+// TODO: Add SDKs for Firebase products that you want to use
+// https://firebase.google.com/docs/web/setup#available-libraries
+
+// Your web app's Firebase configuration
+// For Firebase JS SDK v7.20.0 and later, measurementId is optional
+const firebaseConfig = {
+  apiKey: "AIzaSyDALbDCl1cQ0K-WoIVW_jEhGGFpVKu4HG8",
+  authDomain: "dbtest-a8005.firebaseapp.com",
+  databaseURL: "https://dbtest-a8005-default-rtdb.asia-southeast1.firebasedatabase.app",
+  projectId: "dbtest-a8005",
+  storageBucket: "dbtest-a8005.appspot.com",
+  messagingSenderId: "788239328067",
+  appId: "1:788239328067:web:aa6bd9897621641f4c45f6",
+  measurementId: "G-B77QR8NJPQ"
+};
+
+// Initialize Firebase
+const app = initializeApp(firebaseConfig);
+const analytics = getAnalytics(app);
+const database = getDatabase();
+
 import { queryDivider, generateUuid } from '../set.js';
 
 var uidValue;   //自分(教師)のuidを格納
-
+var nameInput;      //名前 in 入力領域を格納
+var univInput;  //大学名の情報格納
+var stuNumInput; //学籍番号の格納
+var facInput; //学部の情報格納
+var depInput; //学科の情報格納
+var grade;  //生徒の学年情報格納
 // 起動時に実行
-window.addEventListener('load', function(){
+
+window.addEventListener('load', async function(){
     // クエリからuidを取得
     uidValue = queryDivider()[0];
     console.log("get uid: " + uidValue);
+
+    //uid から名前、大学、学部、学科を取得
+    const teaRef = ref(database, 'users/students/' + uidValue + '/mainData/');
+    var snapshot = await get(teaRef);
+    var data = snapshot.val();
+    var teaName = data.studentName;
+    var stuNum = data.studentNum;
+    var teaUniv = data.belonging.univ;
+    var teaFac = data.belonging.fac;
+    var teaDep = data.belonging.dep;
+    var teagrade = data.belonging.grade;
+
+    console.log('Name:' + teaName);
+    console.log('univ:' + teaUniv);
+
+
+    // uidValueをhtmlに反映
+    var uid = document.getElementById('uid');
+    var uid2 = document.createElement('div');
+    uid2.innerHTML = ' ID2・<span class="f-Zen-Maru-Gothic fw-bold c-black">' + uidValue + '</span>';
+    uid.appendChild(uid2);
+
+    var teaNameShow = document.getElementById('teaName');
+    var teaNameShow2 = document.createElement('div'); 
+    teaNameShow2.innerHTML = '名前・<span class="f-Zen-Maru-Gothic fw-bold c-black">' + teaName + '</span>';
+    teaNameShow.appendChild(teaNameShow2);
+
+    var teaNameShow = document.getElementById('stuNum');
+    var teaNameShow2 = document.createElement('div'); 
+    teaNameShow2.innerHTML = '学籍番号・<span class="f-Zen-Maru-Gothic fw-bold c-black">' + stuNum + '</span>';
+    teaNameShow.appendChild(teaNameShow2);
+
+    var teaUnivShow = document.getElementById('teaUniv');
+    var teaUnivShow2 = document.createElement('div');
+    teaUnivShow2.innerHTML = '大学・<span class="f-Zen-Maru-Gothic fw-bold c-black">' + teaUniv + '</span>';
+    teaUnivShow.appendChild(teaUnivShow2);
+
+    var teaFacShow = document.getElementById('teaFac');
+    var teaFacShow2 = document.createElement('div');
+    teaFacShow2.innerHTML = '学部・<span class="f-Zen-Maru-Gothic fw-bold c-black">' + teaFac + '</span>';
+    teaFacShow.appendChild(teaFacShow2);
+
+    var teaDepShow = document.getElementById('teaDep');
+    var teaDepShow2 = document.createElement('div');
+    teaDepShow2.innerHTML = '学科・<span class="f-Zen-Maru-Gothic fw-bold c-black">' + teaDep + '</span>';
+    teaDepShow.appendChild(teaDepShow2);
+
+    var teaDepShow = document.getElementById('teagrade');
+    var teaDepShow2 = document.createElement('div');
+    teaDepShow2.innerHTML = '学年・<span class="f-Zen-Maru-Gothic fw-bold c-black">' + teagrade + '</span>';
+    teaDepShow.appendChild(teaDepShow2);
+
 
 })
 
@@ -111,6 +195,34 @@ function viewMainArea(){
     $('#profileSubjectArea').removeClass('visible').addClass('unvisible');
 }
 
+// プロフィール変更の「保存する」ボタンを押したときに実行
+async function saveProf(){
+  //テキストエリアから情報を取得
+  nameInput = document.getElementById('testNameInput').value;
+  stuNumInput = document.getElementById('teaNumInput').value;
+  univInput = document.getElementById('univ').value;
+  facInput = document.getElementById('faculty').value;
+  depInput = document.getElementById('depature').value;
+  grade = document.getElementById('grade').value;
+  //DBに上書き
+  const userRef1 = ref(database, 'users/students/' + uidValue + '/mainData/');
+  await update(userRef1, {
+      studentNum : stuNumInput,
+      studentName : nameInput
+  });
+
+  const userRef2 = ref(database, 'users/students/' + uidValue + '/mainData/belonging/');
+  await update(userRef2, {
+      univ : univInput,
+      fac : facInput,
+      dep : depInput,
+      grade : grade
+  });
+
+  window.location.href = './profile.html?uid=' + uidValue;
+}
+
+
 //ホームボタンを押したとき実行
 function moveToHome(){
   window.location.href = './mypage.html?id=' + uidValue;
@@ -143,4 +255,5 @@ window.moveToTest = moveToTest;
 window.moveToProf = moveToProf;
 window.moveToSet = moveToSet;
 window.logout = logout;
-export{ viewSubjectArea, viewMainArea,moveToHome, moveToTest, moveToProf, moveToSet, logout }
+window.saveProf = saveProf;
+export{ viewSubjectArea, viewMainArea,moveToHome, moveToTest, moveToProf, moveToSet, logout,saveProf }
