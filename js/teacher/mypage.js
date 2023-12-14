@@ -152,10 +152,10 @@ function supervise(){
 // テストのボタンを押したときに実行
 async function viewTest(subjUid, testUid){    //引数は(教科のuid, テストのuid)
     // テストの各情報を取得(科目名、テスト名、日時、試験時間、テストの備考)、作成者、作成日時
-    const subjRef = ref(database, 'subjects/' + subjUid + '/mainData/');
+    const subjRef = ref(database, 'subjects/' + subjUid + '/');
     var subjSnapshot = await get(subjRef);
     var subjData = subjSnapshot.val();
-    var subjName = subjData.subjName;   //科目名
+    var subjName = subjData.mainData.subjectName;   //科目名
     const testRef = ref(database, 'subjects/' + subjUid + '/tests/' + testUid + '/');
     var testSnapshot = await get(testRef);
     var testData = testSnapshot.val();
@@ -169,7 +169,7 @@ async function viewTest(subjUid, testUid){    //引数は(教科のuid, テス�
     var testLimit = testData.mainData.testLimit;    //試験時間
     var testMemo = testData.mainData.testMemo;  //備考
     var testMakeDate = testData.baseData.makeDate;  //作成日時(unixTime)
-    var makeDateDate = new Date(testMakeDate * 1000);
+    var makeDateDate = new Date(testMakeDate);
     var makeYear = makeDateDate.getFullYear();    //作成年
     var makeMonth = makeDateDate.getMonth() + 1;   //作成月
     var makeDay = makeDateDate.getDate();     //作成日
@@ -303,33 +303,48 @@ async function viewTest(subjUid, testUid){    //引数は(教科のuid, テス�
                                         '</button>' +
                                     '</div>' +
                                 '</div>' +
-                            '</div>' +
+                            '</div>' + 
                         '</div>';
 
     
 
     // 参加者一覧を作成(id = participants)
-    // var stuRef = ref(database, 'users/students/');
-    // var snapshot = await get(stuRef);
-    // var data = snapshot.val();
-    // var stuNumFromDB;
-    // var stuNameFromDB;
+    var stuRef = ref(database, 'users/students/');
+    var snapshot = await get(stuRef);
+    var data = snapshot.val();
+    var stuNumFromDB;
+    var stuNameFromDB;
     // var stuFacFromDB;
-    // var stuGradeFromDB;
+    var stuGradeFromDB;
     // var num = 1;  //インデックス
-    // var particiArea = document.getElementById('participants');//親クラス
-    // for(var stu of stuUidArray){
-    //     // stuUidArrayの各要素(各生徒)について、学籍番号、氏名、学科、学年を取得
-    //     stuNumFromDB = data[stu].mainData.studentNum;
-    //     stuNameFromDB = data[stu].mainData.studentName;
-    //     stuDepFromDB = data[stu].mainData.belonging.dep;
-    //     stuGradeFromDB = data[stu].mainData.belonging.grade;
-    //     // 取得した属性を表示
-    //     var participant = document.createElement('div');    //子クラス
-    //     participant.innerHTML = '<tr>        <th scope="row" class="text-end" style="color: rgb(110, 110, 176);">' + num + '</th>        <td class="text-center">' + stuNumFromDB + '</td>        <td class="text-center">' + stuNameFromDB + '</td>        <td class="text-center">' + stuDepFromDB + '</td>        <td class="text-center">' + stuGradeFromDB + '</td>        <td class="text-center">            <div onclick="" type="button" class="text-danger br-20 be-big-lg" style="border: 1px solid red;"><i class="fa-solid fa-trash"></i></div>        </td>    </tr>'
-    //     particiArea.appendChild(participant);
-    // }
-    
+    var particiArea = document.getElementById('participants');//表示エリア(親クラス)
+    var particiRef = ref(database, 'subjects/' + subjUid + '/participants/');
+    var particiSnapshot = await get(particiRef);
+    var particiData = particiSnapshot.val();
+    Object.keys(particiData).forEach((element, index, key, snapshot) => {      //各履修者に対して、subjRef.participants
+        stuNumFromDB = data[element].mainData.studentNum;
+        stuNameFromDB = data[element].mainData.studentName;
+        stuDepFromDB = data[element].mainData.belonging.dep;
+        stuGradeFromDB = data[element].mainData.belonging.grade;
+        // 取得した属性を表示
+        var participant = document.createElement('div');    //子クラス
+        participant.innerHTML = '<tr>' +
+                                    '<th scope="row" class="text-end" style="color: rgb(110, 110, 176);">' + index + '</th>' +
+                                    '<td class="text-center">' + stuNumFromDB + '</td>' +
+                                    '<td class="text-center">' + stuNameFromDB + '</td>' +
+                                    '<td class="text-center">' + stuDepFromDB + '</td>' +
+                                    '<td class="text-center">' + stuGradeFromDB + '</td>' +
+                                '</tr>';
+        particiArea.appendChild(participant);
+
+    });
+
+    //　テストの編集モーダルを作成
+    var testEditModalArea = document.getElementById('testEditModal');   //表示エリア(親クラス)
+    // テストの名前、実施時間、試験時間、備考をDBから抽出
+
+    // valueに代入
+
 }
 
 //ホームボタンを押したとき実行
