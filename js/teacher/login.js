@@ -32,7 +32,7 @@ var mailValue;      // メアド in databaseを格納
 var passwordValue;  //パスワード in databaseを格納
 var nameValue;      //
 var nameInput      //名前 in 入力領域を格納
-var stunum;        //学籍番号 in入力領域を格納
+var stuNum;        //学籍番号 in入力領域を格納
 var uidValue;       // ユーザーユニークIDを格納
 var mailInput;     // メアド in 入力領域を格納
 var passwordInput; //パスワード in 入力領域を格納
@@ -101,7 +101,6 @@ function viewLoginArea(){
 
 // 「サインインエリア」の「1st step」における「次へ」ボタンを押したときに実行
 function moveTo2(){
-    // 「1st ステップ エリア」を非表示・「2nd ステップ エリア」を表示・「3rd ステップ エリア」を非表示
     mailValue = document.getElementById('signinMailInput').value;
     //「signinMailInput」が空ならreturn
     if(!mailValue) {
@@ -123,6 +122,8 @@ function moveTo2(){
       alert("正しくパスワードを入力してください");
       return;
     };
+
+    // 「1st ステップ エリア」を非表示・「2nd ステップ エリア」を表示・「3rd ステップ エリア」を非表示
     $('#firstStepArea').removeClass('visible').addClass('unvisible');
     $('#secondStepArea').removeClass('unvisible').addClass('visible');
     $('#thirdStepArea').removeClass('visible').addClass('unvisible');
@@ -130,6 +131,20 @@ function moveTo2(){
 
 // 「サインインエリア」の「2st step」における「次へ」ボタンを押したときに実行
 function moveTo3(){
+  stuNum = document.getElementById('signinStudentNumInput').value;
+  if(!stuNum){
+      alert("学籍番号を入力してください");
+      return;
+    };
+    console.log(signinStudentNumInput);
+
+  //テキストボックスから名前を取得
+  nameInput = document.getElementById('signinNameInput').value;
+  if(!nameInput){
+    alert("名前を入力してください");
+    return;
+  };
+
     // 「1st ステップ エリア」を非表示・「2nd ステップ エリア」を非表示・「3rd ステップ エリア」を表示
     $('#firstStepArea').removeClass('visible').addClass('unvisible');
     $('#secondStepArea').removeClass('visible').addClass('unvisible');
@@ -139,19 +154,6 @@ function moveTo3(){
 // 「サインインエリア」の「2st step」における「戻る」ボタンを押したときに実行
 function backTo1(){
     // 「1st ステップ エリア」を表示・「2nd ステップ エリア」を非表示・「3rd ステップ エリア」を非表示
-    stunum = document.getElementById('signinStudentNumInput').value;
-    if(!stunum){
-        alert("学籍番号を入力してください");
-        return;
-      };
-      console.log(signinStudentNumInput);
-
-    //テキストボックスから名前を取得
-    nameInput = document.getElementById('signinNameInput').value;
-    if(!nameInput){
-      alert("名前を入力してください");
-      return;
-    };
     console.log(nameInput);
     $('#firstStepArea').removeClass('unvisible').addClass('visible');
     $('#secondStepArea').removeClass('visible').addClass('unvisible');
@@ -160,13 +162,10 @@ function backTo1(){
 
 // 「サインインエリア」の「3rd step」における「次へ」ボタンを押したときに実行
 async function moveToMypage(){
-    
-
     //プルダウンから学籍番号、大学、学部、学科を取得
-     
-     univInput = document.getElementById('univ').value;
-     facInput = document.getElementById('faculty').value;
-     depInput = document.getElementById('depature').value;
+    univInput = document.getElementById('univ').value;
+    facInput = document.getElementById('faculty').value;
+    depInput = document.getElementById('depature').value;
     console.log(facInput); 
     console.log(depInput);
     console.log(univInput);
@@ -182,7 +181,7 @@ async function moveToMypage(){
     //DBに格納
     const userRef1 = ref(database, 'users/teachers/' + uidValue + '/mainData/');  //第一引数：database(L24)(どのデータベースか), 第2：入れたい場所のパス, refはfirebaseから引っ張ってきた
     await set(userRef1, {      //第一引数：入れたい場所, 第2引数：入れたい内容   await: 非同期関数の中で使える、この関数が完了するまで先に進まない
-      studentNum : stunum,
+      studentNum : stuNum,
       studentName : nameInput,
       userType : "teacher",
       userUid : uidValue,
