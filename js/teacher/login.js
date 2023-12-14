@@ -31,10 +31,15 @@ import {queryDivider, generateUuid } from '../set.js';
 var mailValue;      // メアド in databaseを格納
 var passwordValue;  //パスワード in databaseを格納
 var nameValue;      //
+var nameInput      //名前 in 入力領域を格納
+var stunum;        //学籍番号 in入力領域を格納
 var uidValue;       // ユーザーユニークIDを格納
 var mailInput;     // メアド in 入力領域を格納
 var passwordInput; //パスワード in 入力領域を格納
 var nameInput      //名前 in 入力領域を格納
+var univInput;  //大学名の情報格納
+var facInput; //学部の情報格納
+var depInput; //学科の情報格納
 
 // 「ログインする」ボタンを押したときに実行
 async function login(){
@@ -97,30 +102,6 @@ function viewLoginArea(){
 // 「サインインエリア」の「1st step」における「次へ」ボタンを押したときに実行
 function moveTo2(){
     // 「1st ステップ エリア」を非表示・「2nd ステップ エリア」を表示・「3rd ステップ エリア」を非表示
-    $('#firstStepArea').removeClass('visible').addClass('unvisible');
-    $('#secondStepArea').removeClass('unvisible').addClass('visible');
-    $('#thirdStepArea').removeClass('visible').addClass('unvisible');
-}
-
-// 「サインインエリア」の「2st step」における「次へ」ボタンを押したときに実行
-function moveTo3(){
-    // 「1st ステップ エリア」を非表示・「2nd ステップ エリア」を非表示・「3rd ステップ エリア」を表示
-    $('#firstStepArea').removeClass('visible').addClass('unvisible');
-    $('#secondStepArea').removeClass('visible').addClass('unvisible');
-    $('#thirdStepArea').removeClass('unvisible').addClass('visible');
-}
-
-// 「サインインエリア」の「2st step」における「戻る」ボタンを押したときに実行
-function backTo1(){
-    // 「1st ステップ エリア」を表示・「2nd ステップ エリア」を非表示・「3rd ステップ エリア」を非表示
-    $('#firstStepArea').removeClass('unvisible').addClass('visible');
-    $('#secondStepArea').removeClass('visible').addClass('unvisible');
-    $('#thirdStepArea').removeClass('visible').addClass('unvisible');
-}
-
-// 「サインインエリア」の「3rd step」における「次へ」ボタンを押したときに実行
-async function moveToMypage(){
-    // テキストボックスからメアドを取得
     mailValue = document.getElementById('signinMailInput').value;
     //「signinMailInput」が空ならreturn
     if(!mailValue) {
@@ -142,6 +123,28 @@ async function moveToMypage(){
       alert("正しくパスワードを入力してください");
       return;
     };
+    $('#firstStepArea').removeClass('visible').addClass('unvisible');
+    $('#secondStepArea').removeClass('unvisible').addClass('visible');
+    $('#thirdStepArea').removeClass('visible').addClass('unvisible');
+}
+
+// 「サインインエリア」の「2st step」における「次へ」ボタンを押したときに実行
+function moveTo3(){
+    // 「1st ステップ エリア」を非表示・「2nd ステップ エリア」を非表示・「3rd ステップ エリア」を表示
+    $('#firstStepArea').removeClass('visible').addClass('unvisible');
+    $('#secondStepArea').removeClass('visible').addClass('unvisible');
+    $('#thirdStepArea').removeClass('unvisible').addClass('visible');
+}
+
+// 「サインインエリア」の「2st step」における「戻る」ボタンを押したときに実行
+function backTo1(){
+    // 「1st ステップ エリア」を表示・「2nd ステップ エリア」を非表示・「3rd ステップ エリア」を非表示
+    stunum = document.getElementById('signinStudentNumInput').value;
+    if(!stunum){
+        alert("学籍番号を入力してください");
+        return;
+      };
+      console.log(signinStudentNumInput);
 
     //テキストボックスから名前を取得
     nameInput = document.getElementById('signinNameInput').value;
@@ -150,13 +153,23 @@ async function moveToMypage(){
       return;
     };
     console.log(nameInput);
+    $('#firstStepArea').removeClass('unvisible').addClass('visible');
+    $('#secondStepArea').removeClass('visible').addClass('unvisible');
+    $('#thirdStepArea').removeClass('visible').addClass('unvisible');
+}
+
+// 「サインインエリア」の「3rd step」における「次へ」ボタンを押したときに実行
+async function moveToMypage(){
+    
 
     //プルダウンから学籍番号、大学、学部、学科を取得
-    const stuNumInput = document.getElementById('signinStudentNumInput').value;
-    const univInput = document.getElementById('univ').value;
-    const facInput = document.getElementById('faculty').value;
-    const depInput = document.getElementById('depature').value;
+     
+     univInput = document.getElementById('univ').value;
+     facInput = document.getElementById('faculty').value;
+     depInput = document.getElementById('depature').value;
     console.log(facInput); 
+    console.log(depInput);
+    console.log(univInput);
 
 
     // ユニークなユーザーIDを生成・取得
@@ -169,7 +182,7 @@ async function moveToMypage(){
     //DBに格納
     const userRef1 = ref(database, 'users/teachers/' + uidValue + '/mainData/');  //第一引数：database(L24)(どのデータベースか), 第2：入れたい場所のパス, refはfirebaseから引っ張ってきた
     await set(userRef1, {      //第一引数：入れたい場所, 第2引数：入れたい内容   await: 非同期関数の中で使える、この関数が完了するまで先に進まない
-      studentNum : stuNumInput,
+      studentNum : stunum,
       studentName : nameInput,
       userType : "teacher",
       userUid : uidValue,

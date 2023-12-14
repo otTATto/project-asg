@@ -171,8 +171,8 @@ async function moveToMypage(){
     facInput = document.getElementById('faculty').value;
     depInput = document.getElementById('depature').value;
     console.log(facInput); 
-
     grade = document.getElementById('signinGradeInput').value;
+    
     if(!grade){
         alert("学年を選択してください");
         return;
