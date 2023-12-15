@@ -63,7 +63,7 @@ async function showSubj(){
         console.log("subject.value");
         console.log(subject.value);
 
-         //subjectの表示テキストにsubjNameを入れている。
+        subject.text = subjNameFromDb; //subjectの表示テキストにsubjNameを入れている。
         subjectsList1.appendChild(subject); 
     }
 }
@@ -93,7 +93,6 @@ async function identifyUid(subjUidValue){
 
         if(subParUid == uidValue) {
         subjTaken.push(subjUidValue);
-        //ここにoptinを追加する関数を表示したい
            
         }
         
@@ -112,7 +111,7 @@ window.addEventListener('load', async function(){
     // 非同期関数を使うためのfor...ofループ
     for (const element of Object.keys(subjData)) {
         subjUidValue = subjData[element].mainData.subjectId;
-        console.log(subjUidValue);
+        console.log("subjUidValue: " + subjUidValue);
 
         // 非同期処理を待ってidentifyUidを実行
         await identifyUid(subjUidValue);
@@ -121,6 +120,83 @@ window.addEventListener('load', async function(){
     // forEachが完了した後にshowSubjを実行
     showSubj();
 });
+
+var subjSelect = document.getElementById('subjChoose');
+var todayTestArea = document.getElementById("todayTestArea");
+
+// 科目選択が変更されたときのイベントリスナー
+subjSelect.addEventListener('change', async function () {
+    // 選択された科目の値を取得
+    var selectedSubject = subjSelect.value;
+
+    // 本日のテストエリアの要素をクリア
+    todayTestArea.innerHTML = '<div class="mt-3"> <div class="row justify-content-center row-cols-auto f-Zen-Kaku-Gothic-New"> <div class="col"> <div class="fw-exbold c-blue tb-blue"> 本日のテスト </div> </div> <div class="col"> <div onclick="viewFutureTestArea()" type="button" class="fw-medium text-secondary be-big-lg"> 今後のテスト </div> </div> <div class="col"> <div onclick="viewPastTestArea()" type="button" class="fw-medium text-secondary be-big-lg"> 過去のテスト </div> </div> </div> </div> <div class="mt-4"></div>';
+
+    // 選択された科目の値を使用してデータを取得してtests配列に追加
+    var tests = await fetchTestsData(selectedSubject);
+
+    // 取得したテストデータに基づいて要素を生成して本日のテストエリアに追加
+    tests.forEach(test => {
+        var newTestElement = document.createElement("div");
+        newTestElement.setAttribute("type", "button");
+        newTestElement.setAttribute("data-bs-toggle", "modal");
+        newTestElement.setAttribute("data-bs-target", "#testViewModal");
+        newTestElement.classList.add("shadow", "br-10", "mt-2", "mx-lg-5", "mx-3", "px-3", "py-3", "f-Zen-Kaku-Gothic-New", "be-big-sm");
+        newTestElement.style.border = "2px solid rgb(124, 154, 95)";
+
+        newTestElement.innerHTML = `
+            <div class="row row-cols-auto">
+                <div class="col fw-bold br-20 px-3 ms-2 text-white" style="background-color: rgb(124, 154, 95); font-size: 20px;">
+                    ${test.subject}
+                </div>
+                <div class="col fw-exbold c-black" style="font-size: 20px">
+                    ${test.title}
+                </div>
+            </div>
+            <div class="my-2" style="border-bottom: 1px solid rgb(180, 180, 180);"></div>
+            <div class="row row-cols-auto mt-1 justify-content-end">
+                <div class="col f-Zen-Maru-Gothic br-20 px-3 ms-2 text-white" style="background-color: rgb(89, 121, 60); font-size: 15px;">
+                    ${test.date}
+                </div>
+                <div class="col f-Zen-Maru-Gothic fw-medium c-black text-secondary" style="font-size: 15px">
+                    ${test.examinees}
+                </div>
+            </div>
+        `;
+
+        // 新しいテストを本日のテストエリアに追加
+        todayTestArea.appendChild(newTestElement);
+    });
+});
+
+// データを取得してtests配列に追加する関数
+async function fetchTestsData(selectedSubject) {
+    console.log("selectedSubject :" + selectedSubject)
+    const subjRef = ref(database, 'subjects/' + selectedSubject + '/tests');
+    const subjSnapshot = await get(subjRef);
+    const subjData = subjSnapshot.val();
+    console.log("subjData :" + subjData)
+    const tests = [];
+
+    // subjDataがnullまたはundefinedでないことを確認
+    if (subjData) {
+        // Firebaseから取得したデータをtests配列に変換
+        Object.keys(subjData).forEach(element => {
+            const testInfo = {
+                subject: subjData[element].mainData.testName,
+                title: subjData[element].mainData.testName,
+                date: subjData[element].mainData.testDate,
+                examinees: subjData[element].mainData.testMemo
+            };
+
+            tests.push(testInfo);
+        });
+    } else {
+        console.log("subjData is null or undefined");
+    }
+
+    return tests;
+}
 
 
 

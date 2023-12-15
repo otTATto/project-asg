@@ -33,6 +33,8 @@ var stuNumInput; //学籍番号の格納
 var facInput; //学部の情報格納
 var depInput; //学科の情報格納
 var grade;  //生徒の学年情報格納
+var subjUidValue;
+var subjTaken = [];
 // 起動時に実行
 
 window.addEventListener('load', async function(){
@@ -222,6 +224,86 @@ async function saveProf(){
   window.location.href = './profile.html?uid=' + uidValue;
 }
 
+async function showSubj(){
+  console.log("subjTaken");
+  console.log(subjTaken);
+
+  for(var i = 0; i < subjTaken.length; i++){
+      var element = subjTaken[i];
+
+      console.log("element: " + element);
+
+      var subjectsList1 = document.getElementById('subjChoose');   //科目選択の表示エリア(親クラス)
+      var subject = document.createElement('option');
+      
+      //sujUidValueをsubjTakeの配列の中身にしたい。つまりidentyfyUidで一致した科目uid
+      var subjNameRef = ref(database, 'subjects/' + element + '/mainData/');
+      var snapshot = await get(subjNameRef);
+      var data = snapshot.val();
+      //教科の名前を取得
+      var subjNameFromDb = data.subjectName;
+      console.log("subjNameFromDb: " + subjNameFromDb);
+      subject.text = subjNameFromDb;
+      subject.value = element; //subjectの中身をsubUidをいれている。
+      console.log("subject.value");
+      console.log(subject.value);
+
+      subject.text = subjNameFromDb; //subjectの表示テキストにsubjNameを入れている。
+      subjectsList1.appendChild(subject); 
+  }
+}
+
+// 起動時に自分の担当している教科を「科目選択」のプルダウンに追加→テスト追加の科目名にも適用, プルダウンのvalueは教科のuid
+
+
+async function identifyUid(subjUidValue){
+  // uidValue内に既に自分のuidが格納されているはず？なのでそれをif文を用いて判定する
+  // またforEachを用いることにより条件判定をsub/uid/par/uid内の要素すべてに対して行う
+  //また、ここでは科目のsubjUidvalue部分が変数となる。その変数はより上層の関数から引数として渡される必要がある。
+  //もし自分のuidが格納されているならば"何かを"返り値(?)にして関数を終える
+  //表示したいのは教科名の所、suj/$uid/main/subjectsName←ここ
+  //表示の参照地点はsub/$uid←ここ
+  //変数sunjUidValueを変数としてその変数を繰り返し変更するような文をより高層階で行えば何とか動かすことができる？
+  //つまりsubjUidValueをワールド変数としてそれを繰り返し変更する方針がよい
+  
+  var subjectsList1 = document.getElementById('subjChoose');   //科目選択の表示エリア(親クラス)
+  
+  const stuUidRef = ref(database, 'subjects/'+ subjUidValue + '/participants/');
+  var stuUidSnapshot = await get(stuUidRef);
+  var stuUidData = stuUidSnapshot.val();
+  
+  
+  Object.keys(stuUidData).forEach( key => {
+      let subParUid = stuUidData[key].uid;
+
+      if(subParUid == uidValue) {
+      subjTaken.push(subjUidValue);
+         
+      }
+      
+  })
+  
+}
+
+//上記関数を各科目に対して行いたいため
+
+
+window.addEventListener('load', async function(){
+  const subjRef = ref(database, 'subjects/');
+  var subjSnapshot = await get(subjRef);
+  var subjData = subjSnapshot.val();
+
+  // 非同期関数を使うためのfor...ofループ
+  for (const element of Object.keys(subjData)) {
+      subjUidValue = subjData[element].mainData.subjectId;
+      console.log("subjUidValue: " + subjUidValue);
+
+      // 非同期処理を待ってidentifyUidを実行
+      await identifyUid(subjUidValue);
+  }
+  // forEachが完了した後にshowSubjを実行
+  showSubj();
+})
 
 //ホームボタンを押したとき実行
 function moveToHome(){
@@ -256,4 +338,4 @@ window.moveToProf = moveToProf;
 window.moveToSet = moveToSet;
 window.logout = logout;
 window.saveProf = saveProf;
-export{ viewSubjectArea, viewMainArea,moveToHome, moveToTest, moveToProf, moveToSet, logout,saveProf }
+export{ viewSubjectArea, viewMainArea, moveToHome, moveToTest, moveToProf, moveToSet, logout }
