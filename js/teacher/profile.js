@@ -34,7 +34,8 @@ var univInput;
 var facInput;
 var depInput;
 var stuNumArray = [];     //参加生徒の学籍番号を格納
-var stuUidArray = [];   //参加生徒のuidの配列
+var stuUidArray = [];   //参加生徒のuidの配列(累計のすべての履修者の分)
+var addStuUidArray = [];    //追加する生徒のuidの配列
 var stuUidValue;   //参加生徒のuid
 
 
@@ -125,7 +126,8 @@ async function viewSubject(subjUid){  //教科の詳細を表示する、ボタ�
 
     // モーダルの作成
     var subjectModal = document.getElementById('subjectViewAndEditModal');      //表示エリア(親クラス)
-    subjectModal.innerHTML = '<div class="modal-content br-20">' +
+    subjectModal.innerHTML = '<div class="modal-dialog modal-dialog-centered modal-dialog-scrollable">' +
+                             '<div class="modal-content br-20">' +
                                 '<div class="modal-header">' +
                                     '<h1 class="c-pink modal-title fs-5 f-Zen-Kaku-Gothic-New fw-exbold" id="subjectViewAndEditModalLabel">' +
                                         '<i class="fa-solid fa-file-lines"></i>' +
@@ -224,6 +226,7 @@ async function viewSubject(subjUid){  //教科の詳細を表示する、ボタ�
                                         '</button>' +
                                     '</div>' +
                                 '</div>' +
+                            '</div>' +
                             '</div>';
     // 現在履修者のtable表示
 
@@ -325,7 +328,7 @@ async function addStu(){
 
     // 「,」だったら前後の二つの数字を配列に追加
     var stuNumArrayInput = stuNumsInput.split(',');
-    console.log(typeof(stuNumArrayInput));
+    console.log('要素数：' + stuNumArrayInput.length);
     for(var num in stuNumArrayInput){
         stuNumArrayInput[num] = parseInt(stuNumArrayInput[num]);   //num型に変換
         console.log(stuNumArrayInput[num]);
@@ -335,7 +338,8 @@ async function addStu(){
     // 「-」だったらnum1~num2までのすべての数字を配列に追加
 
 
-    // stuNumArrayInput の各要素に対応したuidを stuUidArrayに追加
+    // stuNumArrayInput の各要素に対応したuidを stuUidArray(DBに登録時使う)、addStuUidArray(新規のみ入れる、表示に使う)に追加
+    addStuUidArray = [];    //初期化
     for(var num of stuNumArrayInput){
         var Ref = ref(database, 'users/students/');
         var snapshot = await get(Ref);
@@ -344,9 +348,13 @@ async function addStu(){
             let numFromDB = data[element].mainData.studentNum;
     
             if(numFromDB == num){   //一致したらその人のuidを保存
-                console.log('ヒットしました:' + element.value);
+                console.log('ヒットしました:');
                 stuUidValue = data[element].mainData.userUid  //uidを取得
                 stuUidArray.push(stuUidValue);    //uidArrayに追加
+                addStuUidArray.push(stuUidValue);
+                console.log('stuUidArrayの要素数:' + stuUidArray.length);
+                console.log('addStuUidArrayの要素数:' + addStuUidArray.length);
+           
             }
             // 一致する学籍番号が存在しないとき
 
@@ -363,14 +371,14 @@ async function addStu(){
     var stuGradeFromDB;
     var num = 1;  //インデックス
     var particiArea = document.getElementById('addParticipants');//親クラス
-    for(var stu of stuUidArray){
+    for(var stu of addStuUidArray){
         // stuUidArrayの各要素(各生徒)について、学籍番号、氏名、学科、学年を取得
         stuNumFromDB = data[stu].mainData.studentNum;
         stuNameFromDB = data[stu].mainData.studentName;
         stuDepFromDB = data[stu].mainData.belonging.dep;
         stuGradeFromDB = data[stu].mainData.belonging.grade;
         // 取得した属性を表示
-        var participant = document.createElement('div');    //子クラス
+        var participant = document.createElement('tr');    //子クラス
         participant.innerHTML = '<tr>        <th scope="row" class="text-end" style="color: rgb(110, 110, 176);">' + num + '</th>        <td class="text-center">' + stuNumFromDB + '</td>        <td class="text-center">' + stuNameFromDB + '</td>        <td class="text-center">' + stuDepFromDB + '</td>        <td class="text-center">' + stuGradeFromDB + '</td>        <td class="text-center">            <div onclick="" type="button" class="text-danger br-20 be-big-lg" style="border: 1px solid red;"><i class="fa-solid fa-trash"></i></div>        </td>    </tr>'
         particiArea.appendChild(participant);
     }
