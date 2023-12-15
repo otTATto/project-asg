@@ -44,7 +44,7 @@
     <div class="py-3 px-3 bg-light br-b-20 shadow">
         <div class="row row-cols-auto">
             <div class="col">
-                <a href="./tests.html" class="f-Zen-Kaku-Gothic-New fw-bold non-a fs-lg-4 fs-5 c-pink">
+                <a id="backBtn" href="./tests.html" class="f-Zen-Kaku-Gothic-New fw-bold non-a fs-lg-4 fs-5 c-pink">
                     <i class="fa-solid fa-angles-left"></i>
                     戻る
                 </a>
@@ -52,13 +52,13 @@
             <div class="col">
                 <div class="br-20 px-3 ms-lg-2" style="background-color: rgb(124, 154, 95);">
                     <div id="subjectNameArea" class="f-Zen-Kaku-Gothic-New fs-lg-4 fs-5 fw-bold text-white">
-                        宗教学
+                        <div class="spinner-border spinner-border-sm mx-4" role="status"></div>
                     </div>
                 </div>
             </div>
             <div class="col">
                 <div id="testNameArea" class="f-Zen-Kaku-Gothic-New fs-lg-4 fs-5 fw-exbold c-black">
-                    第8回 小テスト
+                    <div class="spinner-border spinner-border-sm c-sub-blue mx-5" role="status"></div>
                 </div>
             </div>
         </div>
@@ -71,6 +71,12 @@
         <div class="mt-5">
             <div class="d-grid col-xxl-6 col-lg-8 col-md-10 mx-auto">
                 <div class="shadow br-10 px-3 py-3" style="background-color: white;">
+                    <!-- 読み込み中画面 -->
+                    <div id="loadingArea">
+                        <div class="text-center py-5">
+                            <i class="fa-solid fa-hourglass-half fa-bounce c-sub-blue" style="font-size: 30px;"></i>
+                        </div>
+                    </div>
                     <!-- 試験前(24時間以内)または試験中に表示される領域 -->
                     <div id="testStatusDuring" class="unvisible">
                         <div class="f-Zen-Kaku-Gothic-New fw-bold text-secondary">
@@ -98,7 +104,7 @@
                     </div>
                     <div class="my-2" style="border-bottom: 1px solid rgb(180, 180, 180);"></div>
                     <div class="f-Zen-Kaku-Gothic-New fw-bold text-secondary">
-                        試験開始・<span id="testDateArea" class="c-black">2023年11月3日 10:40</span> / 試験時間・<span id="testLimitArea" class="c-black">60分間</span>
+                        試験開始・<span id="testDateArea" class="c-black"><div class="spinner-border spinner-border-sm c-sub-blue mx-5" role="status"></div></span> / 試験時間・<span id="testLimitArea" class="c-black"><div class="spinner-border spinner-border-sm c-sub-blue mx-5" role="status"></div></span>
                     </div>
                 </div>
             </div>

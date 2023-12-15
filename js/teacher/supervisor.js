@@ -31,6 +31,7 @@ import { differenceToCurrentUnix, differenceFromCurrentUnix, convertISO8601ToDat
 // グローバル変数の定義
 var subjectId;          // 教科のIDを格納
 var subjectName;        // 教科の名前を格納
+var userId;             // ユーザーIDを格納
 var testId;             // テストのIDを格納
 var testName;           // テストの名前を格納
 var testDate;           // テストの日付を格納
@@ -48,7 +49,8 @@ var testLimitArea = document.getElementById("testLimitArea");
 window.onload = async () => {
     // クエリから必要な情報を読み込む
     subjectId = queryDivider()[0];  // クエリの１つ目に「教科のID」
-    testId = queryDivider()[1];     // クエリの２つ目に「テストのID」がある想定
+    testId = queryDivider()[1];     // クエリの２つ目に「テストのID」
+    userId = queryDivider()[2];     // クエリの３つ目に「ユーザーのID」
 
     // DBから必要な情報を取得する
     subjectName = await getSubjectName(subjectId);  // 教科名の取得
@@ -66,7 +68,10 @@ window.onload = async () => {
     testEnd = testStart + (testLimit * 60 * 1000);  // テストの終了時刻(UNIX時間)の取得
     console.log("[ Time-Check ] " + testStart + " : testStart ( UNIX time )");
     console.log("[ Time-Check ] " + testEnd + " : testEnd ( UNIX time )");
-    console.log("differenceCurrentUnix: " + differenceToCurrentUnix(testStart));
+
+    // 戻るボタンの実装
+    var backBtn = document.getElementById("backBtn");
+    backBtn.href = "./mypage.html?id=" + userId;
 
 }
 
@@ -83,7 +88,7 @@ x = setInterval(() => {
 // 現在の「testStatus」の値に応じてHTMLの表示を変更する
 function showStatus(){
     // HTMLオブジェクトの参照
-    var testStatusArea = document.getElementById("testStatusArea"); // 
+    var testStatusArea = document.getElementById("testStatusArea");
 
     // 「testStatus」の条件分岐
     switch(testStatus){
@@ -118,6 +123,9 @@ function showStatus(){
             $('#testStatusAfter').removeClass('unvisible').addClass('visible');
             break;
     }
+
+    // 読み込み画面の非表示
+    $('#loadingArea').addClass('unvisible');
 }
 
 // タイマーの表示

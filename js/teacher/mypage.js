@@ -284,7 +284,7 @@ async function viewTest(subjUid, testUid){    //引数は(教科のuid, テス�
                                         '</div>' +
                                         '<div class="modal-footer f-Zen-Maru-Gothic">' +
                                             '<div class="mt-1 mb-2 d-grid gap-2 col-10 mx-auto">' +
-                                                '<button onclick="supervise()" class="btn btn-primary btn-lg br-30 f-Zen-Kaku-Gothic-New fw-exbold" type="button">' +
+                                                '<button onclick="supervise(\'' + subjUid + '\', \'' + testUid + '\')" class="btn btn-primary btn-lg br-30 f-Zen-Kaku-Gothic-New fw-exbold" type="button">' +
                                                     '監督画面へ進む' +
                                                 '</button>' +
                                             '</div>' +
@@ -396,10 +396,10 @@ async function updateTest(subjUid,testUid){   //引数：教科のuid
 }
 
 // テストの詳細モーダル内の「監督画面へ進む」ボタンを押したときに実行
-function supervise(){
+function supervise(subjId, testId){
 
     // ページ遷移
-    window.location.href = './supervisor.html';
+    window.location.href = './supervisor.html?sId=' + subjId + '&tId=' + testId + '&uId=' + uidValue;
     
 }
 
