@@ -222,7 +222,7 @@
 
                         <!-- 科目追加ボタン -->
                         <div class="mt-4 my-2">
-                            <div type="button" data-bs-toggle="modal" data-bs-target="#subjectAddModal" class="c-blue d-grid col-lg-4 col-md-6 col-10 py-2 py-lg-1 mx-auto br-20 be-big-sm make-letters-distance" style="border: 1.5px solid rgb(68, 112, 158);">
+                            <div onclick="addsubjModal()" type="button" data-bs-toggle="modal" data-bs-target="#subjectAddModal" class="c-blue d-grid col-lg-4 col-md-6 col-10 py-2 py-lg-1 mx-auto br-20 be-big-sm make-letters-distance" style="border: 1.5px solid rgb(68, 112, 158);">
                                 <div class="f-Zen-Kaku-Gothic-New text-center fw-bold">
                                     <i class="fa-solid fa-plus"></i>
                                     科目を追加する
@@ -491,7 +491,7 @@
                                     <th scope="col" class="fw-exbold text-secondary text-center">解除</th>
                                 </tr>
                             </thead>
-                            <tbody class="table-group-divider" id="addParticipants">
+                            <tbody class="table-group-divider" id="participants">
                                 <!-- <tr>
                                     <th scope="row" class="text-end" style="color: rgb(110, 110, 176);">1</th>
                                     <td class="text-center">6321007</td>
@@ -626,8 +626,8 @@
                         <div class="mt-3 f-Zen-Kaku-Gothic-New fw-bold text-secondary">
                             教科名<span class="c-pink">*</span>
                         </div>
-                        <div id="subjNameInput" class="mt-1">
-                            <input class="form-control br-10" placeholder="(例)宗教学１">
+                        <div class="mt-1">
+                            <input id="subjNameInput" class="form-control br-10" placeholder="(例)宗教学１">
                         </div>
 
                         <div class="mt-4 f-Zen-Kaku-Gothic-New fw-bold c-black" style="font-size: 21px;">
