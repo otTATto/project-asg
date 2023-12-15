@@ -1,7 +1,36 @@
+// firebaseで使うやつ
+// Import the functions you need from the SDKs you need
+import { initializeApp } from "https://www.gstatic.com/firebasejs/10.7.0/firebase-app.js";
+import { getAnalytics } from "https://www.gstatic.com/firebasejs/10.7.0/firebase-analytics.js";
+import { getDatabase, ref, set, get, onValue, update } from "https://www.gstatic.com/firebasejs/10.7.0/firebase-database.js";  //追加
+// TODO: Add SDKs for Firebase products that you want to use
+// https://firebase.google.com/docs/web/setup#available-libraries
+
+// Your web app's Firebase configuration
+// For Firebase JS SDK v7.20.0 and later, measurementId is optional
+const firebaseConfig = {
+  apiKey: "AIzaSyDALbDCl1cQ0K-WoIVW_jEhGGFpVKu4HG8",
+  authDomain: "dbtest-a8005.firebaseapp.com",
+  databaseURL: "https://dbtest-a8005-default-rtdb.asia-southeast1.firebasedatabase.app",
+  projectId: "dbtest-a8005",
+  storageBucket: "dbtest-a8005.appspot.com",
+  messagingSenderId: "788239328067",
+  appId: "1:788239328067:web:aa6bd9897621641f4c45f6",
+  measurementId: "G-B77QR8NJPQ"
+};
+
+// Initialize Firebase
+const app = initializeApp(firebaseConfig);
+const analytics = getAnalytics(app);
+const database = getDatabase();
+
 // テストの詳細モーダル内の「試験画面へ進む」ボタンを押したときに実行
 import { queryDivider, generateUuid } from '../set.js';
 
 var uidValue;   //自分(生徒)のuidを格納
+var subjUidValue;
+var subjTaken = [];
+
 // 起動時に実行
 window.addEventListener('load', function(){
     // クエリからuidを取得
@@ -10,54 +39,90 @@ window.addEventListener('load', function(){
 
 })
 
-window.addEventListener('load', async function(){      // 自分の担当教科を表示 
-    // DBから自分が担当教科になっているものを探す
-    var subjectsList = document.getElementById('subjects');   //表示エリア(親クラス)
+async function showSubj(){
+    console.log("subjTaken");
+    console.log(subjTaken);
+
+    for(var i = 0; i < subjTaken.length; i++){
+        var element = subjTaken[i];
+
+        console.log("element: " + element);
+
+        var subjectsList1 = document.getElementById('subjChoose');   //科目選択の表示エリア(親クラス)
+        var subject = document.createElement('option');
+        
+        //sujUidValueをsubjTakeの配列の中身にしたい。つまりidentyfyUidで一致した科目uid
+        var subjNameRef = ref(database, 'subjects/' + element + '/mainData/');
+        var snapshot = await get(subjNameRef);
+        var data = snapshot.val();
+        //教科の名前を取得
+        var subjNameFromDb = data.subjectName;
+        console.log("subjNameFromDb: " + subjNameFromDb);
+        subject.text = subjNameFromDb;
+        subject.value = element; //subjectの中身をsubUidをいれている。
+        console.log("subject.value");
+        console.log(subject.value);
+
+         //subjectの表示テキストにsubjNameを入れている。
+        subjectsList1.appendChild(subject); 
+    }
+}
+
+// 起動時に自分の担当している教科を「科目選択」のプルダウンに追加→テスト追加の科目名にも適用, プルダウンのvalueは教科のuid
+
+
+async function identifyUid(subjUidValue){
+    // uidValue内に既に自分のuidが格納されているはず？なのでそれをif文を用いて判定する
+    // またforEachを用いることにより条件判定をsub/uid/par/uid内の要素すべてに対して行う
+    //また、ここでは科目のsubjUidvalue部分が変数となる。その変数はより上層の関数から引数として渡される必要がある。
+    //もし自分のuidが格納されているならば"何かを"返り値(?)にして関数を終える
+    //表示したいのは教科名の所、suj/$uid/main/subjectsName←ここ
+    //表示の参照地点はsub/$uid←ここ
+    //変数sunjUidValueを変数としてその変数を繰り返し変更するような文をより高層階で行えば何とか動かすことができる？
+    //つまりsubjUidValueをワールド変数としてそれを繰り返し変更する方針がよい
+    
+    var subjectsList1 = document.getElementById('subjChoose');   //科目選択の表示エリア(親クラス)
+    
+    const stuUidRef = ref(database, 'subjects/'+ subjUidValue + '/participants/');
+    var stuUidSnapshot = await get(stuUidRef);
+    var stuUidData = stuUidSnapshot.val();
+    
+    
+    Object.keys(stuUidData).forEach( key => {
+        let subParUid = stuUidData[key].uid;
+
+        if(subParUid == uidValue) {
+        subjTaken.push(subjUidValue);
+        //ここにoptinを追加する関数を表示したい
+           
+        }
+        
+    })
+    
+}
+
+//上記関数を各科目に対して行いたいため
+
+
+window.addEventListener('load', async function(){
     const subjRef = ref(database, 'subjects/');
     var subjSnapshot = await get(subjRef);
     var subjData = subjSnapshot.val();
-    Object.keys(subjData).forEach((element, index, key, snapshot) => {
-        let manaIdFromDB = subjData[element].mainData.managerId;
 
-        if(manaIdFromDB == uidValue){   //一致したら
-            console.log('ヒットしました:' + element.value);
-            var subjName = subjData[element].mainData.subjectName;  //教科の名前を取得
-            var subjUid = subjData[element].mainData.subjectId; //教科のuidを取得(もしかしたらelementだけでいい？)
-            var subject = document.createElement('div');   //子クラス
-            subject.innerHTML = '<button type="button" data-bs-toggle="modal" data-bs-target="#subjectViewAndEditModal" class="list-group-item list-group-item-action"><div class="f-Zen-Kaku-Gothic-New fw-bold fs-5 c-black">' + subjName + '</div></button>';
-            subjectsList.appendChild(subject);   //エリアに追加
+    // 非同期関数を使うためのfor...ofループ
+    for (const element of Object.keys(subjData)) {
+        subjUidValue = subjData[element].mainData.subjectId;
+        console.log(subjUidValue);
 
-            // 科目の詳細欄を更新
-            // テスト(変数名が一緒でも行けるか)
-            // 教科の名前
-            var subjNameArea = document.getElementById('subjNameInput');
-            subjNameArea.innerHTML = '<input class="form-control br-10" value="' + subjName + '">';
-            var num = 1;
+        // 非同期処理を待ってidentifyUidを実行
+        await identifyUid(subjUidValue);
+    }
 
-            // 教科の履修者の表示(未テスト)
-                // 教科の履修者ごとに情報を取得
-                var subjParticiRef = ref(database, 'subjects/' + subjUid + '/participants/');
-                var subjParticiSnapshot = get(subjParticiRef);
-                var subjParticiData = subjParticiSnapshot.val();
-                var stuParticiRef = ref(database, 'users/students/');
-                var stuParticiSnapshot = get(stuParticiRef);
-                var stuParticiData = stuParticiSnapshot.val();
-                Object.keys(subjParticiData).forEach((element, index, key, snapshot) => {
-                    let particiName = stuParticiData[element].mainData.studentName;
-                    let particiNum = stuParticiData[element].mainData.studentNum;
-                    let particiDep = stuParticiData[element].mainData.belonging.dep;
-                    let particiGrade = stuParticiData[element].mainData.belonging.grade;
-                // 取得した属性を表示
-                    var participant = document.createElement('div');    //子クラス
-                    participant.innerHTML = '<tr>        <th scope="row" class="text-end" style="color: rgb(110, 110, 176);">' + num + '</th>        <td class="text-center">' + particiNum + '</td>        <td class="text-center">' + particiName + '</td>        <td class="text-center">' + particiDep + '</td>        <td class="text-center">' + particiGrade + '</td>        <td class="text-center">            <div onclick="" type="button" class="text-danger br-20 be-big-lg" style="border: 1px solid red;"><i class="fa-solid fa-trash"></i></div>        </td>    </tr>'
-                    particiArea.appendChild(participant);//appendchildでhtmlの方に選択肢追加
-                    num += 1;
-                });   
+    // forEachが完了した後にshowSubjを実行
+    showSubj();
+});
 
-        }
-    });
 
-})
 
 function moveToExam(){
 
@@ -124,4 +189,5 @@ window.moveToTest = moveToTest;
 window.moveToProf = moveToProf;
 window.moveToSet = moveToSet;
 window.logout = logout;
+
 export{ viewTodayTestArea, viewFutureTestArea, viewPastTestArea, moveToExam,moveToHome, moveToTest, moveToProf, moveToSet, logout }
