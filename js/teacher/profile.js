@@ -2,7 +2,7 @@
 // Import the functions you need from the SDKs you need
 import { initializeApp } from "https://www.gstatic.com/firebasejs/10.7.0/firebase-app.js";
 import { getAnalytics } from "https://www.gstatic.com/firebasejs/10.7.0/firebase-analytics.js";
-import { getDatabase, ref, set, get, onValue, update } from "https://www.gstatic.com/firebasejs/10.7.0/firebase-database.js";  //追加
+import { getDatabase, ref, set, get, onValue, update, remove } from "https://www.gstatic.com/firebasejs/10.7.0/firebase-database.js";  //追加
 // TODO: Add SDKs for Firebase products that you want to use
 // https://firebase.google.com/docs/web/setup#available-libraries
 
@@ -37,6 +37,7 @@ var stuNumArray = [];     //参加生徒の学籍番号を格納
 var stuUidArray = [];   //参加生徒のuidの配列(累計のすべての履修者の分、DB更新・追加に使用)
 var addStuUidArray = [];    //追加する生徒のuidの配列
 var stuUidValue;   //参加生徒のuid
+var subjUidForMake;     //科目作成のときのsubjUid
 
 
 //ページが読み込まれたときに実行
@@ -123,7 +124,6 @@ async function viewSubject(subjUid){  //教科の詳細を表示する、ボタ�
     var subjSnapshot = await get(subjRef);
     var subjData = subjSnapshot.val();
     var subjName = subjData.subjectName;    //教科名
-    stuUidArray = [];   //初期化
 
     // モーダルの作成
     var subjectModal = document.getElementById('subjectViewAndEditModal');      //表示エリア(親クラス)
@@ -178,7 +178,7 @@ async function viewSubject(subjUid){  //教科の詳細を表示する、ボタ�
                                         '</div>' +
 
                                         '<div class="mt-2 mb-3">' +
-                                            '<div onclick="addStu()" type="button" class="c-blue d-grid col-8 py-2 py-lg-1 mx-auto br-20 be-big-sm make-letters-distance" style="border: 1.5px solid rgb(68, 112, 158);">' +
+                                            '<div onclick="addStu(\'' + subjUid + '\', \'participantsInput\', \'participants\')" type="button" class="c-blue d-grid col-8 py-2 py-lg-1 mx-auto br-20 be-big-sm make-letters-distance" style="border: 1.5px solid rgb(68, 112, 158);">' +
                                                 '<div class="f-Zen-Kaku-Gothic-New text-center fw-bold">' +
                                                     '<i class="fa-solid fa-plus"></i>' + 
                                                         '学生を追加する' +
@@ -229,6 +229,8 @@ async function viewSubject(subjUid){  //教科の詳細を表示する、ボタ�
                                 '</div>' +
                             '</div>' +
                             '</div>';
+                            
+    stuUidArray = [];
 
     // 現在履修者のtable表示(id=participants)
     var stuRef = ref(database, 'users/students/');
@@ -258,7 +260,11 @@ async function viewSubject(subjUid){  //教科の詳細を表示する、ボタ�
                                 '<td class="text-center">' + stuNumFromDB + '</td>' +
                                 '<td class="text-center">' + stuNameFromDB + '</td>' +
                                 '<td class="text-center">' + stuDepFromDB + '</td>' +
-                                '<td class="text-center">' + stuGradeFromDB + '</td>';
+                                '<td class="text-center">' + stuGradeFromDB + '</td>' +
+                                '<td class="text-center">' + 
+                                    '<div onclick="removeStu(\'' + subjUid + '\',\'' + uid + '\')" type="button" class="text-danger br-20 be-big-lg" style="border: 1px solid red;"><i class="fa-solid fa-trash"></i></div>' +
+                                '</td>';
+
         particiArea.appendChild(participant);
 
     });
@@ -307,14 +313,26 @@ async function saveProf(){
 
 // 「科目を追加する」ボタンを押したときに実行
 function addSubjModal(){
-    stuUidArray = [];
+    stuUidArray = [];   //stuUidArrayのリセット
+    subjUidForMake = generateUuid();    //新規subUidの生成
+    // innerHTML
+    var a = document.getElementById('addStu');
+    a.innerHTML =   '<div onclick="addStu(\'' + subjUidForMake + '\', \'addParticipantsInput\', \'addParticipants\')" type="button" class="c-blue d-grid col-8 py-2 py-lg-1 mx-auto br-20 be-big-sm make-letters-distance" style="border: 1.5px solid rgb(68, 112, 158);">' +
+                        '<div class="f-Zen-Kaku-Gothic-New text-center fw-bold">' +
+                            '<i class="fa-solid fa-plus"></i>' +
+                                '学生を追加する' + 
+                        '</div>' +
+                    '</div>';
+
 }
+
+
 
 // 科目追加で「学生を追加する」ボタンを押したときに実行
 // 入力→[num1「, or -」num2] を想定、返り値→学籍番号の配列？
-async function addStu(){
+async function addStu(subjUid, addId, id){          //引数：テキストボックスのid, 表示領域のhtmlにおけるid
     // テキストエリアを「,」「-」で分解
-    var stuNumsInput = document.getElementById('participantsInput').value;
+    var stuNumsInput = document.getElementById(addId).value;
 
     // 「,」だったら前後の二つの数字を配列に追加
     var stuNumArrayInput = stuNumsInput.split(',');
@@ -360,7 +378,7 @@ async function addStu(){
     var stuDepFromDB;
     var stuGradeFromDB;
     var num = 1;  //インデックス
-    var particiArea = document.getElementById('participants');//親クラス
+    var particiArea = document.getElementById(id);//親クラス
     for(var stu of addStuUidArray){
         // stuUidArrayの各要素(各生徒)について、学籍番号、氏名、学科、学年を取得
         stuNumFromDB = data[stu].mainData.studentNum;
@@ -369,7 +387,14 @@ async function addStu(){
         stuGradeFromDB = data[stu].mainData.belonging.grade;
         // 取得した属性を表示
         var participant = document.createElement('tr');    //子クラス
-        participant.innerHTML = '<tr>        <th scope="row" class="text-end" style="color: rgb(110, 110, 176);">' + num + '</th>        <td class="text-center">' + stuNumFromDB + '</td>        <td class="text-center">' + stuNameFromDB + '</td>        <td class="text-center">' + stuDepFromDB + '</td>        <td class="text-center">' + stuGradeFromDB + '</td>        <td class="text-center">            <div onclick="" type="button" class="text-danger br-20 be-big-lg" style="border: 1px solid red;"><i class="fa-solid fa-trash"></i></div>        </td>    </tr>'
+        participant.innerHTML = '<th scope="row" class="text-end" style="color: rgb(110, 110, 176);">' + num + '</th>' +
+                                '<td class="text-center">' + stuNumFromDB + '</td>' +
+                                '<td class="text-center">' + stuNameFromDB + '</td>' +
+                                '<td class="text-center">' + stuDepFromDB + '</td>' +
+                                '<td class="text-center">' + stuGradeFromDB + '</td>' + 
+                                '<td class="text-center">' +
+                                    '<div onclick="removeStu(\'' + subjUid + '\',\'' + stu + '\')" type="button" class="text-danger br-20 be-big-lg" style="border: 1px solid red;"><i class="fa-solid fa-trash"></i></div>' +
+                                '</td>';
         particiArea.appendChild(participant);
     }
     return;
@@ -388,10 +413,17 @@ async function addSubj(){
     // 作成時間を取得
     const createTime = Date.now();
 
-    if(stuUidArray == []){
+    if(!subjNameInput){
+        alert('教科名を入力してください');
+        return;
+    }
+
+    console.log(stuUidArray);
+    if(stuUidArray.length == 0){
         alert('生徒を登録してください');
         return;
     }
+
 
     // subjectのDBを作成、基本情報を格納
     const subjRef1 = ref(database, 'subjects/' + subjUid + '/mainData/');
@@ -444,9 +476,24 @@ async function updateSubj(subjUid){
     window.location.href = './profile.html?uid=' + uidValue;
 }
 
-// 「科目を削除する」を押したときに実行
+// テストの詳細→「科目を削除する」を押したときに実行
+function removeSubj(subjUid){           //引数：教科のuid
+    var subJRef = ref(database, 'subjects/' + subjUid + '/');
+    remove(subJRef);
+    window.location.href = './profile.html?id=' + uidValue;
+}
 
 // 履修者の「解除」ボタンを押したときに実行
+function removeStu(subjUid, stuUid){
+    var stuRef = ref(database, 'subjects/' + subjUid + '/participants/' + stuUid + '/');
+    remove(stuRef); //DBから削除
+    // stuUidArrayから消去
+    stuUidArray = stuUidArray.filter(function(item) {
+        return item !== stuUid;
+    });
+    console.log(stuUidArray);
+    console.log('消えました');
+}
 
 //ホームボタンを押したとき実行
 function moveToHome(){
@@ -481,9 +528,11 @@ window.addSubjModal = addSubjModal;
 window.addStu = addStu;
 window.addSubj = addSubj;
 window.updateSubj = updateSubj;
+window.removeSubj = removeSubj;
+window.removeStu = removeStu;
 window.moveToHome = moveToHome;
 window.moveToTest = moveToTest;
 window.moveToProf = moveToProf;
 window.moveToSet = moveToSet;
 window.logout = logout;
-export{ viewSubjectArea, viewMainArea, viewSubject, saveProf, addSubjModal, addStu, addSubj, updateSubj, moveToHome, moveToTest, moveToProf, moveToSet }
+export{ viewSubjectArea, viewMainArea, viewSubject, saveProf, addSubjModal, addStu, addSubj, updateSubj, removeSubj, removeStu, moveToHome, moveToTest, moveToProf, moveToSet }
