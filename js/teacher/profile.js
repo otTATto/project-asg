@@ -275,7 +275,7 @@ async function showParticipants(subjUid, uidArray, areaId){    //引数：教科
                                         <td class="text-center"> ${stuDep} </td>
                                         <td class="text-center"> ${stuGrade} </td>
                                         <td class="text-center">
-                                            <div onclick="removeStu('${subjUid}', '${uid}')" type="button" class="text-danger br-20 be-big-lg" style="border: 1px solid red;"><i class="fa-solid fa-trash"></i></div>
+                                            <div onclick="removeStu('${subjUid}', '${uid}', '${areaId}')" type="button" class="text-danger br-20 be-big-lg" style="border: 1px solid red;"><i class="fa-solid fa-trash"></i></div>
                                         </td>`;
             particiArea.appendChild(participant);
         }
@@ -422,15 +422,17 @@ function removeSubj(subjUid){           //引数：教科のuid
 }
 
 // 履修者の「解除」ボタンを押したときに実行
-function removeStu(subjUid, stuUid){
-    var stuRef = ref(database, 'subjects/' + subjUid + '/participants/' + stuUid + '/');
-    remove(stuRef); //DBから削除
+function removeStu(subjUid, stuUid, areaId){
+    // var stuRef = ref(database, 'subjects/' + subjUid + '/participants/' + stuUid + '/');
+    // remove(stuRef); //DBから削除
     // stuUidArrayから消去
     stuUidArray = stuUidArray.filter(function(item) {
         return item !== stuUid;
     });
     console.log(stuUidArray);
     console.log('消えました');
+
+    showParticipants(subjUid, stuUidArray, areaId);
 }
 
 // プロフィール変更の「保存する」ボタンを押したときに実行
