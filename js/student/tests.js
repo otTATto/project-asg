@@ -100,7 +100,7 @@ async function identifyUid(subjUidValue){
     
 }
 
-//上記関数を各科目に対して行いたいため
+
 
 
 window.addEventListener('load', async function(){
@@ -123,6 +123,15 @@ window.addEventListener('load', async function(){
 
 var subjSelect = document.getElementById('subjChoose');
 var todayTestArea = document.getElementById("todayTestArea");
+
+
+async function getParticipantsNum(subjectUid){
+    const participantsRef = ref(database, 'subjects/' + subjectUid + '/participants/');
+    var snapshot = await get(participantsRef);
+    var data = snapshot.val();
+    var participantsNum = Object.keys(data).length;
+    return participantsNum;
+}
 
 // 科目選択が変更されたときのイベントリスナー
 subjSelect.addEventListener('change', async function () {
@@ -178,15 +187,31 @@ async function fetchTestsData(selectedSubject) {
     console.log("subjData :" + subjData)
     const tests = [];
 
-    // subjDataがnullまたはundefinedでないことを確認
+    const subjRef1 = ref(database, 'subjects/' + selectedSubject+'/');
+    const subjSnapshot1 = await get(subjRef1);
+    const subjData1 = subjSnapshot1.val();
+    console.log("subjData1 :" + subjData1)
+    
+    // var subbject = subjData1.mainData.subjectName;
+    // var sumstu  = numberOfParticipants;
+
+    // パスを指定してデータを取得
+    const subjRef3 = ref(database, 'subjects/' + selectedSubject + '/participants');
+    const subjSnapshot3 = await get(subjRef3);
+    const participantsData3 = subjSnapshot3.val(); 
+    // オブジェクトのキー（参加者のID）の数を取得
+    const numberOfParticipants = Object.keys(participantsData3).length;
+
+    var subbject = subjData1.mainData.subjectName;
+    var sumstu  = numberOfParticipants;
     if (subjData) {
         // Firebaseから取得したデータをtests配列に変換
         Object.keys(subjData).forEach(element => {
             const testInfo = {
-                subject: subjData[element].mainData.testName,
+                subject: subbject,
                 title: subjData[element].mainData.testName,
                 date: subjData[element].mainData.testDate,
-                examinees: subjData[element].mainData.testMemo
+                examinees: '受験予定者'+ sumstu
             };
 
             tests.push(testInfo);
@@ -197,6 +222,8 @@ async function fetchTestsData(selectedSubject) {
 
     return tests;
 }
+
+
 
 
 

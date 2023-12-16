@@ -1,3 +1,5 @@
+// set.js: UUIDの生成やクエリの読込の関数を用意しているJS
+
 // UUIDの生成
 function generateUuid() {
     // https://github.com/GoogleChrome/chrome-platform-analytics/blob/master/src/internal/identifier.js
