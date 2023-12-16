@@ -34,6 +34,7 @@ var univInput;
 var facInput;
 var depInput;
 var stuUidArray = [];   //参加生徒のuidの配列(累計のすべての履修者の分、DB更新・追加に使用)
+var removeUidArray =[]; //削除する生徒のuidの配列
 var stuUidValue;   //参加生徒のuid
 var subjUidForMake;     //科目作成のときのsubjUid
 
@@ -229,6 +230,7 @@ async function viewSubject(subjUid){  //教科の詳細を表示する、ボタ�
                             '</div>';
                             
     stuUidArray = [];       //初期化
+    removeUidArray = [];
 
     // 現在履修者のuidを配列に格納
     var particiRef = ref(database, 'subjects/' + subjUid + '/participants/');
@@ -286,6 +288,7 @@ async function showParticipants(subjUid, uidArray, areaId){    //引数：教科
 // 「科目を追加する」ボタンを押したときに実行
 function addSubjModal(){
     stuUidArray = [];   //stuUidArrayのリセット
+    removeUidArray = [];
     subjUidForMake = generateUuid();    //新規subUidの生成
     // innerHTML
     var a = document.getElementById('addStu');
@@ -402,10 +405,16 @@ async function updateSubj(subjUid){
         subjectName : updateSubjNameInput
     });
 
+    // 削除した生徒の更新
+    for(var id of removeUidArray){
+        const subjRef2 = ref(database, 'subjects/' + subjUid + '/participants/' + id + '/');
+        remove(subjRef2);
+    }
+
     // 履修者の更新(stuUidArrayの各要素をDBに)
     for(var id of stuUidArray){
-        const subjRef2 = ref(database, 'subjects/' + subjUid + '/participants/' + id + '/');
-        await update(subjRef2, {
+        const subjRef3 = ref(database, 'subjects/' + subjUid + '/participants/' + id + '/');
+        await update(subjRef3, {
             uid : id
         });
     }
@@ -431,6 +440,8 @@ function removeStu(subjUid, stuUid, areaId){
     });
     console.log(stuUidArray);
     console.log('消えました');
+
+    removeUidArray.push(stuUid);
 
     showParticipants(subjUid, stuUidArray, areaId);
 }
