@@ -333,7 +333,8 @@ async function viewTest(subjUid, testUid){    //引数は(教科のuid, テス�
     });
 
     //　テストの編集モーダルを作成
-    var testEditModalArea = document.getElementById('testEditModal');   //表示エリア(親クラス)
+    // var testEditModalArea = document.getElementById('testEditModal');   //表示エリア(親クラス)
+    
     // テストの名前、実施時間、試験時間、備考をDBから抽出(testName, testDate, testLimit, testMemo)
 
     // テストの名前

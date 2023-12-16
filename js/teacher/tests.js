@@ -31,6 +31,7 @@ var subjectsList = document.getElementById('subjChoose');   //科目選択のプ
 var todayTestsArea = document.getElementById('todayTestArea');  //今日のテストの表示エリア
 var futureTestsArea = document.getElementById('futureTestArea');    //今後のテストの表示エリア
 var pastTestsArea = document.getElementById('pastTestArea');    //過去のテストの表示エリア
+var subjectsListForAdd= document.getElementById('subjTest');    //テスト追加の科目選択のプルダウン、表示エリア(親クラス2)
 
 // 起動時に実行
 window.addEventListener('load', function(){
@@ -43,7 +44,7 @@ window.addEventListener('load', function(){
 // 起動時に自分の担当している教科を「科目選択」のプルダウンに追加→テスト追加の科目名にも適用, プルダウンのvalueは教科のuid
 window.addEventListener('load', async function(){
     // DB.subjectsからmanagerIdが自分になっている教科を探し出す(全探索)
-    var subjectsListForAdd= document.getElementById('subjTest');    //テスト追加の科目選択のプルダウン、表示エリア(親クラス2)
+    
     const subjRef = ref(database, 'subjects/');
     var subjSnapshot = await get(subjRef);
     var subjData = subjSnapshot.val();
@@ -161,6 +162,7 @@ subjectsList.addEventListener('change', async function(){
     // 取得したデータをもとにボタンを追加
     tests.forEach(test => {
         var newTestElement = document.createElement("div");
+        newTestElement.setAttribute("onclick", "viewTest(\'" + selectedSubjUid + "\',\'" + test.uid  + "\')")
         newTestElement.setAttribute("type", "button");
         newTestElement.setAttribute("data-bs-toggle", "modal");
         newTestElement.setAttribute("data-bs-target", "#testViewModal");
@@ -240,6 +242,7 @@ async function fetchTestsData(selectedSubject) {
         // Firebaseから取得したデータをtests配列に変換
         Object.keys(subjData).forEach(element => {
             const testInfo = {
+                uid : subjData[element].mainData.testId,
                 subject: subbject,
                 title: subjData[element].mainData.testName,
                 date: subjData[element].mainData.testDate,
@@ -255,7 +258,267 @@ async function fetchTestsData(selectedSubject) {
     return tests;
 }
 
+// テストのボタンを押したときに実行、テストの詳細のモーダルを表示
+async function viewTest(subjUid, testUid){    //引数は(教科のuid, テストのuid)
+    // テストの各情報を取得(科目名、テスト名、日時、試験時間、テストの備考)、作成者、作成日時
+    const subjRef = ref(database, 'subjects/' + subjUid + '/');
+    var subjSnapshot = await get(subjRef);
+    var subjData = subjSnapshot.val();
+    var subjName = subjData.mainData.subjectName;   //科目名
+    console.log(subjName);
+    const testRef = ref(database, 'subjects/' + subjUid + '/tests/' + testUid + '/');
+    var testSnapshot = await get(testRef);
+    var testData = testSnapshot.val();
+    var testName = testData.mainData.testName;  //テスト名
+    var testDate = testData.mainData.testDate;  //実施日時
+    var testDateArray = testDate.split(/-|T/);   //テスト時間を年、月、日、時にわける
+    var testYear = testDateArray[0];    //年
+    var testMonth = testDateArray[1];   //月
+    var testDay = testDateArray[2];     //日
+    var testOc = testDateArray[3];      //時刻
+    var testLimit = testData.mainData.testLimit;    //試験時間
+    var testMemo = testData.mainData.testMemo;  //備考
+    var testMakeDate = testData.baseData.makeDate;  //作成日時(unixTime)
+    var makeDateDate = new Date(testMakeDate);
+    var makeYear = makeDateDate.getFullYear();    //作成年
+    var makeMonth = makeDateDate.getMonth() + 1;   //作成月
+    var makeDay = makeDateDate.getDate();     //作成日
+    // var makeOc = ;      //作成時
+    const teaRef = ref(database, 'users/teachers/' + uidValue + '/mainData/');
+    var teaSnapshot = await get(teaRef);
+    var teaData = teaSnapshot.val();
+    var teaName =  teaData.studentName; //作成者の名前
+    var teaNum = teaData.studentNum;    //作成者の学籍番号
+    console.log(testLimit);
+    var particiNum = Object.keys(subjData.participants).length   //履修者数を取得
+    // モーダルを作成
+    var testModal = document.getElementById('testViewModal');
+    testModal.innerHTML =  '<div class="modal-dialog modal-dialog-centered modal-dialog-scrollable">' +
+                                    '<div class="modal-content br-20">' +
+                                        '<div class="modal-header">' +
+                                            '<h1 class=" modal-title fs-5 f-Zen-Kaku-Gothic-New fw-exbold" id="testViewModalLabel"' +
+                                                'style="color: rgb(62, 62, 136);">' +
+                                                '<i class="fa-solid fa-file-lines"></i>' +
+                                                'テスト内容の確認' +
+                                            '</h1>' +
+                                            '<div class="d-grid col-4 mx-auto f-Zen-Kaku-Gothic-New">' +
+                                                '<button type="button" class="btn btn-outline-danger br-30 fw-exbold"  data-bs-toggle="modal" data-bs-target="#testEditModal">' +
+                                                    '編集する' +
+                                                '</button>' +
+                                            '</div>' +
+                                            '<button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>' +
+                                        '</div>' +
+                                        '<div class="modal-body f-Zen-Kaku-Gothic-New">' +
 
+                                            '<div class="px-3">' +
+
+                                                '<div class="f-Zen-Kaku-Gothic-New fw-bold c-black" style="font-size: 21px;">' +
+                                                    '<i class="fa-solid fa-hashtag"></i>' +
+                                                    '基本情報' +
+                                                '</div>' +
+
+                                                '<table class="table table-hover table-striped">' +
+                                                    '<thead>' +
+                                                        '<tr>' +
+                                                            '<th scope="col" class="text-end fw-exbold text-secondary">見出し</th>' +
+                                                            '<th scope="col" class="fw-exbold text-secondary">内容</th>' +
+                                                        '</tr>' +
+                                                    '</thead>' +
+                                                    '<tbody class="table-group-divider">' +
+                                                        '<tr>' +
+                                                            '<th scope="row" class="text-end" style="color: rgb(110, 110, 176);">科目</th>' +
+                                                            '<td>' + subjName + '</td>' +
+                                                        '</tr>' +
+                                                        '<tr>' +
+                                                            '<th scope="row" class="text-end" style="color: rgb(110, 110, 176);">タイトル</th>' +
+                                                            '<td>' + testName + '</td>' +
+                                                        '</tr>' +
+                                                        '<tr>' +
+                                                            '<th scope="row" class="text-end" style="color: rgb(110, 110, 176);">実施日時</th>' +
+                                                            '<td>' + testYear + '年' + testMonth + '月' + testDay + '日' + testOc +'</td>' +
+                                                        '</tr>' +
+                                                        '<tr>' +
+                                                            '<th scope="row" class="text-end" style="color: rgb(110, 110, 176);">試験時間</th>' +
+                                                            '<td>' + testLimit + '分間</td>' +
+                                                        '</tr>' +
+                                                    '</tbody>' +
+                                                '</table>' +
+
+                                                '<div class="mt-1">' +
+                                                    '<div class="f-Zen-Kaku-Gothic-New fw-bold text-secondary">' +
+                                                        'テストの備考' +
+                                                    '</div>' +
+                                                    '<div class="mt-1 bg-success-subtle px-2 py-1 br-10">' +
+                                                        '<div class="f-Zen-Kaku-Gothic-New c-black">' +
+                                                            testMemo +
+                                                        '</div>' +
+                                                    '</div>' +
+                                                '</div>' +
+
+                                                '<div class="mt-4 f-Zen-Kaku-Gothic-New fw-bold c-black" style="font-size: 21px;">' +
+                                                    '<i class="fa-solid fa-hashtag"></i>' +
+                                                    '補助情報' +
+                                                '</div>' +
+
+                                                '<table class="table table-hover table-striped">' +
+                                                    '<thead>' +
+                                                        '<tr>' +
+                                                            '<th scope="col" class="text-end fw-exbold text-secondary">見出し</th>' +
+                                                            '<th scope="col" class="fw-exbold text-secondary">内容</th>' +
+                                                        '</tr>' +
+                                                    '</thead>' +
+                                                    '<tbody class="table-group-divider">' +
+                                                        '<tr>' +
+                                                            '<th scope="row" class="text-end" style="color: rgb(110, 110, 176);">作成者</th>' +
+                                                            '<td>' + teaNum + '・' + teaName + '</td>' +
+                                                        '</tr>' +
+                                                        '<tr>' +
+                                                            '<th scope="row" class="text-end" style="color: rgb(110, 110, 176);">作成日時</th>' +
+                                                            '<td>' + makeYear + '年' + makeMonth + '月' + makeDay + '日' + '</td>' +
+                                                        '</tr>' +
+                                                    '</tbody>' +
+                                                '</table>' +
+
+                                                '<div class="mt-3 f-Zen-Kaku-Gothic-New fw-bold c-black" style="font-size: 21px;">' +
+                                                    '<i class="fa-solid fa-hashtag"></i>' +
+                                                    '受験者情報<span class="text-secondary ms-1" style="font-size: 15px;">' + particiNum + '人</span>' +
+                                                '</div>' +
+
+                                                '<table class="table table-hover table-striped">' +
+                                                    '<thead>' +
+                                                        '<tr>' +
+                                                            '<th scope="col" class="text-end fw-exbold" style="color: rgb(110, 110, 176);">#</th>' +
+                                                            '<th scope="col" class="fw-exbold text-secondary text-center">学籍番号</th>' +
+                                                            '<th scope="col" class="fw-exbold text-secondary text-center">氏名</th>' +
+                                                            '<th scope="col" class="fw-exbold text-secondary text-center">学科</th>' +
+                                                            '<th scope="col" class="fw-exbold text-secondary text-center">学年</th>' +
+                                                        '</tr>' +
+                                                    '</thead>' +
+                                                    '<tbody class="table-group-divider" id="participants">' +
+                                                    '</tbody>' +
+                                                '</table>' +
+
+                                            '</div>' +
+
+                                        '</div>' +
+                                        '<div class="modal-footer f-Zen-Maru-Gothic">' +
+                                            '<div class="mt-1 mb-2 d-grid gap-2 col-10 mx-auto">' +
+                                                '<button onclick="supervise(\'' + subjUid + '\', \'' + testUid + '\')" class="btn btn-primary btn-lg br-30 f-Zen-Kaku-Gothic-New fw-exbold" type="button">' +
+                                                    '監督画面へ進む' +
+                                                '</button>' +
+                                            '</div>' +
+                                            '<div class="d-grid col-4 mx-auto">' +
+                                                '<button type="button" class="btn btn-secondary br-30" data-bs-dismiss="modal">' +
+                                                    '閉じる' +
+                                                '</button>' +
+                                            '</div>' +
+                                        '</div>' +
+                                    '</div>' + 
+                                '</div>' +
+                            '</div>';
+
+    
+
+    // 参加者一覧を作成(id = participants)
+    var stuRef = ref(database, 'users/students/');
+    var stuSnapshot = await get(stuRef);
+    var data = stuSnapshot.val();
+    var stuNumFromDB;
+    var stuNameFromDB;
+    var stuDepFromDB;
+    var stuGradeFromDB;
+    var particiArea = document.getElementById('participants');  //表示エリア(親クラス)
+    var particiRef = ref(database, 'subjects/' + subjUid + '/participants/');
+    var particiSnapshot = await get(particiRef);
+    var particiData = particiSnapshot.val();
+    Object.keys(particiData).forEach((element, index, key, snapshot) => {      //各履修者に対して、subjRef.participants
+        var uid = particiData[element].uid;    // 生徒のuidを取得
+        // console.log(uid);
+        stuNumFromDB = data[uid].mainData.studentNum;
+        console.log(stuNumFromDB);
+        stuNameFromDB = data[uid].mainData.studentName;
+        stuDepFromDB = data[uid].mainData.belonging.dep;
+        stuGradeFromDB = data[uid].mainData.belonging.grade;
+        // 取得した属性を表示
+        var participant = document.createElement('tr');    //子クラス
+        participant.innerHTML = '<th scope="row" class="text-end" style="color: rgb(110, 110, 176);">' + (index + 1) + '</th>' +
+                                '<td class="text-center">' + stuNumFromDB + '</td>' +
+                                '<td class="text-center">' + stuNameFromDB + '</td>' +
+                                '<td class="text-center">' + stuDepFromDB + '</td>' +
+                                '<td class="text-center">' + stuGradeFromDB + '</td>';
+        particiArea.appendChild(participant);
+
+    });
+
+    //　テストの編集モーダルを作成
+    // var testEditModalArea = document.getElementById('testEditModal');   //表示エリア(親クラス)
+    
+    // テストの名前、実施時間、試験時間、備考をDBから抽出(testName, testDate, testLimit, testMemo)
+
+    //教科名
+    console.log(subjName);
+    var testEditModalSubjName = document.getElementById('edittingSubjNameInput');
+    testEditModalSubjName.value = subjName; 
+
+    // テストの名前
+    var testEditModalName = document.getElementById('edittingTestNameInput');
+    testEditModalName.value = testName;
+
+    // テストの実施日時
+    var testEditModalDate = document.getElementById('edittingTestDateInput');
+    testEditModalDate.value = testDate;
+
+    // テストの制限時間
+    var testEditModalLimit = document.getElementById('edittingTestLimitInput');
+    testEditModalLimit.value = testLimit;
+
+    // テストの備考
+    var testEditModalMemo = document.getElementById('edittingTestMemoInput');
+    testEditModalMemo.value = testMemo;
+
+    // 削除ボタンの作成
+    var removeButton = document.getElementById('removeButton');
+    removeButton.innerHTML ='<button onclick="removeTest(\'' + subjUid + '\',\'' + testUid + '\')" class="btn btn-outline-danger btn-lg br-30 f-Zen-Kaku-Gothic-New fw-exbold" type="button">' +
+                                'テストを削除する' +
+                            '</button>';
+    
+    // 更新ボタンの作成
+    var updateButton = document.getElementById('updateButton');
+    updateButton.innerHTML = '<button onclick="updateTest(\'' + subjUid + '\',\'' + testUid + '\')" class="btn btn-outline-primary btn-lg br-30 f-Zen-Kaku-Gothic-New fw-exbold" type="button">' +
+                                    '更新する' +
+                              '</button>';
+
+}
+
+// テストの詳細モーダル→編集モーダル→「削除する」ボタンを押したときに実行
+function removeTest(subjUid, testUid){           //引数：テストのuid
+    var testRef = ref(database, 'subjects/' + subjUid + '/tests/' + testUid + '/');
+    remove(testRef);
+    window.location.href = './mypage.html?id=' +uidValue;
+}
+
+// テストの詳細モーダル→編集モーダル→「更新する」ボタンを押したときに実行
+async function updateTest(subjUid,testUid){   //引数：教科のuid
+    // テキストボックスから各情報を取得(テストの名前、実施予定日、制限時間、メモ)
+    var testNameInput = document.getElementById('edittingTestNameInput').value;   //テストの名前
+    console.log(testNameInput);
+    var testDateInput = document.getElementById('edittingTestDateInput').value;   //実施日時
+    var testLimitInput = document.getElementById('edittingTestLimitInput').value;  //制限時間
+    var testMemoInput = document.getElementById('edittingTestMemoInput').value;   //メモ
+
+    // DBの情報を上書き
+    const testRef = ref(database, 'subjects/' + subjUid + '/tests/' + testUid + '/mainData');
+    await update(testRef, {
+        testName : testNameInput,
+        testDate : testDateInput,
+        testLimit : testLimitInput,
+        testMemo : testMemoInput
+    });
+    // console.log('成功しました');
+
+    // // ページ遷移
+    window.location.href = './mypage.html?id=' + uidValue;
+}
 
 // 新しくテストを作成する
 async function makeTest(){
@@ -292,12 +555,13 @@ async function makeTest(){
 }
 
 // テストの詳細モーダル内の「監督画面へ進む」ボタンを押したときに実行
-function supervise(){
+function supervise(subjId, testId){
 
     // ページ遷移
-    window.location.href = './supervisor.html';
+    window.location.href = './supervisor.html?sId=' + subjId + '&tId=' + testId + '&uId=' + uidValue;
     
 }
+
 
 // ナビにおける「本日のテスト」ボタンを押したときに実行
 function viewTodayTestArea(){
@@ -353,6 +617,9 @@ function logout(){
 window.viewTodayTestArea = viewTodayTestArea;
 window.viewFutureTestArea = viewFutureTestArea;
 window.viewPastTestArea = viewPastTestArea;
+window.viewTest = viewTest;
+window.removeTest = removeTest;
+window.updateTest = updateTest;
 window.makeTest = makeTest;
 window.supervise = supervise;
 window.moveToHome = moveToHome;
@@ -360,4 +627,4 @@ window.moveToTest = moveToTest;
 window.moveToProf = moveToProf;
 window.moveToSet = moveToSet;
 window.logout = logout;
-export{ viewTodayTestArea, viewFutureTestArea, viewPastTestArea, makeTest, supervise, moveToHome, moveToTest, moveToProf, moveToSet, logout }
+export{ viewTodayTestArea, viewFutureTestArea, viewPastTestArea, viewTest, removeTest, updateTest, makeTest, supervise, moveToHome, moveToTest, moveToProf, moveToSet, logout }
