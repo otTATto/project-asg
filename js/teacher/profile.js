@@ -275,7 +275,7 @@ async function showParticipants(subjUid, uidArray, areaId){    //引数：教科
                                         <td class="text-center"> ${stuDep} </td>
                                         <td class="text-center"> ${stuGrade} </td>
                                         <td class="text-center">
-                                            <div onclick="remove('${subjUid}', '${uid}')" type="button" class="text-danger br-20 be-big-lg" style="border: 1px solid red;"><i class="fa-solid fa-trash"></i></div>
+                                            <div onclick="removeStu('${subjUid}', '${uid}')" type="button" class="text-danger br-20 be-big-lg" style="border: 1px solid red;"><i class="fa-solid fa-trash"></i></div>
                                         </td>`;
             particiArea.appendChild(participant);
         }
