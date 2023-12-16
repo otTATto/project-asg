@@ -120,17 +120,145 @@ async function getCheatData(){
 
 // カンニングデータの詳細を取得して配列「detailCheatDataArray」に格納する関数
 async function getDetailCheatData(){
-    
-    // [ ToDo ] 配列「cheatDataArray」のカンニングした人のUidを元に、その人の各情報を取得して配列「detailCheatDataArray」に格納
+    // 配列「cheatDataArray」のカンニングした人のUidを元に、その人の各情報を取得して配列「detailCheatDataArray」に格納
+    for(var i = 0; i < cheatDataArray.length; i++){
+        var targetUid = cheatDataArray[i][0];                       // ユーザーID
+        var tmpStudentNum = await getStudentNum(targetUid);         // 学籍番号
+        var tmpStudentName = await getStudentName(targetUid);       // 氏名
+        var tmpStudentFac = await getStudentFac(targetUid);         // 学部
+        var tmpStudentDep = await getStudentDep(targetUid);         // 学科
+        var tmpStudentGrade = await getStudentGrade(targetUid);     // 学年
 
+        var tmpArray = [];                  // 整形 ['studentNum', 'studentName', 'studentDep', 'studentGrade', 'cheatDate']
+        tmpArray[0] = tmpStudentNum;
+        tmpArray[1] = tmpStudentName;
+        tmpArray[2] = tmpStudentDep;
+        tmpArray[3] = tmpStudentGrade;
+        tmpArray[4] = cheatDataArray[i][1];
+        
+        detailCheatDataArray.push(tmpArray);
+    }
 }
 
 // カンニングデータをHTMLに表示させる関数
 async function showCheatData(){
-    if(!cheatDataArray) return; // カンニングデータが無いなら実行しない
+    if(cheatDataArray.length == 0){ 
+        $('#neverCheatedArea').removeClass('unvisible').addClass('visible');
+        return;         // カンニングデータが無いなら以降を実行しない
+    }
 
-    // [ ToDo ] カンニングデータをHTMLに表示させる
+    // カンニングデータをHTMLに表示させる
+    $('#neverCheatedArea').removeClass('visible').addClass('unvisible');
+    var cheatDataArea = document.getElementById("cheatDataArea");
+    var tmpContent = '';
+    for(var i = detailCheatDataArray.length; i > 0; i--){
+        tmpContent += '<tr>';
+        tmpContent += '<th scope="row" class="text-end" style="color: rgb(110, 110, 176);">' + i + '</th>'; // インデックス番号
+        tmpContent += '<td class="text-center">' + detailCheatDataArray[i - 1][0] + '</td>';                // 学籍番号
+        tmpContent += '<td class="text-center">' + detailCheatDataArray[i - 1][1] + '</td>';                // 氏名
+        tmpContent += '<td class="text-center">' + detailCheatDataArray[i - 1][2] + '</td>';                // 学科
+        tmpContent += '<td class="text-center">' + detailCheatDataArray[i - 1][3] + '</td>';                // 学年
+        tmpContent += '<td class="text-center">' + detailCheatDataArray[i - 1][4] + '</td>';                // 日時
+        tmpContent += '</tr>';
+        tmpContent += '';
+    }
 
+    cheatDataArea.innerHTML = tmpContent;
+}
+
+// ユーザーID→ユーザーの学籍番号
+async function getStudentNum(userIdInput){
+    var output;
+
+    var studentsRef = ref(database, 'users/students/');
+    var snapshot = await get(studentsRef);
+    var data = snapshot.val();
+
+    if(data == null) return;   // データが空ならforEachしない
+
+    Object.keys(data).forEach((element) => {
+        var userIdFromDb = data[element].mainData.userUid;
+        var studentNumFromDb = data[element].mainData.studentNum;
+        if(userIdFromDb == userIdInput) output = studentNumFromDb;
+    });
+
+    return output;
+}
+
+// ユーザーID→ユーザーの氏名
+async function getStudentName(userIdInput){
+    var output;
+
+    var studentsRef = ref(database, 'users/students/');
+    var snapshot = await get(studentsRef);
+    var data = snapshot.val();
+
+    if(data == null) return;   // データが空ならforEachしない
+
+    Object.keys(data).forEach((element) => {
+        var userIdFromDb = data[element].mainData.userUid;
+        var studentNameFromDb = data[element].mainData.studentName;
+        if(userIdFromDb == userIdInput) output = studentNameFromDb;
+    });
+
+    return output;
+}
+
+// ユーザーID→ユーザーの所属学部
+async function getStudentFac(userIdInput){
+    var output;
+
+    var studentsRef = ref(database, 'users/students/');
+    var snapshot = await get(studentsRef);
+    var data = snapshot.val();
+
+    if(data == null) return;   // データが空ならforEachしない
+
+    Object.keys(data).forEach((element) => {
+        var userIdFromDb = data[element].mainData.userUid;
+        var studentFacFromDb = data[element].mainData.belonging.fac;
+        if(userIdFromDb == userIdInput) output = studentFacFromDb;
+    });
+
+    return output;
+}
+
+// ユーザーID→ユーザーの所属学科
+async function getStudentDep(userIdInput){
+    var output;
+
+    var studentsRef = ref(database, 'users/students/');
+    var snapshot = await get(studentsRef);
+    var data = snapshot.val();
+
+    if(data == null) return;   // データが空ならforEachしない
+
+    Object.keys(data).forEach((element) => {
+        var userIdFromDb = data[element].mainData.userUid;
+        var studentDepFromDb = data[element].mainData.belonging.dep;
+        if(userIdFromDb == userIdInput) output = studentDepFromDb;
+    });
+
+    return output;
+}
+
+// ユーザーID→ユーザーの学年
+async function getStudentGrade(userIdInput){
+    var output;
+
+    var studentsRef = ref(database, 'users/students/');
+    var snapshot = await get(studentsRef);
+    var data = snapshot.val();
+
+    if(data == null) return;   // データが空ならforEachしない
+
+    Object.keys(data).forEach((element) => {
+        var userIdFromDb = data[element].mainData.userUid;
+        var studentGradeFromDb = data[element].mainData.belonging.grade;
+        if(userIdFromDb == userIdInput) output = studentGradeFromDb;
+    });
+
+    return output;
 }
 
 // 現在の「testStatus」の値に応じてHTMLの表示を変更する
