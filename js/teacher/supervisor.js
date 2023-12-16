@@ -58,8 +58,8 @@ window.onload = async () => {
     // DBから必要な情報を取得する
     subjectName = await getSubjectName(subjectId);      // 教科名の取得
     testName = await getTestName(subjectId, testId);    // テスト名の取得
-    testDate = await getTestDate(subjectId, testId);               // テスト日時(ISO8601)の取得
-    testLimit = await getTestLimit(subjectId, testId);             // テスト試験時間の取得
+    testDate = await getTestDate(subjectId, testId);    // テスト日時(ISO8601)の取得
+    testLimit = await getTestLimit(subjectId, testId);  // テスト試験時間の取得
 
     // 必要な情報をHTMLに表示
     subjectNameArea.innerHTML = subjectName;        // 教科名の表示
