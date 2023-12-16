@@ -70,22 +70,6 @@ window.addEventListener('load', async function(){
     
 })
 
-// 起動時に「本日のテスト」を表示する
-window.addEventListener('load', function(){
-
-})
-
-// 起動時に「今後のテスト」を表示する
-window.addEventListener('load', function(){
-
-})
-
-// 起動時に「過去のテスト」を表示する
-window.addEventListener('load', function(){
-
-})
-
-
 // 科目検索のプルダウンを選択したときにその科目のテストを表示する
 subjectsList.addEventListener('change', async function(){
     // 選択された科目のuidを取得

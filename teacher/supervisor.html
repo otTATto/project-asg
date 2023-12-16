@@ -118,7 +118,7 @@
                         検知された<span class="c-pink">カンニング</span>
                     </div>
 
-                    <table class="mt-2 table table-hover table-striped">
+                    <table id="cheatTableArea" class="mt-2 table table-hover table-striped">
                         <thead>
                             <tr>
                                 <th scope="col" class="text-end fw-exbold" style="color: rgb(110, 110, 176);">#</th>
@@ -129,73 +129,20 @@
                                 <th scope="col" class="fw-exbold text-secondary text-center">時間</th>
                             </tr>
                         </thead>
-                        <tbody class="table-group-divider">
-                            <tr>
-                                <th scope="row" class="text-end" style="color: rgb(110, 110, 176);">8</th>
-                                <td class="text-center">6321007</td>
-                                <td class="text-center">池田朝翔</td>
-                                <td class="text-center">IS</td>
-                                <td class="text-center">3</td>
-                                <td class="text-center fw-bold">11:35:20</td>
-                            </tr>
-                            <tr>
-                                <th scope="row" class="text-end" style="color: rgb(110, 110, 176);">7</th>
-                                <td class="text-center">6321022</td>
-                                <td class="text-center">小倉陽毅</td>
-                                <td class="text-center">IS</td>
-                                <td class="text-center">3</td>
-                                <td class="text-center fw-bold">11:30:52</td>
-                            </tr>
-                            <tr>
-                                <th scope="row" class="text-end" style="color: rgb(110, 110, 176);">6</th>
-                                <td class="text-center">6321036</td>
-                                <td class="text-center">鬼頭勇輝</td>
-                                <td class="text-center">IS</td>
-                                <td class="text-center">3</td>
-                                <td class="text-center fw-bold">11:14:08</td>
-                            </tr>
-                            <tr>
-                                <th scope="row" class="text-end" style="color: rgb(110, 110, 176);">5</th>
-                                <td class="text-center">6321047</td>
-                                <td class="text-center">小柳勇翔</td>
-                                <td class="text-center">IS</td>
-                                <td class="text-center">3</td>
-                                <td class="text-center fw-bold">11:03:59</td>
-                            </tr>
-                            <tr>
-                                <th scope="row" class="text-end" style="color: rgb(110, 110, 176);">4</th>
-                                <td class="text-center">6321050</td>
-                                <td class="text-center">佐藤太心</td>
-                                <td class="text-center">IS</td>
-                                <td class="text-center">3</td>
-                                <td class="text-center fw-bold">10:55:37</td>
-                            </tr>
-                            <tr>
-                                <th scope="row" class="text-end" style="color: rgb(110, 110, 176);">3</th>
-                                <td class="text-center">6321080</td>
-                                <td class="text-center">奈良晃希</td>
-                                <td class="text-center">IS</td>
-                                <td class="text-center">3</td>
-                                <td class="text-center fw-bold">10:51:05</td>
-                            </tr>
-                            <tr>
-                                <th scope="row" class="text-end" style="color: rgb(110, 110, 176);">2</th>
-                                <td class="text-center">6321098</td>
-                                <td class="text-center">松田拓馬</td>
-                                <td class="text-center">IS</td>
-                                <td class="text-center">3</td>
-                                <td class="text-center fw-bold">10:41:12</td>
-                            </tr>
-                            <tr>
-                                <th scope="row" class="text-end" style="color: rgb(110, 110, 176);">1</th>
-                                <td class="text-center">6321124</td>
-                                <td class="text-center">渡邉真尋</td>
-                                <td class="text-center">IS</td>
-                                <td class="text-center">3</td>
-                                <td class="text-center fw-bold">10:40:29</td>
-                            </tr>
+                        <tbody id="cheatDataArea" class="table-group-divider">
+                            
                         </tbody>
                     </table>
+
+                    <!-- まだカンニングを検知されていないよのお知らせ -->
+                    <div id="neverCheatedArea" class="unvisible">
+                        <div class="br-20 bg-secondary-subtle">
+                            <div class="f-Zen-Kaku-Gothic-New fw-bold c-sub-blue text-center py-5">
+                                検知されたカンニングは<span class="c-blue">ありません</span>
+                            </div>
+                        </div>
+                    </div>
+
                 </div>
             </div>
         </div>
