@@ -61,13 +61,14 @@ async function showTest(){
     for(var subjUid of subjUidArray){
         // 教科名、テスト名、日時、参加人数を取得
         console.log('reading:' + subjUid);
-        var subjRef = ref(database, 'subjects/' + subjUid + '/mainData/');
+        var subjRef = ref(database, 'subjects/' + subjUid + '/');
         var subjSnapshot = await get(subjRef);
         var subjData = subjSnapshot.val();
         console.log(subjData);
-        var subjName = subjData.subjectName;    //教科名
+        var subjName = subjData.mainData.subjectName;    //教科名
         // console.log(subjName);
-        //参加人数を取得
+        var numOfParticipants = Object.keys(subjData.participants).length;//参加人数を取得
+        console.log(numOfParticipants);
         var testRef = ref(database, 'subjects/' + subjUid + '/tests/');
         var testSnapshot = await get(testRef);
         var testData = testSnapshot.val();
@@ -120,7 +121,7 @@ async function showTest(){
                                                 testYear + '年' + testMonth + '月' + testDay + '日' + testOc +
                                             '</div>' +
                                             '<div class="col f-Zen-Maru-Gothic fw-medium c-black text-secondary" style="font-size: 15px">' +
-                                                '受験予定者' +
+                                                '受験予定者' + numOfParticipants + '人' +
                                             '</div>' +
                                         '</div>' +
                                     '</div>' +
@@ -354,7 +355,7 @@ async function viewTest(subjUid, testUid){    //引数は(教科のuid, テス�
     // 削除ボタンの作成
     var removeButton = document.getElementById('removeButton');
     removeButton.innerHTML ='<button onclick="removeTest(\'' + subjUid + '\',\'' + testUid + '\')" class="btn btn-outline-danger btn-lg br-30 f-Zen-Kaku-Gothic-New fw-exbold" type="button">' +
-                                'テストを削除するよ' +
+                                'テストを削除する' +
                             '</button>';
     
     // 更新ボタンの作成
