@@ -2,7 +2,7 @@
     // Import the functions
     import { initializeApp } from "https://www.gstatic.com/firebasejs/10.7.0/firebase-app.js";
     import { getAnalytics } from "https://www.gstatic.com/firebasejs/10.7.0/firebase-analytics.js";
-    import { getDatabase, ref, set, get, onValue, update, remove } from "https://www.gstatic.com/firebasejs/10.7.0/firebase-database.js";  //追加
+    import { getDatabase, ref, set, get, onValue, update, remove } from "https://www.gstatic.com/firebasejs/10.7.0/firebase-database.js";
     // TODO: Add SDKs for Firebase products that you want to use
     // https://firebase.google.com/docs/web/setup#available-libraries
 
@@ -27,6 +27,7 @@
 // 必要な関数をインポート
 import { queryDivider, generateUuid } from '../set.js';
 import { differenceToCurrentUnix, differenceFromCurrentUnix, convertISO8601ToDateArray, convertUnixToDateArray, convertDateArrayToUnix, convertUnixToISO8601,convertISO8601ToUnix } from '../time.js';
+import { getStudentNum, getStudentName, getStudentFac, getStudentDep, getStudentGrade, getSubjectName, getTestName, getTestDate, getTestLimit } from '../get.js';
 
 // グローバル変数の定義
 var subjectId;          // 教科のIDを格納
@@ -55,10 +56,10 @@ window.onload = async () => {
     userId = queryDivider()[2];     // クエリの３つ目に「ユーザーのID」
 
     // DBから必要な情報を取得する
-    subjectName = await getSubjectName(subjectId);  // 教科名の取得
-    testName = await getTestName(testId);           // テスト名の取得
-    testDate = await getTestDate(testId);           // テスト日時(ISO8601)の取得
-    testLimit = await getTestLimit(testId);         // テスト試験時間の取得
+    subjectName = await getSubjectName(subjectId);      // 教科名の取得
+    testName = await getTestName(subjectId, testId);    // テスト名の取得
+    testDate = await getTestDate(subjectId, testId);    // テスト日時(ISO8601)の取得
+    testLimit = await getTestLimit(subjectId, testId);  // テスト試験時間の取得
 
     // 必要な情報をHTMLに表示
     subjectNameArea.innerHTML = subjectName;        // 教科名の表示
@@ -120,17 +121,50 @@ async function getCheatData(){
 
 // カンニングデータの詳細を取得して配列「detailCheatDataArray」に格納する関数
 async function getDetailCheatData(){
-    
-    // [ ToDo ] 配列「cheatDataArray」のカンニングした人のUidを元に、その人の各情報を取得して配列「detailCheatDataArray」に格納
+    // 配列「cheatDataArray」のカンニングした人のUidを元に、その人の各情報を取得して配列「detailCheatDataArray」に格納
+    for(var i = 0; i < cheatDataArray.length; i++){
+        var targetUid = cheatDataArray[i][0];                       // ユーザーID
+        var tmpStudentNum = await getStudentNum(targetUid);         // 学籍番号
+        var tmpStudentName = await getStudentName(targetUid);       // 氏名
+        var tmpStudentFac = await getStudentFac(targetUid);         // 学部
+        var tmpStudentDep = await getStudentDep(targetUid);         // 学科
+        var tmpStudentGrade = await getStudentGrade(targetUid);     // 学年
 
+        var tmpArray = [];                  // 整形 ['studentNum', 'studentName', 'studentDep', 'studentGrade', 'cheatDate']
+        tmpArray[0] = tmpStudentNum;
+        tmpArray[1] = tmpStudentName;
+        tmpArray[2] = tmpStudentDep;
+        tmpArray[3] = tmpStudentGrade;
+        tmpArray[4] = cheatDataArray[i][1];
+        
+        detailCheatDataArray.push(tmpArray);
+    }
 }
 
 // カンニングデータをHTMLに表示させる関数
 async function showCheatData(){
-    if(!cheatDataArray) return; // カンニングデータが無いなら実行しない
+    if(cheatDataArray.length == 0){ 
+        $('#neverCheatedArea').removeClass('unvisible').addClass('visible');
+        return;         // カンニングデータが無いなら以降を実行しない
+    }
 
-    // [ ToDo ] カンニングデータをHTMLに表示させる
+    // カンニングデータをHTMLに表示させる
+    $('#neverCheatedArea').removeClass('visible').addClass('unvisible');
+    var cheatDataArea = document.getElementById("cheatDataArea");
+    var tmpContent = '';
+    for(var i = detailCheatDataArray.length; i > 0; i--){
+        tmpContent += '<tr>';
+        tmpContent += '<th scope="row" class="text-end" style="color: rgb(110, 110, 176);">' + i + '</th>'; // インデックス番号
+        tmpContent += '<td class="text-center">' + detailCheatDataArray[i - 1][0] + '</td>';                // 学籍番号
+        tmpContent += '<td class="text-center">' + detailCheatDataArray[i - 1][1] + '</td>';                // 氏名
+        tmpContent += '<td class="text-center">' + detailCheatDataArray[i - 1][2] + '</td>';                // 学科
+        tmpContent += '<td class="text-center">' + detailCheatDataArray[i - 1][3] + '</td>';                // 学年
+        tmpContent += '<td class="text-center">' + detailCheatDataArray[i - 1][4] + '</td>';                // 日時
+        tmpContent += '</tr>';
+        tmpContent += '';
+    }
 
+    cheatDataArea.innerHTML = tmpContent;
 }
 
 // 現在の「testStatus」の値に応じてHTMLの表示を変更する
@@ -227,85 +261,5 @@ function getTestStatus(){
 
     // 返り値
     // (-1: 試験時間前(24時間以上前), 0: 試験時間前(24時間以内), 1: 試験時間中, 2: 試験時間後)
-    return output;
-}
-
-// 教科ID→教科名
-async function getSubjectName(subjectIdInput){
-    // 関数の返り値を入れる変数を用意
-    var output;
-
-    // DBの参照
-    const subjectRef = ref(database, 'subjects/');
-    var snapshot = await get(subjectRef);
-    var data = snapshot.val();
-    // DBの「subjects/」の中をひとつひとつ見ていく
-    Object.keys(data).forEach((element) => {
-        var subjectIdFromDb = data[element].mainData.subjectId;
-        var subjectNameFromDb = data[element].mainData.subjectName;
-        // DBの教科IDと引数の教科IDとが一致したらoutputに教科名を入れる
-        if(subjectIdFromDb == subjectIdInput) output = subjectNameFromDb;
-    });
-
-    return output;
-}
-
-// テストID→テスト名（科目IDが既知の場合にのみ使用可能）
-async function getTestName(testIdInput){
-    // 関数の返り値を入れる変数を用意
-    var output;
-
-    // DBの参照
-    const testRef = ref(database, 'subjects/' + subjectId + '/tests/');
-    var snapshot = await get(testRef);
-    var data = snapshot.val();
-    // DBの「tests/」の中をひとつひとつ見ていく
-    Object.keys(data).forEach((element) => {
-        var testIdFromDb = data[element].mainData.testId;
-        var testNameFromDb = data[element].mainData.testName;
-        // DBのテストIDと引数のテストIDとが一致したらoutputにテスト名を入れる
-        if(testIdFromDb == testIdInput) output = testNameFromDb;
-    });
-
-    return output;
-}
-
-// テストID→テストの日時（科目IDが既知の場合にのみ使用可能）
-async function getTestDate(testIdInput){
-    // 関数の返り値を入れる変数を用意
-    var output;
-
-    // DBの参照
-    const testRef = ref(database, 'subjects/' + subjectId + '/tests/');
-    var snapshot = await get(testRef);
-    var data = snapshot.val();
-    // DBの「tests/」の中をひとつひとつ見ていく
-    Object.keys(data).forEach((element) => {
-        var testIdFromDb = data[element].mainData.testId;
-        var testDateFromDb = data[element].mainData.testDate;
-        // DBのテストIDと引数のテストIDとが一致したらoutputにテストの日時を入れる
-        if(testIdFromDb == testIdInput) output = testDateFromDb;
-    });
-
-    return output;
-}
-
-// テストID→試験時間（科目IDが既知の場合にのみ使用可能）
-async function getTestLimit(testIdInput){
-    // 関数の返り値を入れる変数を用意
-    var output;
-
-    // DBの参照
-    const testRef = ref(database, 'subjects/' + subjectId + '/tests/');
-    var snapshot = await get(testRef);
-    var data = snapshot.val();
-    // DBの「tests/」の中をひとつひとつ見ていく
-    Object.keys(data).forEach((element) => {
-        var testIdFromDb = data[element].mainData.testId;
-        var testLimitFromDb = data[element].mainData.testLimit;
-        // DBのテストIDと引数のテストIDとが一致したらoutputに試験時間を入れる
-        if(testIdFromDb == testIdInput) output = testLimitFromDb;
-    });
-
     return output;
 }
