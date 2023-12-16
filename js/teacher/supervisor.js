@@ -44,6 +44,8 @@ var subjectNameArea = document.getElementById("subjectNameArea");
 var testNameArea = document.getElementById("testNameArea");
 var testDateArea = document.getElementById("testDateArea");
 var testLimitArea = document.getElementById("testLimitArea");
+var cheatDataArray = [];        // カンニングデータを格納する配列   （例）[['cheatUid_1', 'cheatDate_1'], ['cheatUid_2', 'cheatDate_2'], ...]
+var detailCheatDataArray = [];  // カンニングデータの詳細を格納する配列
 
 // ページがロードされたときに実行
 window.onload = async () => {
@@ -73,6 +75,9 @@ window.onload = async () => {
     var backBtn = document.getElementById("backBtn");
     backBtn.href = "./mypage.html?id=" + userId;
 
+    // カンニングデータの取得・詳細情報取得・整形・表示
+    await doCheatData();
+
 }
 
 // １秒に１回実行される
@@ -84,6 +89,49 @@ x = setInterval(() => {
     showTimer();        // タイマー表示の関数の呼び出し
 
 }, 1000);
+
+// 新たにカンニングを検知したときに実行（ただし教科IDとテストIDが既知である前提）
+var cheatDataRef = ref(database, 'subjects/' + subjectId + '/tests/' + testId + '/cheatData/');
+onValue(cheatDataRef, doCheatData());  // カンニングデータの取得・詳細情報取得・整形・表示
+
+// カンニングデータの取得・詳細情報取得・整形・表示すべてをまとめた関数
+async function doCheatData(){
+    await getCheatData();           // カンニングデータの取得
+    await getDetailCheatData();     // カンニングデータの詳細を取得
+    await showCheatData();          // カンニングデータの表示
+}
+
+// カンニングデータを読み込んで配列「cheatDataArray」に格納する関数
+async function getCheatData(){
+    var cheatDataRef = ref(database, 'subjects/' + subjectId + '/tests/' + testId + '/cheatData/');
+    var snapshot = await get(cheatDataRef);
+    var data = snapshot.val();
+    
+    if(data == null) return;   // データが空ならforEachしない
+
+    // カンニングデータをひとつひとつ読み込んで、配列「cheatDataArray」に格納
+    Object.keys(data).forEach((element, index, key, snapshot) => {
+        var tmp = [];
+        tmp[0] = data[element].cheatUid;
+        tmp[1] = data[element].cheatDate;
+        cheatDataArray.push(tmp);
+    });
+}
+
+// カンニングデータの詳細を取得して配列「detailCheatDataArray」に格納する関数
+async function getDetailCheatData(){
+    
+    // [ ToDo ] 配列「cheatDataArray」のカンニングした人のUidを元に、その人の各情報を取得して配列「detailCheatDataArray」に格納
+
+}
+
+// カンニングデータをHTMLに表示させる関数
+async function showCheatData(){
+    if(!cheatDataArray) return; // カンニングデータが無いなら実行しない
+
+    // [ ToDo ] カンニングデータをHTMLに表示させる
+
+}
 
 // 現在の「testStatus」の値に応じてHTMLの表示を変更する
 function showStatus(){
