@@ -19,7 +19,7 @@ function generateUuid() {
 }
 
 // クエリの右辺のみを入れた配列を返す
-function queryDivider(){
+function  queryDivider(){
     // URLからクエリ部分のみを取得する
     var query = decodeURI(location.search);
     if(!query){

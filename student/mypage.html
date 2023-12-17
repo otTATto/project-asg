@@ -157,33 +157,38 @@
                     </div>
 
                     <!-- デモ・テストブロック -->
-                    <div onclick="viewTest('8984123')" type="button" data-bs-toggle="modal"
+                    <!-- <div onclick="viewTest('8984123')" type="button" data-bs-toggle="modal"
                         data-bs-target="#testViewModal"
                         class="shadow br-10 mt-2 mx-lg-5 mx-3 px-3 py-3 f-Zen-Kaku-Gothic-New be-big-sm"
                         style="border: 2px solid rgb(124, 154, 95);">
                         <div class="row row-cols-auto">
-                            <!-- 科目 -->
+                             科目 
                             <div class="col fw-bold br-20 px-3 ms-2 text-white"
                                 style="background-color: rgb(124, 154, 95); font-size: 20px;">
                                 宗教学
                             </div>
-                            <!-- タイトル -->
+                             タイトル 
                             <div class="col fw-exbold c-black" style="font-size: 20px">
                                 第8回 小テスト
                             </div>
                         </div>
                         <div class="my-2" style="border-bottom: 1px solid rgb(180, 180, 180);"></div>
                         <div class="row row-cols-auto mt-1 justify-content-end">
-                            <!-- 日付 -->
+                             日付 
                             <div class="col f-Zen-Maru-Gothic br-20 px-3 ms-2 text-white"
                                 style="background-color: rgb(89, 121, 60); font-size: 15px;">
                                 2023年11月3日 10:40
                             </div>
-                            <!-- タイトル -->
+                             タイトル 
                             <div class="col f-Zen-Maru-Gothic fw-medium c-black text-secondary" style="font-size: 15px">
                                 受験予定者 75人
                             </div>
                         </div>
+                    </div> -->
+
+                    <!-- テストブロックエリア -->
+                    <div id="todayTestBlockArea">
+                        <!-- ここにinnerHtmlで記述 -->
                     </div>
 
                 </div>
@@ -304,6 +309,11 @@
                                 受験予定者 75人
                             </div>
                         </div>
+                    </div>
+
+                    <!-- テストブロックエリア -->
+                    <div id="futureTestBlockArea">
+                        <!-- ここにinnerHtmlで記述 -->
                     </div>
                 </div>
 
@@ -539,19 +549,19 @@
                             <tbody class="table-group-divider">
                                 <tr>
                                     <th scope="row" class="text-end" style="color: rgb(110, 110, 176);">科目</th>
-                                    <td>宗教学</td>
+                                    <td id="subjectNameInModal">宗教学</td>
                                 </tr>
                                 <tr>
                                     <th scope="row" class="text-end" style="color: rgb(110, 110, 176);">タイトル</th>
-                                    <td>第8回 小テスト</td>
+                                    <td id="titelInModal">第8回 小テスト</td>
                                 </tr>
                                 <tr>
                                     <th scope="row" class="text-end" style="color: rgb(110, 110, 176);">実施日時</th>
-                                    <td>2023年11月3日 10:40</td>
+                                    <td id="dateInModal">2023年11月3日 10:40</td>
                                 </tr>
                                 <tr>
                                     <th scope="row" class="text-end" style="color: rgb(110, 110, 176);">試験時間</th>
-                                    <td>60分間</td>
+                                    <td id="limitInModal">60分間</td>
                                 </tr>
                             </tbody>
                         </table>
@@ -561,7 +571,7 @@
                                 テストの備考
                             </div>
                             <div class="mt-1 bg-success-subtle px-2 py-1 br-10">
-                                <div class="f-Zen-Kaku-Gothic-New c-black">
+                                <div  id="memoInModal" class="f-Zen-Kaku-Gothic-New c-black">
                                     教科書の持ち込みはできませんが、授業で配ったレジュメのみ試験中に参照可能です。
                                 </div>
                             </div>
@@ -582,11 +592,11 @@
                             <tbody class="table-group-divider">
                                 <tr>
                                     <th scope="row" class="text-end" style="color: rgb(110, 110, 176);">作成者</th>
-                                    <td>9324075・福沢諭吉</td>
+                                    <td id="managerInModal">9324075・福沢諭吉</td>
                                 </tr>
                                 <tr>
                                     <th scope="row" class="text-end" style="color: rgb(110, 110, 176);">作成日時</th>
-                                    <td>2023年11月2日 15:21</td>
+                                    <td id="makeDateInModal">2023年11月2日 15:21</td>
                                 </tr>
                             </tbody>
                         </table>

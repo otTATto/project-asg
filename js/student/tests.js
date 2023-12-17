@@ -138,7 +138,7 @@ subjSelect.addEventListener('change', async function () {
 
     // 選択された科目の値を使用してデータを取得してtests配列に追加
     var tests = await fetchTestsData(selectedSubject);
-
+    console.log("ああああああああ"+tests);
     // 現在の日付を取得
     var currentDate = new Date();
 
@@ -222,12 +222,6 @@ async function editModal(subjectNameInput,titelInModal,dateInModal,limitInModal,
 
 }
 
-// 同じ日かどうかを判定する関数
-function isSameDay(date1, date2) {
-     date1.getFullYear() === date2.getFullYear() &&
-        date1.getMonth() === date2.getMonth() &&
-        date1.getDate() === date2.getDate();
-}
 
 // 日付を指定されたフォーマットに変換する関数
 function formatDate(inputDate) {
@@ -246,73 +240,6 @@ function formatDate(inputDate) {
 }
 
 
-// 科目選択が変更されたときのイベントリスナー
-// subjSelect.addEventListener('change', async function () {
-//     // 選択された科目の値を取得
-//     var selectedSubject = subjSelect.value;
-
-//     // 本日のテストエリアの要素をクリア
-//     todayTestArea.innerHTML = '<div class="mt-3"> <div class="row justify-content-center row-cols-auto f-Zen-Kaku-Gothic-New"> <div class="col"> <div class="fw-exbold c-blue tb-blue"> 本日のテスト </div> </div> <div class="col"> <div onclick="viewFutureTestArea()" type="button" class="fw-medium text-secondary be-big-lg"> 今後のテスト </div> </div> <div class="col"> <div onclick="viewPastTestArea()" type="button" class="fw-medium text-secondary be-big-lg"> 過去のテスト </div> </div> </div> </div> <div class="mt-4"></div>';
-
-//     // 選択された科目の値を使用してデータを取得してtests配列に追加
-//     var tests = await fetchTestsData(selectedSubject);
-
-//     // 取得したテストデータに基づいて要素を生成して本日のテストエリアに追加
-//     tests.forEach(test => {
-
-//         //ここでif文を書きもし～なら
-
-//         var newTestElement = document.createElement("div");
-//         newTestElement.setAttribute("type", "button");
-//         newTestElement.setAttribute("data-bs-toggle", "modal");
-//         newTestElement.setAttribute("data-bs-target", "#testViewModal");
-//         newTestElement.classList.add("shadow", "br-10", "mt-2", "mx-lg-5", "mx-3", "px-3", "py-3", "f-Zen-Kaku-Gothic-New", "be-big-sm");
-//         newTestElement.style.border = "2px solid rgb(124, 154, 95)";
-
-//         newTestElement.innerHTML = `
-//             <div class="row row-cols-auto">
-//                 <div class="col fw-bold br-20 px-3 ms-2 text-white" style="background-color: rgb(124, 154, 95); font-size: 20px;">
-//                     ${test.subject}
-//                 </div>
-//                 <div class="col fw-exbold c-black" style="font-size: 20px">
-//                     ${test.title}
-//                 </div>
-//             </div>
-//             <div class="my-2" style="border-bottom: 1px solid rgb(180, 180, 180);"></div>
-//             <div class="row row-cols-auto mt-1 justify-content-end">
-//                 <div class="col f-Zen-Maru-Gothic br-20 px-3 ms-2 text-white" style="background-color: rgb(89, 121, 60); font-size: 15px;">
-//                     ${test.date}
-//                 </div>
-//                 <div class="col f-Zen-Maru-Gothic fw-medium c-black text-secondary" style="font-size: 15px">
-//                     ${test.examinees}
-//                 </div>
-//             </div>
-//         `;
-
-//         // 新しいテストを本日のテストエリアに追加
-//         todayTestArea.appendChild(newTestElement);
-//     });
-// });
-
-// function padZero(num) {
-//     return num < 10 ? "0" + num : num;
-// }
-
-// //2023-12-16T19:34から2023年12月16日 19:34に変更する関数
-// function formatTime(inputTimeString) {
-//     console.log("input: " + inputTimeString);
-//     var inputTime = new Date(inputTimeString);
-
-//     var year = inputTime.getFullYear();
-//     var month = padZero(inputTime.getMonth() + 1);
-//     var day = padZero(inputTime.getDate());
-//     var hours = padZero(inputTime.getHours());
-//     var minutes = padZero(inputTime.getMinutes());
-
-//     return year + "年" + month + "月" + day + "日 " + hours + ":" + minutes;
-// }
-
-// データを取得してtests配列に追加する関数
 async function fetchTestsData(selectedSubject) {
     console.log("selectedSubject :" + selectedSubject)
 
