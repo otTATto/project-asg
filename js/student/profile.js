@@ -58,11 +58,11 @@ window.addEventListener('load', async function(){
     console.log('univ:' + teaUniv);
 
 
-    // uidValueをhtmlに反映
-    var uid = document.getElementById('uid');
-    var uid2 = document.createElement('div');
-    uid2.innerHTML = ' ID2・<span class="f-Zen-Maru-Gothic fw-bold c-black">' + uidValue + '</span>';
-    uid.appendChild(uid2);
+    // // uidValueをhtmlに反映
+    // var uid = document.getElementById('uid');
+    // var uid2 = document.createElement('div');
+    // uid2.innerHTML = ' ID2・<span class="f-Zen-Maru-Gothic fw-bold c-black">' + uidValue + '</span>';
+    // uid.appendChild(uid2);
 
     var teaNameShow = document.getElementById('teaName');
     var teaNameShow2 = document.createElement('div'); 

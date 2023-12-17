@@ -1,3 +1,5 @@
+// set.js: UUIDの生成やクエリの読込の関数を用意しているJS
+
 // UUIDの生成
 function generateUuid() {
     // https://github.com/GoogleChrome/chrome-platform-analytics/blob/master/src/internal/identifier.js
@@ -25,7 +27,7 @@ function queryDivider(){
         return;
     }
 
-    console.log("クエリを取得しました: " + query);
+    console.log("クエリを取得しました: ");
     // 取得したクエリを「&」で切り分けて各要素を配列「queryArray」に入れる
     var queryArray = query.split('&');
     var trancedDataArray = [];
@@ -33,6 +35,7 @@ function queryDivider(){
     for(var i = 0; i < queryArray.length; i++){
         var queryValueArray = queryArray[i].split('=');
         trancedDataArray[i] = queryValueArray[1];
+        console.log("Query[ " + i + " ]: " + trancedDataArray[i]);
     }
 
     return trancedDataArray;

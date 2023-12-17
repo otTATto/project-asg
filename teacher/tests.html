@@ -177,34 +177,34 @@
                         <div class="mt-4"></div>
 
                         <!-- デモ・テストブロック -->
-                        <div onclick="" type="button" data-bs-toggle="modal"
+                        <!-- <div onclick="" type="button" data-bs-toggle="modal"
                             data-bs-target="#testViewModal"
                             class="shadow br-10 mt-2 mx-lg-5 mx-3 px-3 py-3 f-Zen-Kaku-Gothic-New be-big-sm"
                             style="border: 2px solid rgb(124, 154, 95);">
                             <div class="row row-cols-auto">
-                                <!-- 科目 -->
+                                
                                 <div class="col fw-bold br-20 px-3 ms-2 text-white"
                                     style="background-color: rgb(124, 154, 95); font-size: 20px;">
                                     宗教学
                                 </div>
-                                <!-- タイトル -->
+                                
                                 <div class="col fw-exbold c-black" style="font-size: 20px">
                                     第8回 小テスト
                                 </div>
                             </div>
                             <div class="my-2" style="border-bottom: 1px solid rgb(180, 180, 180);"></div>
                             <div class="row row-cols-auto mt-1 justify-content-end">
-                                <!-- 日付 -->
+                                
                                 <div class="col f-Zen-Maru-Gothic br-20 px-3 ms-2 text-white"
                                     style="background-color: rgb(89, 121, 60); font-size: 15px;">
                                     2023年11月3日 10:40
                                 </div>
-                                <!-- タイトル -->
+                                
                                 <div class="col f-Zen-Maru-Gothic fw-medium c-black text-secondary" style="font-size: 15px">
                                     受験予定者 75人
                                 </div>
                             </div>
-                        </div>
+                        </div> -->
 
                     </div>
                     <!-- ここまで、「本日のテスト」エリア -->
@@ -234,6 +234,8 @@
                             </div>
                         </div>
 
+                        <div class="mt-4"></div>
+
                     </div>
                     <!-- ここまで、「今後のテスト」エリア -->
 
@@ -260,6 +262,8 @@
                                 </div>
                             </div>
                         </div>
+
+                        <div class="mt-4"></div>
 
                     </div>
                     <!-- ここまで、「過去のテスト」エリア -->
@@ -649,14 +653,14 @@
                         </div>
 
                         <div class="mt-2 f-Zen-Kaku-Gothic-New fw-bold text-secondary">
-                            科目<span class="c-pink">*</span>
+                            科目
                         </div>
                         <div class="mt-1">
-                            <select class="form-select text-center f-Zen-Kaku-Gothic-New fw-medium br-10" id="subjTest" aria-label="Default select example">
-                                <option>科目を選択してください</option>
+                            <input class="form-control f-Zen-Kaku-Gothic-New fw-medium br-10" id="edittingSubjNameInput" value="0" disabled>
+                                <!-- <option>科目を選択してください</option>
                                 <option value="1" selected>宗教学１</option>
-                                <option value="2">宗教学２</option>
-                            </select>
+                                <option value="2">宗教学２</option> -->
+                            
                         </div>
 
                         <div class="mt-3 f-Zen-Kaku-Gothic-New fw-bold text-secondary">
@@ -706,7 +710,7 @@
                         </div>
                     </div>
 
-                    <div class="my-4 mb-2 d-grid gap-2 col-10 mx-auto">
+                    <div id="removeButton" class="my-4 mb-2 d-grid gap-2 col-10 mx-auto">
                         <button onclick="" class="btn btn-outline-danger btn-lg br-30 f-Zen-Kaku-Gothic-New fw-exbold" type="button">
                             テストを削除する
                         </button>
@@ -714,7 +718,7 @@
 
                 </div>
                 <div class="modal-footer f-Zen-Maru-Gothic">
-                    <div class="mt-1 mb-2 d-grid gap-2 col-10 mx-auto">
+                    <div id="updateButton" class="mt-1 mb-2 d-grid gap-2 col-10 mx-auto">
                         <button onclick="" class="btn btn-outline-primary btn-lg br-30 f-Zen-Kaku-Gothic-New fw-exbold" type="button">
                             更新する
                         </button>

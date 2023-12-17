@@ -61,13 +61,14 @@ async function showTest(){
     for(var subjUid of subjUidArray){
         // 教科名、テスト名、日時、参加人数を取得
         console.log('reading:' + subjUid);
-        var subjRef = ref(database, 'subjects/' + subjUid + '/mainData/');
+        var subjRef = ref(database, 'subjects/' + subjUid + '/');
         var subjSnapshot = await get(subjRef);
         var subjData = subjSnapshot.val();
         console.log(subjData);
-        var subjName = subjData.subjectName;    //教科名
+        var subjName = subjData.mainData.subjectName;    //教科名
         // console.log(subjName);
-        //参加人数を取得
+        var numOfParticipants = Object.keys(subjData.participants).length;//参加人数を取得
+        console.log(numOfParticipants);
         var testRef = ref(database, 'subjects/' + subjUid + '/tests/');
         var testSnapshot = await get(testRef);
         var testData = testSnapshot.val();
@@ -120,7 +121,7 @@ async function showTest(){
                                                 testYear + '年' + testMonth + '月' + testDay + '日' + testOc +
                                             '</div>' +
                                             '<div class="col f-Zen-Maru-Gothic fw-medium c-black text-secondary" style="font-size: 15px">' +
-                                                '受験予定者' +
+                                                '受験予定者' + numOfParticipants + '人' +
                                             '</div>' +
                                         '</div>' +
                                     '</div>' +
@@ -284,7 +285,7 @@ async function viewTest(subjUid, testUid){    //引数は(教科のuid, テス�
                                         '</div>' +
                                         '<div class="modal-footer f-Zen-Maru-Gothic">' +
                                             '<div class="mt-1 mb-2 d-grid gap-2 col-10 mx-auto">' +
-                                                '<button onclick="supervise()" class="btn btn-primary btn-lg br-30 f-Zen-Kaku-Gothic-New fw-exbold" type="button">' +
+                                                '<button onclick="supervise(\'' + subjUid + '\', \'' + testUid + '\')" class="btn btn-primary btn-lg br-30 f-Zen-Kaku-Gothic-New fw-exbold" type="button">' +
                                                     '監督画面へ進む' +
                                                 '</button>' +
                                             '</div>' +
@@ -332,7 +333,8 @@ async function viewTest(subjUid, testUid){    //引数は(教科のuid, テス�
     });
 
     //　テストの編集モーダルを作成
-    var testEditModalArea = document.getElementById('testEditModal');   //表示エリア(親クラス)
+    // var testEditModalArea = document.getElementById('testEditModal');   //表示エリア(親クラス)
+    
     // テストの名前、実施時間、試験時間、備考をDBから抽出(testName, testDate, testLimit, testMemo)
 
     // テストの名前
@@ -354,7 +356,7 @@ async function viewTest(subjUid, testUid){    //引数は(教科のuid, テス�
     // 削除ボタンの作成
     var removeButton = document.getElementById('removeButton');
     removeButton.innerHTML ='<button onclick="removeTest(\'' + subjUid + '\',\'' + testUid + '\')" class="btn btn-outline-danger btn-lg br-30 f-Zen-Kaku-Gothic-New fw-exbold" type="button">' +
-                                'テストを削除するよ' +
+                                'テストを削除する' +
                             '</button>';
     
     // 更新ボタンの作成
@@ -396,10 +398,10 @@ async function updateTest(subjUid,testUid){   //引数：教科のuid
 }
 
 // テストの詳細モーダル内の「監督画面へ進む」ボタンを押したときに実行
-function supervise(){
+function supervise(subjId, testId){
 
     // ページ遷移
-    window.location.href = './supervisor.html';
+    window.location.href = './supervisor.html?sId=' + subjId + '&tId=' + testId + '&uId=' + uidValue;
     
 }
 

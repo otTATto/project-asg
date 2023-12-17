@@ -33,9 +33,8 @@ var stuNumInput;
 var univInput;
 var facInput;
 var depInput;
-var stuNumArray = [];     //参加生徒の学籍番号を格納
 var stuUidArray = [];   //参加生徒のuidの配列(累計のすべての履修者の分、DB更新・追加に使用)
-var addStuUidArray = [];    //追加する生徒のuidの配列
+var removeUidArray =[]; //削除する生徒のuidの配列
 var stuUidValue;   //参加生徒のuid
 var subjUidForMake;     //科目作成のときのsubjUid
 
@@ -61,10 +60,10 @@ window.addEventListener('load', async function(){
 
 
     // uidValueをhtmlに反映
-    var uid = document.getElementById('uid');
-    var uid2 = document.createElement('div');
-    uid2.innerHTML = ' ID2・<span class="f-Zen-Maru-Gothic fw-bold c-black">' + uidValue + '</span>';
-    uid.appendChild(uid2);
+    // var uid = document.getElementById('uid');
+    // var uid2 = document.createElement('div');
+    // uid2.innerHTML = ' ID・<span class="f-Zen-Maru-Gothic fw-bold c-black">' + uidValue + '</span>';
+    // uid.appendChild(uid2);
 
     var teaNameShow = document.getElementById('teaName');
     var teaNameShow2 = document.createElement('div'); 
@@ -173,7 +172,7 @@ async function viewSubject(subjUid){  //教科の詳細を表示する、ボタ�
 
                                         '<div class="mt-1 bg-success-subtle px-2 py-1 br-10">' +
                                             '<div class="f-Zen-Kaku-Gothic-New text-secondary text-center">' +
-                                                'カンマ(<span class="c-pink">,</span>)で区切ることで複数人を登録したり、ハイフン(<span class="c-pink">-</span>)を用いて連続した学籍番号を登録することができます。' +
+                                                'カンマ(<span class="c-pink">,</span>)で区切ることで複数人を登録することができます' +
                                             '</div>' +
                                         '</div>' +
 
@@ -230,90 +229,66 @@ async function viewSubject(subjUid){  //教科の詳細を表示する、ボタ�
                             '</div>' +
                             '</div>';
                             
-    stuUidArray = [];
+    stuUidArray = [];       //初期化
+    removeUidArray = [];
 
-    // 現在履修者のtable表示(id=participants)
-    var stuRef = ref(database, 'users/students/');
-    var stuSnapshot = await get(stuRef);
-    var data = stuSnapshot.val();
-    var stuNumFromDB;
-    var stuNameFromDB;
-    var stuDepFromDB;
-    var stuGradeFromDB;
-    var particiArea = document.getElementById('participants');  //表示エリア(親クラス)
+    // 現在履修者のuidを配列に格納
     var particiRef = ref(database, 'subjects/' + subjUid + '/participants/');
     var particiSnapshot = await get(particiRef);
     var particiData = particiSnapshot.val();
-    Object.keys(particiData).forEach((element, index, key, snapshot) => {      //各履修者に対して、subjRef.participants
+    Object.keys(particiData).forEach((element, index, key, snapshot) => {      //各履修者に対して、uidをstuUidArrayに追加
         var uid = particiData[element].uid;    // 生徒のuidを取得
-        // console.log(uid);
-        stuNumFromDB = data[uid].mainData.studentNum;
-        console.log(index + ':' + stuNumFromDB);
-        stuNameFromDB = data[uid].mainData.studentName;
-        stuDepFromDB = data[uid].mainData.belonging.dep;
-        stuGradeFromDB = data[uid].mainData.belonging.grade;
+        //console.log(uid);
         stuUidArray.push(uid);//stuUidArrayに追加
         console.log(stuUidArray);
-        // 取得した属性を表示
-        var participant = document.createElement('tr');    //子クラス
-        participant.innerHTML = '<th scope="row" class="text-end" style="color: rgb(110, 110, 176);">' + (index + 1) + '</th>' +
-                                '<td class="text-center">' + stuNumFromDB + '</td>' +
-                                '<td class="text-center">' + stuNameFromDB + '</td>' +
-                                '<td class="text-center">' + stuDepFromDB + '</td>' +
-                                '<td class="text-center">' + stuGradeFromDB + '</td>' +
-                                '<td class="text-center">' + 
-                                    '<div onclick="removeStu(\'' + subjUid + '\',\'' + uid + '\')" type="button" class="text-danger br-20 be-big-lg" style="border: 1px solid red;"><i class="fa-solid fa-trash"></i></div>' +
-                                '</td>';
-
-        particiArea.appendChild(participant);
-
     });
 
+    // 配列の各要素をhtmlに追加する関数を起動
+    showParticipants(subjUid, stuUidArray,'participants');
 
 }
 
-// 「科目情報」をクリックしたときに実行
-function viewSubjectArea(){
-    // 「基本情報エリア」を非表示・「科目情報エリア」を表示
-    $('#profileMainArea').removeClass('visible').addClass('unvisible');
-    $('#profileSubjectArea').removeClass('unvisible').addClass('visible');
-}
+async function showParticipants(subjUid, uidArray, areaId){    //引数：教科のuid, 表示させたい履修者のuidの配列, 表示させたい場所のid
+    var particiArea = document.getElementById(areaId);  //表示エリア(親クラス)
 
-function viewMainArea(){
-    // 「基本情報エリア」を表示・「科目情報エリア」を非表示
-    $('#profileMainArea').removeClass('unvisible').addClass('visible');
-    $('#profileSubjectArea').removeClass('visible').addClass('unvisible');
-}
+    //表示領域をクリアにする
+    var area = document.getElementById(areaId);
+    area.innerHTML = '';
 
-// プロフィール変更の「保存する」ボタンを押したときに実行
-async function saveProf(){
-    //テキストエリアから情報を取得
-    nameInput = document.getElementById('teaNameInput').value;
-    stuNumInput = document.getElementById('teaNumInput').value;
-    univInput = document.getElementById('univ').value;
-    facInput = document.getElementById('faculty').value;
-    depInput = document.getElementById('depature').value;
-
-    //DBに上書き
-    const userRef1 = ref(database, 'users/teachers/' + uidValue + '/mainData/');
-    await update(userRef1, {
-        studentNum : stuNumInput,
-        studentName : nameInput
-    });
-
-    const userRef2 = ref(database, 'users/teachers/' + uidValue + '/mainData/belonging/');
-    await update(userRef2, {
-        univ : univInput,
-        fac : facInput,
-        dep : depInput
-    });
-
-    window.location.href = './profile.html?uid=' + uidValue;
+    for(var num in uidArray){
+        // 各情報を取得(学籍番号、名前、学科、学年)
+        var uid = uidArray[num];    //生徒のuid
+        var stuRef = ref(database, 'users/students/' + uid + '/mainData');
+        var snapshot = await get(stuRef);
+        var stuData = snapshot.val();
+        if(stuData){        //DB内にそのuidがあったら
+            var stuNum = stuData.studentNum;    //学籍番号
+            var stuName = stuData.studentName;  //名前
+            var stuDep = stuData.belonging.dep; //学科
+            var stuGrade = stuData.belonging.grade; //学年
+            var index = parseInt(num) + 1;
+            console.log(stuNum + ',' + stuName + ',' + stuDep + ',' + stuGrade);
+    
+            // htmlに表示
+            var participant = document.createElement('tr'); //子クラス
+            participant.innerHTML = `<th scope="row" class="text-end" style="color: rgb(110, 110, 176);">  ${index} </th>
+                                        <td class="text-center"> ${stuNum} </td>
+                                        <td class="text-center"> ${stuName} </td>
+                                        <td class="text-center"> ${stuDep} </td>
+                                        <td class="text-center"> ${stuGrade} </td>
+                                        <td class="text-center">
+                                            <div onclick="removeStu('${subjUid}', '${uid}', '${areaId}')" type="button" class="text-danger br-20 be-big-lg" style="border: 1px solid red;"><i class="fa-solid fa-trash"></i></div>
+                                        </td>`;
+            particiArea.appendChild(participant);
+        }
+        
+    }
 }
 
 // 「科目を追加する」ボタンを押したときに実行
 function addSubjModal(){
     stuUidArray = [];   //stuUidArrayのリセット
+    removeUidArray = [];
     subjUidForMake = generateUuid();    //新規subUidの生成
     // innerHTML
     var a = document.getElementById('addStu');
@@ -330,7 +305,7 @@ function addSubjModal(){
 
 // 科目追加で「学生を追加する」ボタンを押したときに実行
 // 入力→[num1「, or -」num2] を想定、返り値→学籍番号の配列？
-async function addStu(subjUid, addId, id){          //引数：テキストボックスのid, 表示領域のhtmlにおけるid
+async function addStu(subjUid, addId, id){          //引数：教科のuid, テキストボックスのid, 表示領域のhtmlにおけるid
     // テキストエリアを「,」「-」で分解
     var stuNumsInput = document.getElementById(addId).value;
 
@@ -338,16 +313,10 @@ async function addStu(subjUid, addId, id){          //引数：テキストボ�
     var stuNumArrayInput = stuNumsInput.split(',');
     console.log('要素数：' + stuNumArrayInput.length);
     for(var num in stuNumArrayInput){
-        // stuNumArrayInput[num] = parseInt(stuNumArrayInput[num]);   //num型に変換
         console.log(stuNumArrayInput[num]);
     }
-    // console.log(stuNumArrayInput);
-    // console.log(typeof(stuNumArrayInput));
-    // 「-」だったらnum1~num2までのすべての数字を配列に追加
 
-
-    // stuNumArrayInput の各要素に対応したuidを stuUidArray(DBに登録時使う)、addStuUidArray(新規のみ入れる、表示に使う)に追加
-    addStuUidArray = [];    //初期化
+    // stuNumArrayInput の各要素に対応したuidを stuUidArrayに追加
     for(var num of stuNumArrayInput){
         var Ref = ref(database, 'users/students/');
         var snapshot = await get(Ref);
@@ -359,44 +328,16 @@ async function addStu(subjUid, addId, id){          //引数：テキストボ�
                 console.log('ヒットしました:');
                 stuUidValue = data[element].mainData.userUid  //uidを取得
                 stuUidArray.push(stuUidValue);    //uidArrayに追加
-                addStuUidArray.push(stuUidValue);
                 console.log('stuUidArrayの要素数:' + stuUidArray.length);
-                console.log('addStuUidArrayの要素数:' + addStuUidArray.length);
            
             }
-            // 一致する学籍番号が存在しないとき
 
         });
     } 
 
-    // htmlに参加者を表示、反映させる
-    var stuRef = ref(database, 'users/students/');
-    var snapshot = await get(stuRef);
-    var data = snapshot.val();
-    var stuNumFromDB;
-    var stuNameFromDB;
-    var stuDepFromDB;
-    var stuGradeFromDB;
-    var num = 1;  //インデックス
-    var particiArea = document.getElementById(id);//親クラス
-    for(var stu of addStuUidArray){
-        // stuUidArrayの各要素(各生徒)について、学籍番号、氏名、学科、学年を取得
-        stuNumFromDB = data[stu].mainData.studentNum;
-        stuNameFromDB = data[stu].mainData.studentName;
-        stuDepFromDB = data[stu].mainData.belonging.dep;
-        stuGradeFromDB = data[stu].mainData.belonging.grade;
-        // 取得した属性を表示
-        var participant = document.createElement('tr');    //子クラス
-        participant.innerHTML = '<th scope="row" class="text-end" style="color: rgb(110, 110, 176);">' + num + '</th>' +
-                                '<td class="text-center">' + stuNumFromDB + '</td>' +
-                                '<td class="text-center">' + stuNameFromDB + '</td>' +
-                                '<td class="text-center">' + stuDepFromDB + '</td>' +
-                                '<td class="text-center">' + stuGradeFromDB + '</td>' + 
-                                '<td class="text-center">' +
-                                    '<div onclick="removeStu(\'' + subjUid + '\',\'' + stu + '\')" type="button" class="text-danger br-20 be-big-lg" style="border: 1px solid red;"><i class="fa-solid fa-trash"></i></div>' +
-                                '</td>';
-        particiArea.appendChild(participant);
-    }
+    // stuUidArrayの各要素をhtmlに表示
+    showParticipants(subjUid, stuUidArray, id);
+
     return;
 }
 
@@ -464,10 +405,16 @@ async function updateSubj(subjUid){
         subjectName : updateSubjNameInput
     });
 
+    // 削除した生徒の更新
+    for(var id of removeUidArray){
+        const subjRef2 = ref(database, 'subjects/' + subjUid + '/participants/' + id + '/');
+        remove(subjRef2);
+    }
+
     // 履修者の更新(stuUidArrayの各要素をDBに)
     for(var id of stuUidArray){
-        const subjRef2 = ref(database, 'subjects/' + subjUid + '/participants/' + id + '/');
-        await update(subjRef2, {
+        const subjRef3 = ref(database, 'subjects/' + subjUid + '/participants/' + id + '/');
+        await update(subjRef3, {
             uid : id
         });
     }
@@ -484,15 +431,58 @@ function removeSubj(subjUid){           //引数：教科のuid
 }
 
 // 履修者の「解除」ボタンを押したときに実行
-function removeStu(subjUid, stuUid){
-    var stuRef = ref(database, 'subjects/' + subjUid + '/participants/' + stuUid + '/');
-    remove(stuRef); //DBから削除
+function removeStu(subjUid, stuUid, areaId){
+    // var stuRef = ref(database, 'subjects/' + subjUid + '/participants/' + stuUid + '/');
+    // remove(stuRef); //DBから削除
     // stuUidArrayから消去
     stuUidArray = stuUidArray.filter(function(item) {
         return item !== stuUid;
     });
     console.log(stuUidArray);
     console.log('消えました');
+
+    removeUidArray.push(stuUid);
+
+    showParticipants(subjUid, stuUidArray, areaId);
+}
+
+// プロフィール変更の「保存する」ボタンを押したときに実行
+async function saveProf(){
+    //テキストエリアから情報を取得
+    nameInput = document.getElementById('teaNameInput').value;
+    stuNumInput = document.getElementById('teaNumInput').value;
+    univInput = document.getElementById('univ').value;
+    facInput = document.getElementById('faculty').value;
+    depInput = document.getElementById('depature').value;
+
+    //DBに上書き
+    const userRef1 = ref(database, 'users/teachers/' + uidValue + '/mainData/');
+    await update(userRef1, {
+        studentNum : stuNumInput,
+        studentName : nameInput
+    });
+
+    const userRef2 = ref(database, 'users/teachers/' + uidValue + '/mainData/belonging/');
+    await update(userRef2, {
+        univ : univInput,
+        fac : facInput,
+        dep : depInput
+    });
+
+    window.location.href = './profile.html?uid=' + uidValue;
+}
+
+// 「科目情報」をクリックしたときに実行
+function viewSubjectArea(){
+    // 「基本情報エリア」を非表示・「科目情報エリア」を表示
+    $('#profileMainArea').removeClass('visible').addClass('unvisible');
+    $('#profileSubjectArea').removeClass('unvisible').addClass('visible');
+}
+
+function viewMainArea(){
+    // 「基本情報エリア」を表示・「科目情報エリア」を非表示
+    $('#profileMainArea').removeClass('unvisible').addClass('visible');
+    $('#profileSubjectArea').removeClass('visible').addClass('unvisible');
 }
 
 //ホームボタンを押したとき実行
