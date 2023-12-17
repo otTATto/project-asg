@@ -25,6 +25,7 @@ const analytics = getAnalytics(app);
 const database = getDatabase();
 
 import { queryDivider, generateUuid } from '../set.js';
+import { getStudentNum, getStudentName, getStudentFac, getStudentDep, getStudentGrade, getSubjectName, getTestName, getTestDate, getTestLimit } from '../get.js';
 
 var uidValue;   //自分(教師)のuidを格納
 var nameInput;      //名前 in 入力領域を格納
@@ -34,7 +35,7 @@ var facInput; //学部の情報格納
 var depInput; //学科の情報格納
 var grade;  //生徒の学年情報格納
 var subjUidValue;
-var subjTaken = [];
+var subjTaken = []; //自分が履修している教科のuidを格納
 // 起動時に実行
 
 window.addEventListener('load', async function(){
@@ -225,38 +226,10 @@ async function saveProf(){
   window.location.href = './profile.html?uid=' + uidValue;
 }
 
-async function showSubj(){
-  console.log("subjTaken");
-  console.log(subjTaken);
-
-  for(var i = 0; i < subjTaken.length; i++){
-      var element = subjTaken[i];
-
-      console.log("element: " + element);
-
-      var subjectsList1 = document.getElementById('subjChoose');   //科目選択の表示エリア(親クラス)
-      var subject = document.createElement('option');
-      
-      //sujUidValueをsubjTakeの配列の中身にしたい。つまりidentyfyUidで一致した科目uid
-      var subjNameRef = ref(database, 'subjects/' + element + '/mainData/');
-      var snapshot = await get(subjNameRef);
-      var data = snapshot.val();
-      //教科の名前を取得
-      var subjNameFromDb = data.subjectName;
-      console.log("subjNameFromDb: " + subjNameFromDb);
-      subject.text = subjNameFromDb;
-      subject.value = element; //subjectの中身をsubUidをいれている。
-      console.log("subject.value");
-      console.log(subject.value);
-
-      subject.text = subjNameFromDb; //subjectの表示テキストにsubjNameを入れている。
-      subjectsList1.appendChild(subject); 
-  }
-}
 
 // 起動時に自分の担当している教科を「科目選択」のプルダウンに追加→テスト追加の科目名にも適用, プルダウンのvalueは教科のuid
 
-
+//自分が履修している科目のuidをsujTakenに格納する関数
 async function identifyUid(subjUidValue){
   // uidValue内に既に自分のuidが格納されているはず？なのでそれをif文を用いて判定する
   // またforEachを用いることにより条件判定をsub/uid/par/uid内の要素すべてに対して行う
@@ -267,27 +240,21 @@ async function identifyUid(subjUidValue){
   //変数sunjUidValueを変数としてその変数を繰り返し変更するような文をより高層階で行えば何とか動かすことができる？
   //つまりsubjUidValueをワールド変数としてそれを繰り返し変更する方針がよい
   
-  var subjectsList1 = document.getElementById('subjChoose');   //科目選択の表示エリア(親クラス)
-  
   const stuUidRef = ref(database, 'subjects/'+ subjUidValue + '/participants/');
   var stuUidSnapshot = await get(stuUidRef);
   var stuUidData = stuUidSnapshot.val();
-  
   
   Object.keys(stuUidData).forEach( key => {
       let subParUid = stuUidData[key].uid;
 
       if(subParUid == uidValue) {
-      subjTaken.push(subjUidValue);
-         
-      }
-      
+      subjTaken.push(subjUidValue);  
+      }    
   })
-  
 }
 
-//上記関数を各科目に対して行いたいため
 
+var subjName = [];
 
 window.addEventListener('load', async function(){
   const subjRef = ref(database, 'subjects/');
@@ -302,9 +269,43 @@ window.addEventListener('load', async function(){
       // 非同期処理を待ってidentifyUidを実行
       await identifyUid(subjUidValue);
   }
-  // forEachが完了した後にshowSubjを実行
-  showSubj();
-})
+  // processArray() 内で subjName を取得
+  processArray();
+});
+
+async function processArray() {
+  for (let i = 0; i < subjTaken.length; i++) {
+    // 教科IDを取得
+    const subjectIdInput = subjTaken[i];
+
+    // getSubjectName関数を実行し、結果を取得
+    const subjectName = await getSubjectName(subjectIdInput);
+    
+    // 取得した結果を新しい配列に格納
+    subjName.push(subjectName);
+  }
+
+  // ここから新しく要素を生成するコードを追加
+  var takenSubjContainer = document.getElementById('Takensubj');
+  console.log(subjName);
+  console.log(takenSubjContainer);
+
+  // 配列の各要素に対してボタンを生成して #Takensubj 要素に追加
+  subjName.forEach(function(subjectName) {
+      var divItem = document.createElement("div");
+      divItem.classList.add("list-group-item", "list-group-item-action");
+
+      var divContent = document.createElement("div");
+      divContent.classList.add("f-Zen-Kaku-Gothic-New", "fw-bold", "fs-5", "c-black");
+      divContent.textContent = subjectName;
+
+      divItem.appendChild(divContent);
+      takenSubjContainer.appendChild(divItem);
+  });
+}
+
+// 既存の .list-group 要素を取得
+var listGroup = document.querySelector('.list-group');
 
 //ホームボタンを押したとき実行
 function moveToHome(){
