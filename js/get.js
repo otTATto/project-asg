@@ -48,7 +48,7 @@
         return output;
     }
 
-    // ユーザーID→ユーザーの氏名
+    // ユーザーID→ユーザーの氏名（学生）
     async function getStudentName(userIdInput){
         var output;
 
@@ -119,6 +119,44 @@
             var userIdFromDb = data[element].mainData.userUid;
             var studentGradeFromDb = data[element].mainData.belonging.grade;
             if(userIdFromDb == userIdInput) output = studentGradeFromDb;
+        });
+
+        return output;
+    }
+
+    // ユーザーID→ユーザーの氏名（教師）
+    async function getTeacherName(userIdInput){
+        var output;
+
+        var teacherRef = ref(database, 'users/teachers/');
+        var snapshot = await get(teacherRef);
+        var data = snapshot.val();
+
+        if(data == null) return;   // データが空ならforEachしない
+
+        Object.keys(data).forEach((element) => {
+            var userIdFromDb = data[element].mainData.userUid;
+            var teacherNameFromDb = data[element].mainData.studentName;
+            if(userIdFromDb == userIdInput) output = teacherNameFromDb;
+        });
+
+        return output;
+    }
+
+    // ユーザーID→ユーザーの学籍番号（教師）
+    async function getTeacherNum(userIdInput){
+        var output;
+
+        var teacherRef = ref(database, 'users/teachers/');
+        var snapshot = await get(teacherRef);
+        var data = snapshot.val();
+
+        if(data == null) return;   // データが空ならforEachしない
+
+        Object.keys(data).forEach((element) => {
+            var userIdFromDb = data[element].mainData.userUid;
+            var teacherNumFromDb = data[element].mainData.studentNum;
+            if(userIdFromDb == userIdInput) output = teacherNumFromDb;
         });
 
         return output;
@@ -211,4 +249,4 @@
 
 
 // 関数のエクスポート
-export{ getStudentNum, getStudentName, getStudentFac, getStudentDep, getStudentGrade, getSubjectName, getTestName, getTestDate, getTestLimit }
+export{ getStudentNum, getStudentName, getStudentFac, getStudentDep, getStudentGrade, getTeacherName, getTeacherNum, getSubjectName, getTestName, getTestDate, getTestLimit }
