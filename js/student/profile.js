@@ -53,6 +53,7 @@ window.addEventListener('load', async function(){
     var teaDep = data.belonging.dep;
     var teagrade = data.belonging.grade;
 
+
     console.log('Name:' + teaName);
     console.log('univ:' + teaUniv);
 
