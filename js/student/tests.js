@@ -26,10 +26,15 @@ const database = getDatabase();
 
 // テストの詳細モーダル内の「試験画面へ進む」ボタンを押したときに実行
 import { queryDivider, generateUuid } from '../set.js';
+import { getTeacherName, getTeacherNum } from '../get.js';
+import { convertUnixToISO8601 } from '../time.js'
 
 var uidValue;   //自分(生徒)のuidを格納
 var subjUidValue;
 var subjTaken = [];
+var todayTestBlockArea = document.getElementById("todayTestBlockArea");
+var futureTestBlockArea = document.getElementById("futureTestBlockArea");
+var todayTestBlockArea = document.getElementById("todayTestBlockArea");
 
 // 起動時に実行
 window.addEventListener('load', function(){
@@ -39,6 +44,7 @@ window.addEventListener('load', function(){
 
 })
 
+//自分が履修している科目をプルダウンに表示する関数
 async function showSubj(){
     console.log("subjTaken");
     console.log(subjTaken);
@@ -70,16 +76,9 @@ async function showSubj(){
 
 // 起動時に自分の担当している教科を「科目選択」のプルダウンに追加→テスト追加の科目名にも適用, プルダウンのvalueは教科のuid
 
-
+//科目のuidを引数を受け取りその科目を自分が履修しているかを確認し
+//履修している科目をsujTaken内に格納する。
 async function identifyUid(subjUidValue){
-    // uidValue内に既に自分のuidが格納されているはず？なのでそれをif文を用いて判定する
-    // またforEachを用いることにより条件判定をsub/uid/par/uid内の要素すべてに対して行う
-    //また、ここでは科目のsubjUidvalue部分が変数となる。その変数はより上層の関数から引数として渡される必要がある。
-    //もし自分のuidが格納されているならば"何かを"返り値(?)にして関数を終える
-    //表示したいのは教科名の所、suj/$uid/main/subjectsName←ここ
-    //表示の参照地点はsub/$uid←ここ
-    //変数sunjUidValueを変数としてその変数を繰り返し変更するような文をより高層階で行えば何とか動かすことができる？
-    //つまりsubjUidValueをワールド変数としてそれを繰り返し変更する方針がよい
     
     var subjectsList1 = document.getElementById('subjChoose');   //科目選択の表示エリア(親クラス)
     
@@ -92,17 +91,12 @@ async function identifyUid(subjUidValue){
         let subParUid = stuUidData[key].uid;
 
         if(subParUid == uidValue) {
-        subjTaken.push(subjUidValue);
-           
-        }
-        
-    })
-    
+        subjTaken.push(subjUidValue);  
+        }  
+    })    
 }
 
-
-
-
+//プルダウンにより選択された科目のテストを表示する関数
 window.addEventListener('load', async function(){
     const subjRef = ref(database, 'subjects/');
     var subjSnapshot = await get(subjRef);
@@ -116,7 +110,6 @@ window.addEventListener('load', async function(){
         // 非同期処理を待ってidentifyUidを実行
         await identifyUid(subjUidValue);
     }
-
     // forEachが完了した後にshowSubjを実行
     showSubj();
 });
@@ -124,7 +117,7 @@ window.addEventListener('load', async function(){
 var subjSelect = document.getElementById('subjChoose');
 var todayTestArea = document.getElementById("todayTestArea");
 
-
+//履修をしている人数を数えてリターンで返す関数
 async function getParticipantsNum(subjectUid){
     const participantsRef = ref(database, 'subjects/' + subjectUid + '/participants/');
     var snapshot = await get(participantsRef);
@@ -133,23 +126,30 @@ async function getParticipantsNum(subjectUid){
     return participantsNum;
 }
 
-// 科目選択が変更されたときのイベントリスナー
+
 subjSelect.addEventListener('change', async function () {
     // 選択された科目の値を取得
     var selectedSubject = subjSelect.value;
 
-    // 本日のテストエリアの要素をクリア
-    todayTestArea.innerHTML = '<div class="mt-3"> <div class="row justify-content-center row-cols-auto f-Zen-Kaku-Gothic-New"> <div class="col"> <div class="fw-exbold c-blue tb-blue"> 本日のテスト </div> </div> <div class="col"> <div onclick="viewFutureTestArea()" type="button" class="fw-medium text-secondary be-big-lg"> 今後のテスト </div> </div> <div class="col"> <div onclick="viewPastTestArea()" type="button" class="fw-medium text-secondary be-big-lg"> 過去のテスト </div> </div> </div> </div> <div class="mt-4"></div>';
+    // 本日のテストエリア、過去のテストエリア、今後のテストエリアの要素をクリア
+    todayTestBlockArea.innerHTML = '';
+    pastTestBlockArea.innerHTML = ''; // 過去のテストエリアをクリア
+    futureTestBlockArea.innerHTML = ''; // 今後のテストエリアをクリア
 
     // 選択された科目の値を使用してデータを取得してtests配列に追加
     var tests = await fetchTestsData(selectedSubject);
 
-    // 取得したテストデータに基づいて要素を生成して本日のテストエリアに追加
+    // 現在の日付を取得
+    var currentDate = new Date();
+
+
+    // 取得したテストデータに基づいて要素を生成して本日のテストエリア、過去のテストエリア、今後のテストエリアに追加
     tests.forEach(test => {
         var newTestElement = document.createElement("div");
         newTestElement.setAttribute("type", "button");
         newTestElement.setAttribute("data-bs-toggle", "modal");
         newTestElement.setAttribute("data-bs-target", "#testViewModal");
+        newTestElement.setAttribute("onclick", "editModal('" + test.subject + "', '" + test.title + "' ,'" + test.date +"' ,'" + test.testLimit + "' , '" + test.testMemo + "', '" + test.managerId + "', '" + test.makeDate + "', '" + test.testUid + "', '" + test.subjId + "')");
         newTestElement.classList.add("shadow", "br-10", "mt-2", "mx-lg-5", "mx-3", "px-3", "py-3", "f-Zen-Kaku-Gothic-New", "be-big-sm");
         newTestElement.style.border = "2px solid rgb(124, 154, 95)";
 
@@ -165,7 +165,7 @@ subjSelect.addEventListener('change', async function () {
             <div class="my-2" style="border-bottom: 1px solid rgb(180, 180, 180);"></div>
             <div class="row row-cols-auto mt-1 justify-content-end">
                 <div class="col f-Zen-Maru-Gothic br-20 px-3 ms-2 text-white" style="background-color: rgb(89, 121, 60); font-size: 15px;">
-                    ${test.date}
+                    ${formatDate(test.date)}
                 </div>
                 <div class="col f-Zen-Maru-Gothic fw-medium c-black text-secondary" style="font-size: 15px">
                     ${test.examinees}
@@ -173,14 +173,149 @@ subjSelect.addEventListener('change', async function () {
             </div>
         `;
 
-        // 新しいテストを本日のテストエリアに追加
-        todayTestArea.appendChild(newTestElement);
+
+
+        // 日付比較を行い、本日、過去、今後のテストエリアに追加
+        var testDate = new Date(test.date);
+        console.log(testDate);
+        var testYear = testDate.getFullYear();
+        var testMonth = testDate.getMonth() + 1;
+        var testDay = testDate.getDate();
+
+
+        var currentYear = currentDate.getFullYear();
+        var currentMonth = currentDate.getMonth() + 1; // 月は0から11で表されるため、+1して実際の月に変換
+        var currentDay = currentDate.getDate();
+        console.log(testDay);
+        console.log(currentDay);
+
+        if (testYear == currentYear && testMonth == currentMonth &&  testDay == currentDay) {
+            // 本日のテストエリアに追加
+            todayTestBlockArea.appendChild(newTestElement);
+        } else if ( testYear > currentYear) {
+            futureTestBlockArea.appendChild(newTestElement);
+        } else if( testMonth > currentMonth ) {
+            futureTestBlockArea.appendChild(newTestElement);
+        } else if( testDay > currentDay ) {
+            futureTestBlockArea.appendChild(newTestElement);
+        } else {
+            pastTestBlockArea.appendChild(newTestElement);
+        }
+        ;
     });
 });
+
+// テスト詳細モーダルの内容を変更する関数
+async function editModal(subjectNameInput,titelInModal,dateInModal,limitInModal,memoInModal,managerInModal,makeDateInModal,testIdInput, subjectIdInput ){
+    console.log("[ GET ]makeDateInModal: " + makeDateInModal);
+    console.log("managerInModal: " + managerInModal);
+    document.getElementById("subjectNameInModal").innerHTML = subjectNameInput;
+    document.getElementById("titelInModal").innerHTML = titelInModal;
+    document.getElementById("dateInModal").innerHTML = dateInModal;
+    document.getElementById("limitInModal").innerHTML = limitInModal;
+    document.getElementById("memoInModal").innerHTML = memoInModal;
+    document.getElementById("managerInModal").innerHTML = await getTeacherNum(managerInModal) + '・' + await getTeacherName(managerInModal);
+    document.getElementById("makeDateInModal").innerHTML = formatDate(convertUnixToISO8601(makeDateInModal));
+    // var moveToExamBtn = document.getElementById("moveToExamBtn");
+    var tmp = "moveToExam('" + subjectIdInput + "', '" + testIdInput + "', '" + uidValue + "')";
+    $("#moveToExamBtn").attr('onClick', tmp);
+
+}
+
+// 同じ日かどうかを判定する関数
+function isSameDay(date1, date2) {
+     date1.getFullYear() === date2.getFullYear() &&
+        date1.getMonth() === date2.getMonth() &&
+        date1.getDate() === date2.getDate();
+}
+
+// 日付を指定されたフォーマットに変換する関数
+function formatDate(inputDate) {
+    var date = new Date(inputDate);
+    var year = date.getFullYear();
+    var month = date.getMonth() + 1;
+    var day = date.getDate();
+    var hour = date.getHours();
+    var minute  =date.getMinutes();
+    
+    // 月と日が1桁の場合は0埋めする
+    month = month < 10 ? '0' + month : month;
+    day = day < 10 ? '0' + day : day;
+
+    return year + '年' + month + '月' + day + '日 ' + hour + ":" + minute;
+}
+
+
+// 科目選択が変更されたときのイベントリスナー
+// subjSelect.addEventListener('change', async function () {
+//     // 選択された科目の値を取得
+//     var selectedSubject = subjSelect.value;
+
+//     // 本日のテストエリアの要素をクリア
+//     todayTestArea.innerHTML = '<div class="mt-3"> <div class="row justify-content-center row-cols-auto f-Zen-Kaku-Gothic-New"> <div class="col"> <div class="fw-exbold c-blue tb-blue"> 本日のテスト </div> </div> <div class="col"> <div onclick="viewFutureTestArea()" type="button" class="fw-medium text-secondary be-big-lg"> 今後のテスト </div> </div> <div class="col"> <div onclick="viewPastTestArea()" type="button" class="fw-medium text-secondary be-big-lg"> 過去のテスト </div> </div> </div> </div> <div class="mt-4"></div>';
+
+//     // 選択された科目の値を使用してデータを取得してtests配列に追加
+//     var tests = await fetchTestsData(selectedSubject);
+
+//     // 取得したテストデータに基づいて要素を生成して本日のテストエリアに追加
+//     tests.forEach(test => {
+
+//         //ここでif文を書きもし～なら
+
+//         var newTestElement = document.createElement("div");
+//         newTestElement.setAttribute("type", "button");
+//         newTestElement.setAttribute("data-bs-toggle", "modal");
+//         newTestElement.setAttribute("data-bs-target", "#testViewModal");
+//         newTestElement.classList.add("shadow", "br-10", "mt-2", "mx-lg-5", "mx-3", "px-3", "py-3", "f-Zen-Kaku-Gothic-New", "be-big-sm");
+//         newTestElement.style.border = "2px solid rgb(124, 154, 95)";
+
+//         newTestElement.innerHTML = `
+//             <div class="row row-cols-auto">
+//                 <div class="col fw-bold br-20 px-3 ms-2 text-white" style="background-color: rgb(124, 154, 95); font-size: 20px;">
+//                     ${test.subject}
+//                 </div>
+//                 <div class="col fw-exbold c-black" style="font-size: 20px">
+//                     ${test.title}
+//                 </div>
+//             </div>
+//             <div class="my-2" style="border-bottom: 1px solid rgb(180, 180, 180);"></div>
+//             <div class="row row-cols-auto mt-1 justify-content-end">
+//                 <div class="col f-Zen-Maru-Gothic br-20 px-3 ms-2 text-white" style="background-color: rgb(89, 121, 60); font-size: 15px;">
+//                     ${test.date}
+//                 </div>
+//                 <div class="col f-Zen-Maru-Gothic fw-medium c-black text-secondary" style="font-size: 15px">
+//                     ${test.examinees}
+//                 </div>
+//             </div>
+//         `;
+
+//         // 新しいテストを本日のテストエリアに追加
+//         todayTestArea.appendChild(newTestElement);
+//     });
+// });
+
+// function padZero(num) {
+//     return num < 10 ? "0" + num : num;
+// }
+
+// //2023-12-16T19:34から2023年12月16日 19:34に変更する関数
+// function formatTime(inputTimeString) {
+//     console.log("input: " + inputTimeString);
+//     var inputTime = new Date(inputTimeString);
+
+//     var year = inputTime.getFullYear();
+//     var month = padZero(inputTime.getMonth() + 1);
+//     var day = padZero(inputTime.getDate());
+//     var hours = padZero(inputTime.getHours());
+//     var minutes = padZero(inputTime.getMinutes());
+
+//     return year + "年" + month + "月" + day + "日 " + hours + ":" + minutes;
+// }
 
 // データを取得してtests配列に追加する関数
 async function fetchTestsData(selectedSubject) {
     console.log("selectedSubject :" + selectedSubject)
+
     const subjRef = ref(database, 'subjects/' + selectedSubject + '/tests');
     const subjSnapshot = await get(subjRef);
     const subjData = subjSnapshot.val();
@@ -201,17 +336,27 @@ async function fetchTestsData(selectedSubject) {
     const participantsData3 = subjSnapshot3.val(); 
     // オブジェクトのキー（参加者のID）の数を取得
     const numberOfParticipants = Object.keys(participantsData3).length;
-
+    
     var subbject = subjData1.mainData.subjectName;
     var sumstu  = numberOfParticipants;
+    var managerId = subjData1.mainData.managerId;
+    var subjId = subjData1.mainData.subjectId;
     if (subjData) {
         // Firebaseから取得したデータをtests配列に変換
         Object.keys(subjData).forEach(element => {
+             var testDate = subjData[element].mainData.testDate;
+            // var formattedTestDate = formatTime(testDate);
             const testInfo = {
                 subject: subbject,
                 title: subjData[element].mainData.testName,
-                date: subjData[element].mainData.testDate,
-                examinees: '受験予定者'+ sumstu
+                date: testDate,
+                examinees: '受験予定者'+ sumstu,
+                testUid: subjData[element].mainData.testId,
+                testLimit:subjData[element].mainData.testLimit,
+                testMemo:subjData[element].mainData.testMemo,
+                managerId:managerId,
+                subjId: subjId,
+                makeDate: subjData[element].baseData.makeDate
             };
 
             tests.push(testInfo);
@@ -227,10 +372,10 @@ async function fetchTestsData(selectedSubject) {
 
 
 
-function moveToExam(){
+function moveToExam(subjectIdInput, testIdInput, userIdInput){
 
     // ページ遷移
-    window.location.href = './exam.html';
+    window.location.href = './exam.html?sId=' + subjectIdInput + '&tId=' + testIdInput + '&uId=' + userIdInput;
     
 }
 
@@ -292,5 +437,6 @@ window.moveToTest = moveToTest;
 window.moveToProf = moveToProf;
 window.moveToSet = moveToSet;
 window.logout = logout;
+window.editModal = editModal;
 
-export{ viewTodayTestArea, viewFutureTestArea, viewPastTestArea, moveToExam,moveToHome, moveToTest, moveToProf, moveToSet, logout }
+export{ viewTodayTestArea, viewFutureTestArea, viewPastTestArea, moveToExam,moveToHome, moveToTest, moveToProf, moveToSet, logout, editModal }

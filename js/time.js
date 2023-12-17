@@ -53,6 +53,9 @@ function convertUnixToDateArray(input){
     // 関数の返り値を入れる空の配列を用意
     var output = [];
 
+    // inputのUNIX時間をDateオブジェクトの引数に取れる形に変形する
+    input = input * 1;
+
     // 各時間要素の取得
     var date = new Date(input);
     output[0] = date.getFullYear();
@@ -62,6 +65,8 @@ function convertUnixToDateArray(input){
     output[4] = date.getMinutes().toString().padStart(2, "0");
     output[5] = date.getSeconds().toString().padStart(2, "0");
 
+    console.log("[ GET ]output[0]: " + output[0]);
+
     return output;
 }
 
@@ -69,9 +74,6 @@ function convertUnixToDateArray(input){
 function convertDateArrayToUnix(input){
     // 関数の返り値を入れる変数を用意
     var output;
-
-    // 引数の配列で足りない要素は初期値(0 or 1)を補う
-    input = fillDateArray(input);
 
     // Dateオブジェクトの引数として受け取れる形(ISO8601)に整形
     var dateInput = convertDateArrayToISO8601(input);
@@ -86,9 +88,6 @@ function convertDateArrayToUnix(input){
 function convertDateArrayToISO8601(input){
     // 関数の返り値を入れる変数を用意
     var output;
-
-    // 引数の配列で足りない要素は初期値(0 or 1)を補う
-    input = fillDateArray(input);
 
     // 整形
     output = input[0] + '-' + input[1] + '-' + input[2] + 'T' + input[3] + ':' + input[4] + ':' + input[5];
@@ -108,7 +107,7 @@ function convertISO8601ToUnix(input){
 
 // 不完全なDateArray[yyyy, mm, dd, hh, mm, ss]を完全なものに補う
 function fillDateArray(input){
-    // 関数の返り値となる配列を用意
+    // 関数の返り値となる配列を用意 
     var output = ['1970', '01', '01', '00', '00', '00'];
 
     for(var i = 0; i < input.length; i++){
