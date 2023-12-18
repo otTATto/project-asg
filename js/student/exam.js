@@ -74,6 +74,8 @@ window.onload = async () => {
     var backBtn = document.getElementById("backBtn");
     backBtn.href = "./mypage.html?id=" + userId;
 
+    // カンニング判定プログラムの実行
+    await doCheatCheck();
 }
 
 // １秒に１回実行される
@@ -85,6 +87,11 @@ x = setInterval(() => {
     showTimer();        // タイマー表示の関数の呼び出し
 
 }, 1000);
+
+// カンニング判定の関数
+async function doCheatCheck(){
+
+}
 
 // 現在の「testStatus」の値に応じてHTMLの表示を変更する
 function showStatus(){

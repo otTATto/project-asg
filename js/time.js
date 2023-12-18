@@ -75,6 +75,8 @@ function convertDateArrayToUnix(input){
     // 関数の返り値を入れる変数を用意
     var output;
 
+    input = fillDateArray(input);
+
     // Dateオブジェクトの引数として受け取れる形(ISO8601)に整形
     var dateInput = convertDateArrayToISO8601(input);
 
