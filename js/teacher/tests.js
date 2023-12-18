@@ -165,7 +165,7 @@ subjectsList.addEventListener('change', async function(){
             <div class="my-2" style="border-bottom: 1px solid rgb(180, 180, 180);"></div>
             <div class="row row-cols-auto mt-1 justify-content-end">
                 <div class="col f-Zen-Maru-Gothic br-20 px-3 ms-2 text-white" style="background-color: rgb(89, 121, 60); font-size: 15px;">
-                    ${test.date}
+                    ${formatDate(test.date)}
                 </div>
                 <div class="col f-Zen-Maru-Gothic fw-medium c-black text-secondary" style="font-size: 15px">
                     ${test.examinees}
@@ -196,6 +196,24 @@ subjectsList.addEventListener('change', async function(){
     });
 
 })
+
+// 日付を指定されたフォーマットに変換する関数
+function formatDate(inputDate) {
+    var date = new Date(inputDate);
+    var year = date.getFullYear();
+    var month = date.getMonth() + 1;
+    var day = date.getDate();
+    var hour = date.getHours();
+    var minute  =date.getMinutes();
+    
+    // 月と日が1桁の場合は0埋めする
+    month = month < 10 ? '0' + month : month;
+    day = day < 10 ? '0' + day : day;
+    hour = hour < 10 ? '0' + hour : hour;
+    minute = minute < 10 ? '0' + minute : minute;
+
+    return year + '年' + month + '月' + day + '日 ' + hour + ":" + minute;
+}
 
 async function fetchTestsData(selectedSubject) {
     console.log("selectedSubject :" + selectedSubject)

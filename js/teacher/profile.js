@@ -131,7 +131,7 @@ async function viewSubject(subjUid){  //教科の詳細を表示する、ボタ�
                                 '<div class="modal-header">' +
                                     '<h1 class="c-pink modal-title fs-5 f-Zen-Kaku-Gothic-New fw-exbold" id="subjectViewAndEditModalLabel">' +
                                         '<i class="fa-solid fa-file-lines"></i>' +
-                                            '担当科目を確認・編集するよ' +
+                                            '担当科目を確認・編集する' +
                                     '</h1>' +
                                     '<button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>' +
                                 '</div>' + 

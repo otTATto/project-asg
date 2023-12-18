@@ -362,7 +362,7 @@ async function viewTest(subjUid, testUid){    //引数は(教科のuid, テス�
     // 更新ボタンの作成
     var updateButton = document.getElementById('updateButton');
     updateButton.innerHTML = '<button onclick="updateTest(\'' + subjUid + '\',\'' + testUid + '\')" class="btn btn-outline-primary btn-lg br-30 f-Zen-Kaku-Gothic-New fw-exbold" type="button">' +
-                                    '更新するよ' +
+                                    '更新する' +
                               '</button>';
 
 }
