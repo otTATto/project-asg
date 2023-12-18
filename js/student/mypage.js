@@ -133,7 +133,7 @@ async function editModal(subjectNameInput,titelInModal,dateInModal,limitInModal,
     document.getElementById("memoInModal").innerHTML = memoInModal;
     document.getElementById("managerInModal").innerHTML = await getTeacherNum(managerInModal) + '・' + await getTeacherName(managerInModal);
     document.getElementById("makeDateInModal").innerHTML = formatDate(convertUnixToISO8601(makeDateInModal));
-    // var moveToExamBtn = document.getElementById("moveToExamBtn");
+    
     var tmp = "moveToExam('" + subjectIdInput + "', '" + testIdInput + "', '" + uidValue + "')";
     $("#moveToExamBtn").attr('onClick', tmp);
 
