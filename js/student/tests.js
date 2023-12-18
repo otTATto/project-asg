@@ -211,8 +211,8 @@ async function editModal(subjectNameInput,titelInModal,dateInModal,limitInModal,
     console.log("managerInModal: " + managerInModal);
     document.getElementById("subjectNameInModal").innerHTML = subjectNameInput;
     document.getElementById("titelInModal").innerHTML = titelInModal;
-    document.getElementById("dateInModal").innerHTML = dateInModal;
-    document.getElementById("limitInModal").innerHTML = limitInModal;
+    document.getElementById("dateInModal").innerHTML = formatDate(dateInModal);
+    document.getElementById("limitInModal").innerHTML = limitInModal + '分間';
     document.getElementById("memoInModal").innerHTML = memoInModal;
     document.getElementById("managerInModal").innerHTML = await getTeacherNum(managerInModal) + '・' + await getTeacherName(managerInModal);
     document.getElementById("makeDateInModal").innerHTML = formatDate(convertUnixToISO8601(makeDateInModal));

@@ -28,6 +28,8 @@ const database = getDatabase();
 
 
 import { queryDivider, generateUuid } from '../set.js';
+import { getTeacherName, getTeacherNum } from '../get.js';
+import { convertUnixToISO8601 } from '../time.js'
 
 var uidValue;   //教師のuidを格納
 var subjUidValue;
@@ -37,6 +39,7 @@ var futureTestBlockArea = document.getElementById("futureTestBlockArea");
 var tests =[];
 
 // 起動時に実行
+// 関数内で await を使用するために async を追加
 window.addEventListener('load', async function(){
 
     // クエリからuidを取得
@@ -45,14 +48,11 @@ window.addEventListener('load', async function(){
     // この学生が履修している科目を配列「subjTaken」に格納
     await getSubjTaken();
 
-        // 関数内で await を使用するために async を追加
-    subjTaken.forEach(async (element) => {
-        // fetchTestsDataがPromiseを返すと仮定しています
-        await fetchTestsData(element);
-        //  ここで tests を使用するか、適切な処理を実行する
-        console.log( "ああああ"+tests)    
-    });
-        
+    // 
+    for(var subject of subjTaken){
+        await fetchTestsData(subject);
+    }
+    
 
     
     tests.forEach(test => {
@@ -60,7 +60,7 @@ window.addEventListener('load', async function(){
         newTestElement.setAttribute("type", "button");
         newTestElement.setAttribute("data-bs-toggle", "modal");
         newTestElement.setAttribute("data-bs-target", "#testViewModal");
-        //newTestElement.setAttribute("onclick", "editModal('" + test.subject + "', '" + test.title + "' ,'" + test.date +"' ,'" + test.testLimit + "' , '" + test.testMemo + "', '" + test.managerId + "', '" + test.makeDate + "', '" + test.testUid + "', '" + test.subjId + "')");
+        newTestElement.setAttribute("onclick", "editModal('" + test.subject + "', '" + test.title + "' ,'" + test.date +"' ,'" + test.testLimit + "' , '" + test.testMemo + "', '" + test.managerId + "', '" + test.makeDate + "', '" + test.testUid + "', '" + test.subjId + "')");
         newTestElement.classList.add("shadow", "br-10", "mt-2", "mx-lg-5", "mx-3", "px-3", "py-3", "f-Zen-Kaku-Gothic-New", "be-big-sm");
         newTestElement.style.border = "2px solid rgb(124, 154, 95)";
         newTestElement.innerHTML = `
@@ -78,12 +78,10 @@ window.addEventListener('load', async function(){
                     ${formatDate(test.date)}
                 </div>
                 <div class="col f-Zen-Maru-Gothic fw-medium c-black text-secondary" style="font-size: 15px">
-                    ${test.examinees}
+                    受験予定者 ${test.examinees} 人
                 </div>
             </div>
         `;
-
-
 
         // 日付比較を行い、本日、過去、今後のテストエリアに追加
         var testDate = new Date(test.date);
@@ -113,7 +111,22 @@ window.addEventListener('load', async function(){
     });
 });
 
+// テスト詳細モーダルの内容を変更する関数
+async function editModal(subjectNameInput,titelInModal,dateInModal,limitInModal,memoInModal,managerInModal,makeDateInModal,testIdInput, subjectIdInput ){
+    console.log("[ GET ]makeDateInModal: " + makeDateInModal);
+    console.log("managerInModal: " + managerInModal);
+    document.getElementById("subjectNameInModal").innerHTML = subjectNameInput;
+    document.getElementById("titelInModal").innerHTML = titelInModal;
+    document.getElementById("dateInModal").innerHTML = formatDate(dateInModal);
+    document.getElementById("limitInModal").innerHTML = limitInModal + '分間';
+    document.getElementById("memoInModal").innerHTML = memoInModal;
+    document.getElementById("managerInModal").innerHTML = await getTeacherNum(managerInModal) + '・' + await getTeacherName(managerInModal);
+    document.getElementById("makeDateInModal").innerHTML = formatDate(convertUnixToISO8601(makeDateInModal));
+    // var moveToExamBtn = document.getElementById("moveToExamBtn");
+    var tmp = "moveToExam('" + subjectIdInput + "', '" + testIdInput + "', '" + uidValue + "')";
+    $("#moveToExamBtn").attr('onClick', tmp);
 
+}
 
 async function fetchTestsData(selectedSubject) {
     console.log("selectedSubject :" + selectedSubject)
@@ -121,12 +134,10 @@ async function fetchTestsData(selectedSubject) {
     const subjRef = ref(database, 'subjects/' + selectedSubject + '/tests');
     const subjSnapshot = await get(subjRef);
     const subjData = subjSnapshot.val();
-    console.log("subjData :" + subjData)
 
     const subjRef1 = ref(database, 'subjects/' + selectedSubject+'/');
     const subjSnapshot1 = await get(subjRef1);
     const subjData1 = subjSnapshot1.val();
-    console.log("subjData1 :" + subjData1)
     
     // var subbject = subjData1.mainData.subjectName;
     // var sumstu  = numberOfParticipants;
@@ -142,6 +153,7 @@ async function fetchTestsData(selectedSubject) {
     var sumstu  = numberOfParticipants;
     var managerId = subjData1.mainData.managerId;
     var subjId = subjData1.mainData.subjectId;
+    console.log("subjId: " + subjId);
     if (subjData) {
         // Firebaseから取得したデータをtests配列に変換
         Object.keys(subjData).forEach(element => {
@@ -151,7 +163,7 @@ async function fetchTestsData(selectedSubject) {
                 subject: subbject,
                 title: subjData[element].mainData.testName,
                 date: testDate,
-                examinees: '受験予定者'+ sumstu,
+                examinees: sumstu,
                 testUid: subjData[element].mainData.testId,
                 testLimit:subjData[element].mainData.testLimit,
                 testMemo:subjData[element].mainData.testMemo,
@@ -201,7 +213,7 @@ function formatDate(inputDate) {
     var month = date.getMonth() + 1;
     var day = date.getDate();
     var hour = date.getHours();
-    var minute  =date.getMinutes();
+    var minute  =date.getMinutes().toString().padStart(2, "0");;
     
     // 月と日が1桁の場合は0埋めする
     month = month < 10 ? '0' + month : month;
@@ -273,10 +285,10 @@ function logout(){
     window.location.href = './login.html';
 }
 
-function moveToExam(){
+function moveToExam(subjectIdInput, testIdInput, userIdInput){
 
     // ページ遷移
-    window.location.href = './exam.html?uuid=uuid&tuid=tuid';
+    window.location.href = './exam.html?sId=' + subjectIdInput + '&tId=' + testIdInput + '&uId=' + userIdInput;
     
 }
 
@@ -286,4 +298,5 @@ window.moveToTest = moveToTest;
 window.moveToProf = moveToProf;
 window.moveToSet = moveToSet;
 window.logout = logout;
-export{ moveToExam, moveToHome,moveToTest, moveToProf, moveToSet, logout}
+window.editModal = editModal;
+export{ moveToExam, moveToHome,moveToTest, moveToProf, moveToSet, logout, editModal }
