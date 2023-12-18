@@ -42,18 +42,29 @@ var tests =[];
 // 関数内で await を使用するために async を追加
 window.addEventListener('load', async function(){
 
+    // とりあえず読込中表示
+    var loadingContent = '';
+    loadingContent += '<div class="text-center c-sub-blue">';
+    loadingContent += '<div class="spinner-border" role="status"></div>';
+    loadingContent += '</div>';
+    loadingContent += '';
+    todayTestBlockArea.innerHTML = loadingContent;
+    futureTestBlockArea.innerHTML = loadingContent;
+
     // クエリからuidを取得
     uidValue = queryDivider()[0];
 
     // この学生が履修している科目を配列「subjTaken」に格納
     await getSubjTaken();
 
-    // 
+    // テスト情報を取得
     for(var subject of subjTaken){
         await fetchTestsData(subject);
     }
     
-
+    // 一旦まっさらにする
+    todayTestBlockArea.innerHTML = '';
+    futureTestBlockArea.innerHTML = '';
     
     tests.forEach(test => {
         var newTestElement = document.createElement("div");
