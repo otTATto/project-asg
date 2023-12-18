@@ -218,7 +218,7 @@ async function moveToMypage(){
 
 
     // マイページへの遷移
-    window.location.href = './mypage.html?uid=' + uidValue + '/';
+    window.location.href = './mypage.html?uid=' + uidValue;
 
 }
 

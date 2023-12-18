@@ -168,7 +168,7 @@ subjSelect.addEventListener('change', async function () {
                     ${formatDate(test.date)}
                 </div>
                 <div class="col f-Zen-Maru-Gothic fw-medium c-black text-secondary" style="font-size: 15px">
-                    ${test.examinees}
+                    受験予定者 ${test.examinees} 人
                 </div>
             </div>
         `;
@@ -230,7 +230,7 @@ function formatDate(inputDate) {
     var month = date.getMonth() + 1;
     var day = date.getDate();
     var hour = date.getHours();
-    var minute  =date.getMinutes();
+    var minute = date.getMinutes().toString().padStart(2, "0");;
     
     // 月と日が1桁の場合は0埋めする
     month = month < 10 ? '0' + month : month;
@@ -277,7 +277,7 @@ async function fetchTestsData(selectedSubject) {
                 subject: subbject,
                 title: subjData[element].mainData.testName,
                 date: testDate,
-                examinees: '受験予定者'+ sumstu,
+                examinees: sumstu,
                 testUid: subjData[element].mainData.testId,
                 testLimit:subjData[element].mainData.testLimit,
                 testMemo:subjData[element].mainData.testMemo,
